@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
+<script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
+<link rel="stylesheet" href="intro.css?v=d7eedc">
+<script src="intro.js?v=d7eedc" defer></script>
+<script src="aura.js?v=d7ed08" defer></script>
+<script src="pulso.js?v=d7f026" defer></script>
+<script src="fondo.js?v=d7ecf9" defer></script>
+<title>Máximo Romero — Artista visual</title>
+<meta name="description" content="Portfolio de Máximo José Romero: dibujo, carbonilla, diseño gráfico y motion graphics. Córdoba, Argentina.">
+<style>
+  :root {
+    --papel: #e8e4db;
+    --papel-2: #dedad0;
+    --tinta: #141414;
+    --gris: #6d6a63;
+    --acento: #c8321e;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--papel); color: var(--tinta); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+
+  /* ---------- Cabecera ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px clamp(16px, 3vw, 40px);
+    background: var(--papel); color: var(--tinta); border-bottom: 1px solid rgba(0,0,0,.15);   /* mismo margen y fondo que en Diseño */
+  }
+  header a { text-decoration: none; }
+  .marca { font-family: var(--serif); font-size: 20px; letter-spacing: .01em; }
+  nav { display: flex; gap: clamp(14px, 2.2vw, 32px); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  nav a { opacity: .85; transition: opacity .2s; }
+  nav a:hover, nav a.actual { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+
+
+  /* ---------- Inicio: acordeón ---------- */
+  #inicio { position: relative; margin-top: 55px; height: calc(100vh - 55px); min-height: 460px; display: flex; background: #111; }
+  .tira {
+    position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; cursor: pointer;
+    border: 0; padding: 0; background: #111; border-right: 1px solid rgba(232,228,219,.35);
+    transition: flex-grow .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .tira:last-child { border-right: 0; }
+  .tira.activa { flex-grow: 7; }
+  .tira img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(.85) brightness(.8); transform: scale(1.08); transition: filter .6s, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .tira.activa img { filter: none; transform: scale(1); }
+  .tira .leyenda { position: absolute; z-index: 2; left: 14px; right: 14px; top: 16px; color: #fff; text-align: left; font-size: 12px; line-height: 1.35; opacity: 0; transform: translateY(-8px); transition: opacity .4s .2s, transform .4s .2s; text-shadow: 0 1px 8px rgba(0,0,0,.7); }
+  .tira.activa .leyenda { opacity: 1; transform: none; }
+  /* la leyenda va arriba (abajo está el nombre grande); una sombra suave la hace legible */
+  .tira::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 38%; z-index: 1; pointer-events: none; background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,0)); opacity: 0; transition: opacity .5s; }
+  .tira.activa::before { opacity: 1; }
+  .tira .leyenda b { display: block; font-family: var(--serif); font-weight: 400; font-size: 18px; }
+  .nuevo { position: absolute; top: 76px; left: 12px; z-index: 3; background: var(--acento); color: #fff; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 8px; pointer-events: none; }
+  .obra .nuevo { top: 8px; left: 8px; }
+  .tira.es-nueva { flex-grow: 1.6; }
+  .tira.es-nueva.activa { flex-grow: 7; }
+  .tira:focus-visible { outline: 2px solid var(--acento); outline-offset: -4px; }
+  #inicio .rotulo { position: absolute; left: clamp(16px, 3vw, 40px); bottom: 28px; z-index: 5; pointer-events: none; color: #fff; mix-blend-mode: difference; }
+  #inicio .rotulo p { color: #fff; opacity: .8; }
+  #inicio .bajar { position: absolute; right: clamp(16px, 3vw, 40px); bottom: 28px; z-index: 5; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #fff; mix-blend-mode: difference; text-decoration: none; }
+  @media (max-width: 760px) { #inicio { flex-direction: column; } .tira { border-right: 0; border-bottom: 1px solid rgba(232,228,219,.35); } .tira .leyenda { display: none; } }
+
+  /* ---------- Escenario interactivo ---------- */
+  #escena { position: relative; min-height: 100vh; overflow: hidden; scroll-margin-top: 55px; }
+  section.bloque { scroll-margin-top: 55px; }
+  .rotulo h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 6vw, 84px); line-height: .95; letter-spacing: -.01em; }
+  .rotulo p { margin-top: 10px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  .controles {
+    position: absolute; right: clamp(16px, 3vw, 40px); bottom: 28px; z-index: 40;
+    display: flex; gap: 10px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gris);
+  }
+  .controles button {
+    font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--tinta);
+    background: transparent; border: 1px solid var(--tinta); padding: 9px 14px; cursor: pointer; transition: background .2s, color .2s;
+  }
+  .controles button:hover { background: var(--tinta); color: var(--papel); }
+
+  .obra {
+    position: absolute; left: 0; top: 0; margin: 0; cursor: pointer;
+    will-change: transform; transform-origin: 50% 50%;
+    background: var(--papel-2); box-shadow: 0 10px 28px -12px rgba(0,0,0,.45);
+  }
+  .obra img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+  .obra .pie {
+    position: absolute; left: 0; right: 0; top: 100%; padding-top: 6px;
+    font-size: 11px; line-height: 1.3; letter-spacing: .02em; color: var(--tinta);
+    opacity: 0; transition: opacity .25s; pointer-events: none;
+  }
+  .obra.ordenada:hover .pie, .obra.ordenada:focus-visible .pie { opacity: 1; }
+  .obra:focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+
+  /* ---------- Secciones ---------- */
+  section.bloque { padding: clamp(70px, 10vw, 140px) clamp(16px, 3vw, 40px); border-top: 1px solid rgba(0,0,0,.2); }
+  .etiqueta { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); margin-bottom: 28px; }
+
+  .sobre { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 80px); align-items: start; max-width: 1300px; margin: 0 auto; }
+  .sobre img { width: 100%; display: block; filter: grayscale(1) contrast(1.05); }
+  .sobre h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4vw, 54px); line-height: 1.02; margin-bottom: 26px; }
+  .sobre p { font-size: 16px; line-height: 1.65; margin-bottom: 1.1em; max-width: 60ch; }
+
+
+  .contacto { max-width: 1300px; margin: 0 auto; }
+  .contacto a.grande { display: block; font-family: var(--serif); font-size: clamp(26px, 5vw, 64px); line-height: 1.1; text-decoration: none; word-break: break-word; }
+  .contacto a.grande:hover { color: var(--acento); }
+  .contacto ul { list-style: none; margin-top: 36px; display: flex; gap: 32px; flex-wrap: wrap; font-size: 15px; }
+  footer { padding: 24px clamp(16px, 3vw, 40px); font-size: 12px; color: var(--gris); border-top: 1px solid rgba(0,0,0,.2); }
+
+  /* ---------- Visor ---------- */
+  #visor { position: fixed; inset: 0; z-index: 100; background: rgba(20,20,20,.94); color: #eee; display: none; align-items: center; justify-content: center; padding: 4vh 4vw; }
+  #visor.abierto { display: flex; }
+  #visor figure { display: flex; gap: 32px; align-items: flex-end; max-height: 100%; max-width: 100%; }
+  #visor img { max-height: 90vh; max-height: 90dvh; max-width: min(70vw, 100%); object-fit: contain; display: block; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  #visor figcaption { min-width: 200px; max-width: 280px; padding-bottom: 6px; }
+  #visor h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.1; margin-bottom: 12px; }
+  #visor p { font-size: 13px; line-height: 1.5; color: #aaa; }
+  #visor .num { font-size: 12px; letter-spacing: .12em; color: #888; margin-top: 18px; }
+  #visor button { position: absolute; background: none; border: 0; color: #eee; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; padding: 14px; }
+  #visor .cerrar { top: 10px; right: 14px; }
+  #visor .ant { left: 8px; top: 50%; } #visor .sig { right: 8px; top: 50%; }
+
+  @media (max-width: 760px) {
+    nav { font-size: 11px; gap: 12px; }
+    .sobre { grid-template-columns: 1fr; }
+    #visor figure { flex-direction: column; align-items: flex-start; gap: 14px; }
+    #visor img { max-width: 100%; max-height: 62vh; }
+    #visor { padding: 56px 14px 14px; }
+    #visor .ant, #visor .sig { top: auto; bottom: 8px; }
+    #visor .ant { left: 8px; } #visor .sig { right: 8px; }
+    .controles span { display: none; }
+    .rotulo p { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+<link rel="stylesheet" href="tipografia.css?v=c920a1">
+<link rel="stylesheet" href="comun.css?v=c92278">
+<link rel="stylesheet" href="tema.css?v=d7eb95">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+
+<header>
+  <a class="marca" href="index.html">Máximo Romero</a>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a class="actual" href="#escena">Obras</a>
+    <a href="diseno.html">Diseño y motion</a>
+    <a href="#sobre">Sobre mí</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+<script src="marca.js?v=ceb8de"></script>
+
+<main>
+  <section id="inicio" aria-label="Inicio: obras destacadas">
+    <div class="rotulo">
+      <h1>Máximo<br>Romero</h1>
+      <p>Artista visual · Ilustración · Diseño gráfico · Motion</p>
+    </div>
+    <a class="bajar" href="#escena">Ver todas las obras ↓</a>
+  </section>
+
+  <div id="escena" aria-label="Galería interactiva de obras">
+    <div class="controles">
+      <span id="contador">0 / 0 ordenadas</span>
+      <button id="btnDesordenar" type="button">Desordenar</button>
+      <button id="btnOrdenar" type="button">Ordenar todo</button>
+    </div>
+  </div>
+
+    <section class="bloque" id="sobre">
+    <p class="etiqueta">Sobre mí</p>
+    <div class="sobre">
+      <img src="img/retrato.jpg" alt="Máximo Romero dibujando en un cuaderno" loading="lazy">
+      <div>
+        <h2>Máximo José Romero</h2>
+        <p>Mi nombre es Máximo José Romero, tengo 19 años y nací en Córdoba, Argentina. Dibujo desde que tengo memoria y nunca dejé de hacerlo: de una u otra manera, el dibujo siempre formó parte de mi vida.</p>
+        <p>Dibujar es lo que más amo, lo que me entretiene y me da paz. No lo hago solo porque me guste o porque desde chico se me daba bien, sino porque es mi forma de canalizar emociones y conectarme profundamente conmigo mismo. Dibujo porque lo necesito, porque es parte de mí.</p>
+        <p>Este último año me dediqué al estudio de la carbonilla y, a su vez, trabajé mucho en una perspectiva que juega de manera brusca con la deformación del campo visual. Busco generar una visión que transmita movimiento exagerado, intentando plasmar en el dibujo la idea de dinamismo y fluidez. Para ello, utilizo con frecuencia cuerpos orgánicos que me permiten expresar esa energía en cada trazo.</p>
+        <p>Este portfolio reúne 2 obras de gran tamaño y 25 obras realizadas en carbonilla sobre hojas A4. Cada una de ellas busca ilustrar y transmitir escenas de la vida cotidiana, ventanas hacia distintas situaciones y personas que habitan lo común y lo azaroso. La intención es poner en valor lo bello de la cotidianeidad y la aparente banalidad de la vida, resaltando la poesía que existe en los gestos y momentos simples del día a día.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="contacto">
+    <p class="etiqueta">Contacto</p>
+    <div class="contacto">
+      <a class="grande" href="mailto:maxdibujosinstgramoficial@gmail.com">maxdibujosinstgramoficial@gmail.com</a>
+      <ul>
+        <li><a href="https://instagram.com/maxdiibujos" target="_blank" rel="noopener">Instagram @maxdiibujos</a></li>
+        <li><a href="tel:+543512115333">351 211-5333</a></li>
+        <li>Córdoba, Argentina</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<footer>© 2026 Máximo José Romero — maqueta de prueba</footer>
+
+<div id="visor" role="dialog" aria-modal="true" aria-label="Obra ampliada" aria-hidden="true">
+  <button class="cerrar" type="button" aria-label="Cerrar">Cerrar ✕</button>
+  <button class="ant" type="button" aria-label="Anterior">←</button>
+  <figure><img alt=""><figcaption><h3></h3><p class="tec"></p><p class="med"></p><p class="num"></p></figcaption></figure>
+  <button class="sig" type="button" aria-label="Siguiente">→</button>
+</div>
+
+<script src="comun.js?v=c9221b"></script>
+<script src="obras.js?v=c5c10c"></script>
+<script>
+(() => {
+  const escena = document.getElementById('escena');
+  const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RADIO = 170;          // distancia del cursor a la que una obra empieza a acomodarse (px)
+  const VELOCIDAD = 0.09;     // suavizado de la animación (0-1 por frame)
+
+  // Aleatorio con semilla: el "desorden" es el mismo en cada visita
+  let semilla = 7;
+  const azar = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+
+  const obras = OBRAS.map((o, i) => {
+    const el = document.createElement('figure');
+    el.className = 'obra'; el.tabIndex = 0; el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', o.titulo + (o.tecnica ? ', ' + o.tecnica : ''));
+    el.innerHTML = `<img src="${esc(o.thumb)}" alt="${esc(o.titulo)}${o.tecnica ? ', ' + esc(o.tecnica) : ''}" draggable="false" decoding="async">${o.nuevo ? '<span class="nuevo">Nuevo</span>' : ''}<figcaption class="pie"><b>${esc(o.titulo)}</b><br>${esc(o.tecnica)}</figcaption>`;
+    escena.appendChild(el);
+    el.addEventListener('click', () => abrirVisor(i));
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirVisor(i); } });
+    return { o, el, p: reducido ? 1 : 0, objetivo: reducido ? 1 : 0, ord: null, des: null, ancho: 0, alto: 0, rot0: (azar() - .5) * 46, z: 0 };
+  });
+
+  // ----- Posiciones: ordenada (grilla) y desordenada (collage) -----
+  function calcular() {
+    const W = escena.clientWidth, Hv = innerHeight;
+    const margen = Math.max(16, W * 0.03);
+    const cols = W < 520 ? 3 : W < 860 ? 5 : W < 1200 ? 7 : 9;
+    const hueco = Math.max(8, W * 0.01);
+    const cw = (W - margen * 2 - hueco * (cols - 1)) / cols;
+    const ch = cw * 1.34;
+    const filas = Math.ceil(obras.length / cols);
+    const top = 78;
+    const altoGrilla = top + filas * ch + (filas - 1) * (hueco + 14) + 150;
+    escena.style.height = Math.max(Hv, altoGrilla) + 'px';
+    const H = escena.clientHeight;
+    semilla = 7;
+    obras.forEach((ob, i) => {
+      const r = ob.o.w / ob.o.h;
+      // Cada obra mantiene su proporción dentro de la celda
+      ob.ancho = r > cw / ch ? cw : ch * r;
+      ob.alto = ob.ancho / r;
+      ob.el.style.width = ob.ancho + 'px'; ob.el.style.height = ob.alto + 'px';
+      const c = i % cols, f = Math.floor(i / cols);
+      ob.ord = { x: margen + c * (cw + hueco) + (cw - ob.ancho) / 2, y: top + f * (ch + hueco + 14) + (ch - ob.alto) / 2, rot: 0, esc: 1 };
+      // Desorden: dispersas por todo el escenario, algunas más grandes y rotadas
+      const esc = 1.1 + azar() * 0.9;
+      ob.des = {
+        x: azar() * (W - ob.ancho * esc) + ob.ancho * (esc - 1) / 2,
+        y: azar() * (H - ob.alto * esc) + ob.alto * (esc - 1) / 2,
+        rot: ob.rot0, esc
+      };
+    });
+    despertar();
+  }
+
+  // ----- Animación -----
+  const suave = t => t * t * (3 - 2 * t);
+  const mezcla = (a, b, t) => a + (b - a) * t;
+  // El bucle de animación solo corre mientras alguna obra se está moviendo (ahorra batería en el celular)
+  let corriendo = false, textoContador = '';
+  const elContador = document.getElementById('contador');
+  function despertar() { if (!corriendo) { corriendo = true; requestAnimationFrame(dibujar); } }
+  function dibujar() {
+    let ordenadas = 0, mueve = false;
+    for (const ob of obras) {
+      const d = ob.p - ob.objetivo;
+      if (Math.abs(d) > 0.001) { ob.p -= d * VELOCIDAD; mueve = true; } else ob.p = ob.objetivo;
+      const t = suave(Math.min(1, Math.max(0, ob.p)));
+      const x = mezcla(ob.des.x, ob.ord.x, t), y = mezcla(ob.des.y, ob.ord.y, t);
+      const rot = mezcla(ob.des.rot, 0, t), esc = mezcla(ob.des.esc, 1, t);
+      ob.el.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(${esc})`;
+      ob.el.style.zIndex = t > .98 ? 1 : 2;
+      const ya = ob.p > 0.97;
+      if (ya) ordenadas++;
+      if (ya !== ob.ya) { ob.ya = ya; ob.el.classList.toggle('ordenada', ya); }
+    }
+    const txt = `${ordenadas} / ${obras.length} ordenadas`;
+    if (txt !== textoContador) { textoContador = txt; elContador.textContent = txt; }
+    if (mueve) requestAnimationFrame(dibujar); else corriendo = false;
+  }
+
+  // El cursor "peina" las obras: las que quedan dentro del radio se acomodan
+  function mover(e) {
+    const r = escena.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    for (const ob of obras) {
+      if (ob.objetivo === 1) continue;
+      // Centro actual de la obra (interpolado)
+      const t = suave(Math.min(1, Math.max(0, ob.p)));
+      const cx = mezcla(ob.des.x, ob.ord.x, t) + ob.ancho / 2, cy = mezcla(ob.des.y, ob.ord.y, t) + ob.alto / 2;
+      if (Math.hypot(cx - mx, cy - my) < RADIO) { ob.objetivo = 1; despertar(); }
+    }
+  }
+  escena.addEventListener('pointermove', mover);
+  escena.addEventListener('pointerdown', mover);
+
+  document.getElementById('btnOrdenar').onclick = () => obras.forEach((ob, i) => setTimeout(() => { ob.objetivo = 1; despertar(); }, i * 35));
+  document.getElementById('btnDesordenar').onclick = () => obras.forEach((ob, i) => setTimeout(() => { ob.objetivo = 0; despertar(); }, i * 20));
+
+  // En pantallas táctiles (sin cursor) se ordenan solas al llegar a la galería
+  if (matchMedia('(pointer: coarse)').matches && !reducido && 'IntersectionObserver' in window) {
+    const vigia = new IntersectionObserver(es => {
+      if (!es.some(e => e.isIntersecting)) return;
+      vigia.disconnect();
+      setTimeout(() => obras.forEach((ob, i) => setTimeout(() => { ob.objetivo = 1; despertar(); }, i * 90)), 400);
+    }, { threshold: 0.2 });
+    vigia.observe(escena);
+  }
+
+  // ----- Visor -----
+  const visor = document.getElementById('visor'), vImg = visor.querySelector('img');
+  let actual = 0;
+  const precargar = i => { const o = obras[(i + obras.length) % obras.length].o; new Image().src = o.src; };
+  function mostrar(i) {
+    actual = (i + obras.length) % obras.length;
+    const o = obras[actual].o;
+    vImg.src = o.src; vImg.alt = o.titulo;
+    visor.querySelector('h3').textContent = o.titulo;
+    visor.querySelector('.tec').textContent = o.tecnica;
+    visor.querySelector('.med').textContent = o.medidas;
+    visor.querySelector('.num').textContent = `${actual + 1} / ${obras.length}${o.nuevo ? ' · NUEVO' : ''}`;
+    precargar(actual + 1); precargar(actual - 1);
+  }
+  function abrirVisor(i) {
+    mostrar(i); visor.classList.add('abierto'); visor.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
+    foco.entrar(visor, visor.querySelector('.cerrar'));
+  }
+  function cerrar() { visor.classList.remove('abierto'); visor.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; foco.salir(visor); }
+  visor.querySelector('.cerrar').onclick = cerrar;
+  visor.querySelector('.ant').onclick = () => mostrar(actual - 1);
+  visor.querySelector('.sig').onclick = () => mostrar(actual + 1);
+  visor.addEventListener('click', e => { if (e.target === visor) cerrar(); });
+  deslizar(visor, () => mostrar(actual + 1), () => mostrar(actual - 1));
+  addEventListener('keydown', e => {
+    if (!visor.classList.contains('abierto')) return;
+    if (e.key === 'Escape') cerrar();
+    if (e.key === 'ArrowLeft') mostrar(actual - 1);
+    if (e.key === 'ArrowRight') mostrar(actual + 1);
+    foco.atrapar(e, visor);
+  });
+
+  // ----- Inicio en acordeón: la tira bajo el cursor se expande -----
+  // Nuevas primero (hasta 5), completando hasta 9 tiras con una selección de las de siempre
+  const siempre = OBRAS.filter(o => !o.nuevo);
+  const seleccion = [0, 1, 3, 6, 9, 12, 16, 20, 25].map(i => siempre[i]).filter(Boolean);
+  const nuevas = OBRAS.filter(o => o.nuevo).slice(0, 5);
+  const destacadas = nuevas.concat(seleccion.slice(0, Math.max(4, 9 - nuevas.length)));
+  const inicio = document.getElementById('inicio');
+  const chica = matchMedia('(max-width: 760px)').matches;      // en celular alcanza con la miniatura (mucho más liviana)
+  let tocada = { b: null, t: 0 };
+  const tiras = destacadas.map(o => {
+    const idx = OBRAS.indexOf(o);
+    const b = document.createElement('button');
+    b.className = 'tira' + (o.nuevo ? ' es-nueva' : ''); b.type = 'button'; b.setAttribute('aria-label', o.titulo);
+    b.innerHTML = `<img src="${esc(chica ? o.thumb : o.src)}" alt="${esc(o.titulo)}" draggable="false" decoding="async">${o.nuevo ? '<span class="nuevo">Nuevo</span>' : ''}<span class="leyenda"><b>${esc(o.titulo)}</b>${esc(o.tecnica)}</span>`;
+    const abrirla = () => { if (!b.classList.contains('activa')) { activar(b); tocada = { b, t: Date.now() }; } };
+    b.addEventListener('mouseenter', abrirla);
+    b.addEventListener('focus', abrirla);
+    // En el celular el foco llega junto con el toque: ese primer toque solo expande la tira, el segundo abre la obra
+    b.addEventListener('click', () => { if (tocada.b === b && Date.now() - tocada.t < 400) return; if (b.classList.contains('activa')) abrirVisor(idx); else activar(b); });
+    return b;
+  });
+  tiras.slice().reverse().forEach(b => inicio.insertBefore(b, inicio.firstChild));
+  function activar(b) { tiras.forEach(t => t.classList.toggle('activa', t === b)); }
+  activar(nuevas.length ? tiras[0] : tiras[Math.floor(tiras.length / 2)]);
+
+  let rz, anchoPrev = innerWidth;   // en el celular la barra del navegador dispara 'resize' al hacer scroll: solo recalculamos si cambió el ancho
+  addEventListener('resize', () => { if (innerWidth === anchoPrev) return; anchoPrev = innerWidth; clearTimeout(rz); rz = setTimeout(calcular, 150); });
+  calcular();
+})();
+</script>
+</body>
+</html>

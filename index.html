@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
+<script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
+<link rel="stylesheet" href="intro.css?v=d7eedc">
+<script src="intro.js?v=d7eedc" defer></script>
+<script src="aura.js?v=d7ed08" defer></script>
+<script src="pulso.js?v=d7f026" defer></script>
+<title>Máximo Romero — Artista visual y diseñador</title>
+<meta name="description" content="Máximo José Romero: obra artística, diseño gráfico y motion graphics. Córdoba, Argentina.">
+<style>
+  :root { --papel: #e8e4db; --tinta: #141414; --acento: #c8321e;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: #111; font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow: hidden; }
+
+  .marca { position: fixed; top: 22px; left: 50%; transform: translateX(-50%); z-index: 10; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,.6);
+    font-family: var(--serif); font-size: 20px; text-align: center; pointer-events: none; }
+  .marca small { display: block; margin-top: 4px; font-family: var(--sans); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+
+  .puerta { display: flex; height: 100vh; height: 100dvh; }
+  .lado {
+    position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
+    padding: clamp(20px, 3.5vw, 56px); color: #fff; text-decoration: none;
+    transition: flex-grow .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .puerta:hover .lado { flex-grow: .7; }
+  .puerta .lado:hover { flex-grow: 1.7; }
+  .lado + .lado { border-left: 1px solid rgba(232,228,219,.4); }
+
+  .slides { position: absolute; inset: 0; background: #111; transition: filter .6s; }
+  .slide { position: absolute; inset: 0; overflow: hidden; }
+  .slide img, .slide video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform; }
+  .lado::after { content: ""; position: absolute; inset: 0; z-index: 3; background: linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,.05) 62%); pointer-events: none; }
+  /* Obra: en gris hasta que se la mira; Diseño: apagado hasta que se la mira */
+  .obra .slides { filter: grayscale(1) brightness(.85) contrast(1.05); }
+  .obra:hover .slides, .obra:focus-visible .slides { filter: none; }
+  .diseno .slides { filter: grayscale(1) brightness(.85) contrast(1.05); }   /* igual que Obra: en blanco y negro hasta que pasa el cursor */
+  .diseno:hover .slides, .diseno:focus-visible .slides { filter: none; }
+  /* barra de avance del loop */
+  .progreso { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 5; background: rgba(255,255,255,.18); }
+  .progreso i { display: block; height: 100%; width: 100%; background: #fff; transform-origin: 0 50%; transform: scaleX(0); }
+  .contador { position: absolute; top: 22px; z-index: 5; font-size: 11px; letter-spacing: .14em; color: #fff; opacity: .9; text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+  .obra .contador { left: clamp(20px, 3.5vw, 56px); } .diseno .contador { right: clamp(20px, 3.5vw, 56px); }
+  .tipo-nuevo { display: none; margin-left: 8px; background: #c8321e; padding: 3px 6px; letter-spacing: .12em; }
+  .tipo-nuevo.on { display: inline-block; }
+
+  .texto { position: relative; z-index: 4; }
+  .num { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(38px, 6.2vw, 104px); line-height: .95; letter-spacing: -.01em; margin: 10px 0 14px; white-space: nowrap; }
+  .desc { font-size: 15px; line-height: 1.5; max-width: 38ch; opacity: .85; }
+  .entrar { display: inline-block; margin-top: 22px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; padding-bottom: 4px; border-bottom: 1px solid #fff; transition: padding-right .3s; }
+  .lado:hover .entrar { padding-right: 18px; }
+  .lado:focus-visible { outline: 2px solid var(--acento); outline-offset: -6px; }
+
+  /* degradado arriba para que el nombre se lea sobre cualquier foto */
+  .puerta::before { content: ""; position: fixed; inset: 0 0 auto 0; height: 120px; z-index: 9; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+  @media (max-height: 560px) { .desc { display: none; } h2 { font-size: clamp(30px, 8vh, 60px); } }
+  @media (max-width: 760px) {
+    .puerta { flex-direction: column; }
+    .lado + .lado { border-left: 0; border-top: 1px solid rgba(232,228,219,.4); }
+    .puerta:hover .lado, .puerta .lado:hover { flex-grow: 1; }
+    h2 { font-size: 40px; } .desc { display: none; }
+    .marca { top: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lado, .fondo { transition: none; } }
+</style>
+<link rel="stylesheet" href="tipografia.css?v=c920a1">
+<link rel="stylesheet" href="tema.css?v=d7eb95">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+<meta name="theme-color" content="#111111">
+</head>
+<body>
+  <div class="marca">Máximo Romero<small>Artista visual · Diseñador</small></div>
+<script src="marca.js?v=ceb8de"></script>
+
+  <main class="puerta">
+    <a class="lado obra" href="obras.html" aria-label="Entrar a la obra artística">
+      <div class="slides"></div><span class="contador"></span><div class="progreso"><i></i></div>
+      <div class="texto">
+        <span class="num">01 — Dibujo y pintura<span class="tipo-nuevo">Nuevo</span></span>
+        <h2>Obra</h2>
+        <p class="desc">Carbonilla, pasteles y acrílico. Escenas de lo cotidiano con el cuerpo en movimiento.</p>
+        <span class="entrar">Ver portfolio →</span>
+      </div>
+    </a>
+    <a class="lado diseno" href="diseno.html" aria-label="Entrar a diseño gráfico y motion graphics">
+      <div class="slides"></div><span class="contador"></span><div class="progreso"><i></i></div>
+      <div class="texto">
+        <span class="num">02 — Diseño gráfico y motion</span>
+        <h2>Diseño<br>&amp; motion</h2>
+        <p class="desc">Identidad de marca, diseño editorial, ilustración aplicada y motion graphics.</p>
+        <span class="entrar">Ver trabajos →</span>
+      </div>
+    </a>
+  </main>
+
+<script src="obras.js?v=c5c10c"></script>
+<script src="diseno.js?v=c5cfd6"></script>
+<script src="inicio.js?v=c5cfd6"></script>
+<script>
+(() => {
+  const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DUR_IMG = 4200, DUR_VIDEO_MAX = 9000, BARRIDO = 1000;
+
+  // ---- Qué se muestra en cada mitad ----
+  const chica = matchMedia('(max-width: 760px)').matches;      // en celular se usan las miniaturas (mucho más livianas)
+  const nuevas = OBRAS.filter(o => o.nuevo).slice(0, 5);
+  const siempre = OBRAS.filter(o => !o.nuevo);
+  const elegidasObra = [0, 1, 3, 6, 9, 12, 16, 20, 25].map(i => siempre[i]).filter(Boolean);
+  const fotosObra = nuevas.concat(elegidasObra).map(o => ({ tipo: 'img', src: chica ? o.thumb : o.src, nuevo: !!o.nuevo, titulo: o.titulo }));
+
+  const trabajos = DISENO.flatMap(g => g.works);
+  const paso = Math.max(1, Math.floor(trabajos.length / 10));
+  const fotosDiseno = trabajos.filter((_, i) => i % paso === 0).slice(0, 10).map(w => ({ tipo: 'img', src: chica ? w.thumb : w.images[0].src, titulo: w.title }));
+
+  // Los videos de "videos inicio/" se intercalan: uno cada 3 fotos
+  function mezclar(fotos, videos) {
+    const out = []; let v = 0;
+    fotos.forEach((f, i) => { out.push(f); if ((i + 1) % 3 === 0 && v < videos.length) out.push({ tipo: 'video', src: encodeURI(videos[v++]) }); });
+    while (v < videos.length) out.push({ tipo: 'video', src: encodeURI(videos[v++]) });
+    return out;
+  }
+
+  // ---- Carrusel con barrido (clip-path) y zoom lento ----
+  function carrusel(lado, slides, retraso) {
+    const cont = lado.querySelector('.slides'), barra = lado.querySelector('.progreso i'),
+          cuenta = lado.querySelector('.contador'), etiqueta = lado.querySelector('.tipo-nuevo');
+    const dir = lado.classList.contains('obra') ? 'inset(100% 0 0 0)' : 'inset(0 0 100% 0)';  // Obra sube, Diseño baja
+    const cache = [];
+    let i = -1, timer = null;
+
+    function crear(k) {
+      if (cache[k]) return cache[k];
+      const s = slides[k], w = document.createElement('div'); w.className = 'slide';
+      let m;
+      if (s.tipo === 'video') { m = document.createElement('video'); m.muted = true; m.playsInline = true; m.preload = 'auto'; m.src = s.src; m.addEventListener('error', () => { s.malo = true; if (cache[i] && cache[i].s === s) avanzar(); }); }
+      else { m = new Image(); m.alt = s.titulo || ''; m.decoding = 'async'; m.src = s.src; }
+      w.appendChild(m); return (cache[k] = { w, m, s });
+    }
+
+    function mostrar(k) {
+      const prev = i >= 0 ? cache[i] : null; i = k;
+      const c = crear(k); cont.appendChild(c.w);
+      if (prev) {
+        c.w.animate([{ clipPath: dir }, { clipPath: 'inset(0 0 0 0)' }], { duration: BARRIDO, easing: 'cubic-bezier(.7,0,.2,1)' });
+        setTimeout(() => { if (prev.w.parentNode && prev !== c) prev.w.remove(); if (prev.s.tipo === 'video') prev.m.pause(); }, BARRIDO + 50);
+      } else c.w.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700 });
+      c.m.animate([{ transform: 'scale(1.14)' }, { transform: 'scale(1)' }], { duration: DUR_IMG + 4000, easing: 'ease-out', fill: 'forwards' });
+      let dur = DUR_IMG;
+      if (c.s.tipo === 'video') {
+        c.m.currentTime = 0; c.m.play().catch(() => {});
+        const d = c.m.duration; dur = isFinite(d) && d > 0 ? Math.min(d * 1000, DUR_VIDEO_MAX) : DUR_VIDEO_MAX;
+      }
+      cuenta.textContent = String(k + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+      if (etiqueta) etiqueta.classList.toggle('on', !!c.s.nuevo);
+      barra.getAnimations().forEach(a => a.cancel());
+      barra.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: dur, easing: 'linear', fill: 'forwards' });
+      crear((k + 1) % slides.length);   // precarga la siguiente
+      clearTimeout(timer); timer = setTimeout(avanzar, dur);
+    }
+    function avanzar() {
+      if (document.hidden) { clearTimeout(timer); timer = setTimeout(avanzar, 500); return; }
+      let k = i;
+      for (let n = 0; n < slides.length; n++) { k = (k + 1) % slides.length; if (!slides[k].malo) break; }   // saltea videos que no se pueden reproducir
+      mostrar(k);
+    }
+
+    if (!slides.length) return;
+    mostrar(0);
+    if (reducido || slides.length < 2) { clearTimeout(timer); barra.parentNode.style.display = 'none'; }
+    else { clearTimeout(timer); timer = setTimeout(avanzar, retraso); }   // la primera foto dura 'retraso': así los dos paneles quedan desfasados
+  }
+
+  carrusel(document.querySelector('.lado.obra'), mezclar(fotosObra, VIDEOS_INICIO.obra), 3200);
+  carrusel(document.querySelector('.lado.diseno'), mezclar(fotosDiseno, VIDEOS_INICIO.diseno), 4800);   // desfasadas para que no cambien a la vez
+})();
+</script>
+</body>
+</html>

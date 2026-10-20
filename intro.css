@@ -1,0 +1,76 @@
+/* Intro: el logo MR se dibuja como vector, se rellena, aparece el nombre, glitch y la cortina sube (una vez por visita).
+   Lo usan las 3 páginas. Claro: fondo azul y logo blanco. Oscuro: fondo negro, isotipo azul y nombre blanco. */
+/* mientras se arma, una tapa del mismo color evita que la página se vea antes de tiempo */
+html.con-intro { overflow: hidden; }
+html.con-intro body::before { content: ""; position: fixed; inset: 0; z-index: 999; background: #1800ff; }
+html[data-tema="oscuro"].con-intro body::before { background: #000; }
+
+#intro { --fondo: #1800ff; position: fixed; inset: 0; z-index: 1000; background: var(--fondo); color: #fff; display: grid; place-items: center; padding: 24px;
+  font-family: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif; cursor: pointer; overflow: hidden;
+  transition: transform 1s cubic-bezier(.76,0,.24,1); }
+html[data-tema="oscuro"] #intro { --fondo: #000; }
+html[data-tema="oscuro"] #intro .lockup > .i-iso { color: #4d4dff; }   /* #1800ff sobre negro casi no se ve */
+
+.i-fondo { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* HUD en las esquinas */
+.i-hud { position: absolute; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-variant-numeric: tabular-nums; white-space: nowrap;
+  opacity: 0; transition: opacity .4s .2s; }
+.i-hud b { font-weight: 600; }
+.i-hud.tl { top: 22px; left: clamp(16px, 3vw, 40px); } .i-hud.tr { top: 22px; right: clamp(16px, 3vw, 40px); }
+.i-hud.bl { bottom: 22px; left: clamp(16px, 3vw, 40px); } .i-hud.br { bottom: 22px; right: clamp(16px, 3vw, 40px); }
+#intro.entra .i-hud { opacity: .85; }
+
+/* proporciones del logo original: isotipo 13×10 módulos, nombre debajo y un poco más ancho */
+#intro .lockup { position: relative; width: min(76vw, 52vh, 520px); transition: transform 1s cubic-bezier(.76,0,.24,1); }
+#intro .i-iso svg { display: block; width: 83.4%; height: auto; overflow: visible; }
+#intro .i-palabra { margin-top: 13.5%; }
+#intro .i-palabra svg { display: block; width: 100%; height: auto; }
+
+/* 1 · vector: contornos que se dibujan, nodos en las esquinas y caja de selección que se ajusta */
+.i-contorno { fill: none; stroke: #fff; stroke-width: .05; stroke-dasharray: 1; stroke-dashoffset: 1;
+  transition: stroke-dashoffset .6s cubic-bezier(.6,0,.2,1) calc(.1s + var(--k) * 90ms), opacity .3s 1.45s; }
+#intro.entra .i-contorno { stroke-dashoffset: 0; opacity: 0; }
+.i-nodo { fill: var(--fondo); stroke: #fff; stroke-width: .045; opacity: 0; transition: opacity .2s .35s; }
+#intro.entra .i-nodo { opacity: 1; animation: i-apaga .3s 1.45s forwards; }
+.i-sel { opacity: 0; transform: scale(1.3); transform-box: fill-box; transform-origin: center; transition: transform .9s cubic-bezier(.16,1,.3,1) .15s, opacity .3s .15s; }
+.i-sel-caja { fill: none; stroke: #fff; stroke-width: .035; }
+.i-manija { fill: var(--fondo); stroke: #fff; stroke-width: .035; }
+#intro.entra .i-sel { opacity: .9; transform: none; animation: i-apaga .3s 1.4s forwards; }
+@keyframes i-apaga { to { opacity: 0; } }
+
+/* 2 · relleno: los bloques crecen sobre su contorno (el de arriba entra de costado) */
+#intro .i-iso svg > rect { transform-box: fill-box; transform: scale(1, 0); transform-origin: 50% 100%;
+  transition: transform .6s cubic-bezier(.2,.85,.25,1) calc(.7s + var(--k) * 100ms); }
+#intro .i-iso svg > rect:first-child { transform: scale(0, 1); transform-origin: 0 50%; }
+#intro.entra .i-iso svg > rect { transform: none; }
+
+/* 3 · nombre y bajada */
+#intro .i-palabra { clip-path: inset(0 100% 0 0); transition: clip-path .75s cubic-bezier(.7,0,.2,1) 1.2s; }
+#intro.entra .i-palabra { clip-path: inset(0 0 0 0); }
+#intro .bajada { position: absolute; left: 0; right: 0; bottom: clamp(48px, 8vh, 80px); text-align: center; font-size: clamp(11px, 1vw, 13px); letter-spacing: .16em; text-transform: uppercase;
+  opacity: 0; transform: translateY(8px); transition: opacity .5s 1.65s, transform .6s cubic-bezier(.2,.8,.2,1) 1.65s; }
+#intro.entra .bajada { opacity: .9; transform: none; }
+
+/* 4 · glitch: copias cian y magenta cortadas en franjas */
+#intro .i-g { position: absolute; inset: 0; opacity: 0; pointer-events: none; mix-blend-mode: screen; }
+#intro .i-g1 { color: #00f0ff; } #intro .i-g2 { color: #ff2bd6; }
+#intro .i-g .i-iso, #intro .i-g .i-palabra { color: inherit !important; }
+#intro.glitch .i-g1 { opacity: .9; animation: i-corte1 .35s steps(1) infinite; }
+#intro.glitch .i-g2 { opacity: .9; animation: i-corte2 .35s steps(1) infinite; }
+#intro.glitch .lockup > .i-iso, #intro.glitch .lockup > .i-palabra { animation: i-tiembla .35s steps(1) infinite; }
+@keyframes i-corte1 {
+  0% { transform: translate(-12px, 0); clip-path: inset(8% 0 64% 0); } 25% { transform: translate(9px, 2px); clip-path: inset(46% 0 30% 0); }
+  50% { transform: translate(-5px, -2px); clip-path: inset(74% 0 6% 0); } 75% { transform: translate(15px, 0); clip-path: inset(20% 0 56% 0); } }
+@keyframes i-corte2 {
+  0% { transform: translate(11px, 2px); clip-path: inset(58% 0 22% 0); } 25% { transform: translate(-14px, 0); clip-path: inset(4% 0 78% 0); }
+  50% { transform: translate(6px, -2px); clip-path: inset(34% 0 42% 0); } 75% { transform: translate(-8px, 2px); clip-path: inset(82% 0 3% 0); } }
+@keyframes i-tiembla {
+  0% { transform: translate(0, 0); clip-path: inset(0); } 25% { transform: translate(-4px, 0); clip-path: inset(0 0 42% 0); }
+  50% { transform: translate(3px, 0); clip-path: inset(28% 0 0 0); } 75% { transform: translate(-1px, 1px); clip-path: inset(0); } }
+
+/* salida: la cortina sube y el logo se queda un poco atrás */
+#intro.sale { transform: translateY(-100%); }
+#intro.sale .lockup { transform: translateY(28vh); }
+
+@media (max-width: 640px) { .i-hud.br, .i-hud.tr { display: none; } }

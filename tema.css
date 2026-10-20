@@ -1,0 +1,99 @@
+/* Tema del sitio: azul fuerte + blanco (claro) y negro + azul + blanco (oscuro). Logo MR en el encabezado.
+   Se carga ÚLTIMO en las 3 páginas: redefine las variables de cada página (--papel, --tinta, --gris, --acento).
+   El <head> pone html[data-tema] antes de pintar (lo guarda marca.js en localStorage). Contrastes medidos:
+   azul #1800ff sobre blanco 8,5:1 · #5b5bff sobre blanco 4,8:1 · #8c92ff sobre negro 7,7:1 · blanco sobre #4d4dff 5,5:1. */
+:root, html[data-tema="claro"] {
+  --azul: #1800ff;
+  --papel: #ffffff; --papel-2: #eceeff;
+  --tinta: #1800ff; --gris: #5b5bff; --acento: #5b5bff;   /* acento más claro: los hover se notan */
+  --linea: rgba(24, 0, 255, .22);
+  --logo-iso: currentColor;
+  color-scheme: light;
+}
+html[data-tema="oscuro"] {
+  --papel: #000000; --papel-2: #10101c;
+  --tinta: #ffffff; --gris: #8c92ff; --acento: #4d4dff;
+  --linea: rgba(255, 255, 255, .2);
+  --logo-iso: #4d4dff;   /* #1800ff sobre negro no se ve (2,2:1) */
+  color-scheme: dark;
+}
+body { transition: background-color .4s, color .4s; }
+
+/* Líneas finas: del gris al color del tema */
+header, header.menu { border-bottom-color: var(--linea) !important; }
+.bloque, section.bloque, footer { border-top-color: var(--linea) !important; }
+
+/* ---------- Logo MR (marca.js) ---------- */
+header, header.menu { align-items: center; }
+.marca.con-logo { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1; }
+.mr-caja { --alto: 19px; display: inline-grid; height: var(--alto); width: calc(var(--alto) * 9.423); }
+.mr-cara { grid-area: 1 / 1; display: block; height: var(--alto); overflow: hidden; }
+.mr-cara svg { display: block; height: var(--alto); width: auto; }
+.mr-iso { color: var(--logo-iso); }
+/* isotipo: los 5 bloques crecen de abajo, uno tras otro; el nombre se barre de derecha a izquierda */
+.mr-iso rect { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0);
+  transition: transform .35s cubic-bezier(.6,0,.4,1) calc((4 - var(--k)) * 40ms); }
+.ver-iso .mr-iso rect { transform: none; transition: transform .5s cubic-bezier(.2,.8,.2,1) calc(.3s + var(--k) * 80ms); }
+.mr-palabra { clip-path: inset(0 0 0 0); transition: clip-path .6s cubic-bezier(.7,0,.2,1) .35s; }
+.ver-iso .mr-palabra { clip-path: inset(0 100% 0 0); transition-delay: 0s; }
+
+/* Portada (index): logo centrado, blanco sobre las fotos */
+div.marca.con-logo { align-items: center; --logo-iso: currentColor; }
+div.marca.con-logo .mr-caja { --alto: 24px; }
+div.marca.con-logo .mr-cara { justify-self: center; }
+div.marca.con-logo small { margin-top: 10px; }
+div.marca.con-logo .mr-caja { filter: drop-shadow(0 1px 10px rgba(0,0,0,.45)); }
+
+/* ---------- Botón claro / oscuro ---------- */
+.tema-boton { display: inline-flex; align-items: center; gap: 8px; margin-left: clamp(14px, 2.2vw, 32px); padding: 6px 11px; flex: none;
+  font: inherit; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; line-height: 1;
+  color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 999px; cursor: pointer; transition: background .25s, color .25s; }
+.tema-boton:hover { background: var(--tinta); color: var(--papel); }
+.tema-boton:focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+.tema-icono { flex: none; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid currentColor; background: linear-gradient(90deg, currentColor 50%, transparent 50%); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+html[data-tema="oscuro"] .tema-icono { transform: rotate(180deg); }
+.tema-txt i { font-style: normal; }
+html:not([data-tema="oscuro"]) .tema-txt i:first-child, html[data-tema="oscuro"] .tema-txt i:last-child { display: none; }
+header nav, header nav.principal { margin-left: auto; }
+.tema-boton.fijo { position: fixed; top: 20px; right: clamp(16px, 3vw, 40px); z-index: 11; margin: 0; color: #fff; text-shadow: none; }
+.tema-boton.fijo:hover { background: #fff; color: var(--azul); }
+
+/* ---------- Portada (index) ---------- */
+.tipo-nuevo { background: var(--acento) !important; }
+
+/* ---------- Capítulos con colores propios: quedan iguales en los dos modos ---------- */
+#feria-del-centro { --papel: #ffffff; --tinta: #141414; --gris: #58595b; --acento: #141414; color: #141414; }
+
+/* Botones .boton dentro de capítulos de color fijo: el texto del hover toma el fondo del capítulo */
+.ah-manual, .ah-sistema { --fondo-boton: #f4f3ef; }
+/* foco visible sobre fondos oscuros fijos y sobre las fotos de la portada */
+#agencia, #nexar { --acento: #8c92ff; }
+.lado:focus-visible { outline-color: #fff !important; }
+#indice li a { border-bottom-color: var(--linea) !important; }
+/* portada: el botón de tema no tapa el contador de Diseño */
+.diseno .contador { top: 64px !important; }
+
+/* FIT: sigue el tema (el libro de papel queda bien sobre negro); textos que estaban fijos en gris */
+.fit-cab p { color: var(--tinta); opacity: .85; }
+.fit-estante button span { color: #1800ff; }
+#fit { border-top-color: var(--linea); }
+
+/* pantallas medianas: el botón queda solo con el ícono para que entre el menú */
+@media (max-width: 900px) { header .tema-txt { display: none; } header .tema-boton { padding: 6px 8px; } }
+
+/* ---------- Celulares ---------- */
+@media (max-width: 640px) {
+  header, header.menu { align-items: flex-start; }
+  header .tema-boton { position: absolute; top: 0; right: 8px; margin: 0; padding: 0; min-width: 44px; min-height: 40px; justify-content: center; border-color: transparent; }
+  header .tema-txt { display: none; }
+  header nav, header nav.principal { margin-left: 0; }
+  .mr-caja { --alto: 16px; }
+  header .marca.con-logo { margin: 2px 0 10px; }   /* la fila del menú baja y no queda debajo del botón */
+  .tema-boton.fijo { top: 8px; right: 8px; padding: 0; min-width: 44px; min-height: 36px; justify-content: center; }
+  .tema-boton.fijo .tema-txt { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mr-iso rect, .mr-palabra, .tema-icono, body { transition: none; }
+}
+
+/* Aura del cursor: los estilos los pone aura.js en el propio canvas */

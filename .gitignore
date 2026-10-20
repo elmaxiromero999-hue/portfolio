@@ -1,0 +1,13 @@
+# Solo se publica el sitio (ver CLAUDE.md, "Publicar solo")
+/*
+!/.gitignore
+!/.nojekyll
+!/index.html
+!/obras.html
+!/diseno.html
+!/*.css
+!/*.js
+!/img/
+!/videos/
+!/fuentes/
+.DS_Store

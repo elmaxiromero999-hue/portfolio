@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
+<script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
+<link rel="stylesheet" href="intro.css?v=d7eedc">
+<script src="intro.js?v=d7eedc" defer></script>
+<script src="aura.js?v=d7ed08" defer></script>
+<script src="pulso.js?v=d7f026" defer></script>
+<script src="fondo.js?v=d7ecf9" defer></script>
+<meta name="description" content="Diseño gráfico y motion graphics de Máximo José Romero: identidad visual del Archivo Histórico de la Provincia de Córdoba, motion institucional para la Agencia Córdoba Cultura, catálogo FIT, Nexar Networks, Feria del Centro, visuales para conciertos y experimentación visual.">
+<meta name="theme-color" content="#ffffff">
+<title>Diseño y motion — Máximo Romero</title>
+<style>
+  :root { --papel: #e8e4db; --papel-2: #dedad0; --tinta: #141414; --gris: #6d6a63; --acento: #c8321e;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--papel); color: var(--tinta); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+
+  header.menu { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px clamp(16px, 3vw, 40px); background: var(--papel); border-bottom: 1px solid rgba(0,0,0,.15); }
+  header.menu a { text-decoration: none; }
+  .marca { font-family: var(--serif); font-size: 20px; }
+  nav.principal { display: flex; gap: clamp(14px, 2.2vw, 32px); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  nav.principal a { opacity: .85; } nav.principal a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+  nav.principal a.actual { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+
+  .intro { padding: clamp(110px, 15vw, 190px) clamp(16px, 3vw, 40px) clamp(30px, 5vw, 60px); max-width: 1500px; margin: 0 auto; }
+  .etiqueta { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 8vw, 120px); line-height: .95; letter-spacing: -.01em; }
+  .intro p.sub { margin-top: 24px; max-width: 54ch; font-size: 16px; line-height: 1.6; color: var(--gris); }
+
+  .bloque { max-width: 1500px; margin: 0 auto; padding: clamp(40px, 6vw, 80px) clamp(16px, 3vw, 40px); border-top: 1px solid rgba(0,0,0,.2); scroll-margin-top: 60px; }
+  .ph { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }
+  .ph .y { font-size: 12px; letter-spacing: .12em; color: var(--gris); }
+  .ph h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 4vw, 52px); line-height: 1; }
+  .ph p { font-size: 13px; color: var(--gris); margin-left: auto; }
+
+  .vids { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+  .vid { grid-column: span 6; aspect-ratio: 16/9; }
+
+
+  /* videos en loop */
+  .vid { position: relative; background: #111; overflow: hidden; }
+  .vid video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vid .sonido { position: absolute; right: 10px; bottom: 10px; background: rgba(20,20,20,.7); color: #fff; border: 0; font: inherit; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 7px 10px; cursor: pointer; }
+  .vid .sonido:hover { background: var(--acento); }
+
+  /* filtros */
+  .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .filtros button { font: inherit; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; background: transparent; color: var(--tinta);
+    border: 1px solid var(--tinta); padding: 9px 14px; cursor: pointer; transition: background .2s, color .2s; }
+  .filtros button:hover, .filtros button.on { background: var(--tinta); color: var(--papel); }
+  .filtros button sup { font-size: 9px; opacity: .65; margin-left: 4px; }
+
+  /* mampostería */
+  .muro { column-count: 4; column-gap: 14px; }
+  .trabajo { position: relative; display: block; width: 100%; margin: 0 0 14px; padding: 0; border: 0; background: var(--papel-2); cursor: zoom-in; break-inside: avoid; overflow: hidden; text-align: left;
+    opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+  .trabajo.visto { opacity: 1; transform: none; }
+  .trabajo img { display: block; width: 100%; height: auto; transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .4s; }
+  .trabajo:hover img, .trabajo:focus-visible img { transform: scale(1.05); filter: brightness(.55); }
+  .trabajo .info { position: absolute; left: 12px; right: 12px; bottom: 10px; color: #fff; opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .35s; pointer-events: none; text-shadow: 0 1px 10px rgba(0,0,0,.6); }
+  .trabajo:hover .info, .trabajo:focus-visible .info { opacity: 1; transform: none; }
+  .trabajo .info b { display: block; font-family: var(--serif); font-weight: 400; font-size: 19px; line-height: 1.1; }
+  .trabajo .info span { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+  .trabajo .mas { position: absolute; top: 8px; right: 8px; background: rgba(20,20,20,.75); color: #fff; font-size: 11px; letter-spacing: .08em; padding: 4px 7px; pointer-events: none; }
+  .trabajo:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+  .vacio { color: var(--gris); font-size: 14px; }
+
+  footer { padding: 24px clamp(16px, 3vw, 40px); font-size: 12px; color: var(--gris); border-top: 1px solid rgba(0,0,0,.2); }
+
+  /* visor */
+  #visor { position: fixed; inset: 0; z-index: 100; background: rgba(18,18,18,.96); display: none; align-items: center; justify-content: center; padding: 5vh 5vw; color: #eee; }
+  #visor.abierto { display: flex; }
+  #visor [hidden] { display: none !important; }
+  #visor img, #visor video { max-width: 100%; max-height: 86vh; object-fit: contain; display: block; box-shadow: 0 20px 60px rgba(0,0,0,.6); animation: entra .35s ease; }
+  @keyframes entra { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+  #visor button { position: absolute; background: none; border: 0; color: #eee; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; padding: 14px; }
+  #visor .cerrar { top: 10px; right: 14px; } #visor .ant { left: 8px; top: 50%; } #visor .sig { right: 8px; top: 50%; }
+  #visor .cap { position: absolute; left: 22px; bottom: 16px; right: 22px; display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+  #visor .cap b { font-family: var(--serif); font-weight: 400; font-size: 22px; }
+  #visor .cap span { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #aaa; }
+
+  @media (max-width: 1100px) { .muro { column-count: 3; } }
+  @media (max-width: 760px) { .muro { column-count: 2; column-gap: 10px; } .trabajo { margin-bottom: 10px; } .vid { grid-column: span 12; } .ph p { margin-left: 0; }
+    .trabajo .info { display: none; } nav.principal { font-size: 11px; gap: 12px; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .trabajo { opacity: 1; transform: none; transition: none; } }
+</style>
+<link rel="stylesheet" href="tipografia.css?v=c920a1">
+<link rel="stylesheet" href="diseno-inst.css?v=d7e04f">
+<link rel="stylesheet" href="comun.css?v=c92278">
+<link rel="stylesheet" href="transicion.css?v=d7e9c9">
+<link rel="stylesheet" href="tema.css?v=d7eb95">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+</head>
+<body>
+<header class="menu">
+  <a class="marca" href="index.html">Máximo Romero</a>
+  <nav class="principal"><a href="index.html">Inicio</a><a href="obras.html">Obra</a><a class="actual" href="diseno.html">Diseño y motion</a><a href="obras.html#contacto">Contacto</a></nav>
+</header>
+<script src="marca.js?v=ceb8de"></script>
+
+<div class="dis-cab">
+  <p class="etiqueta">02 — Diseño gráfico y motion graphics</p>
+  <h1>Diseño <em>y</em> movimiento</h1>
+  <div class="franja" aria-hidden="true"><div class="franja-pista"></div></div>
+</div>
+
+<nav id="indice" aria-label="Capítulos">
+  <p class="indice-tit"><span>Índice</span><span>7 capítulos · 2025—2026</span></p>
+  <ol>
+    <li><a href="#archivo-historico" data-vista="ahpc"><span class="n">01</span><b>Archivo Histórico de la Provincia de Córdoba</b><span class="q">Identidad visual</span><span class="a">2026</span></a></li>
+    <li><a href="#agencia" data-vista="agencia"><span class="n">02</span><b>Agencia Córdoba Cultura</b><span class="q">Motion institucional</span><span class="a">2026</span></a></li>
+    <li><a href="#fit" data-vista="fit"><span class="n">03</span><b>Catálogo FIT 2026</b><span class="q">Diseño editorial</span><span class="a">2026</span></a></li>
+    <li><a href="#nexar" data-vista="nexar"><span class="n">04</span><b>Nexar Networks</b><span class="q">Motion · video institucional</span><span class="a"></span></a></li>
+    <li><a href="#feria-del-centro" data-vista="fdc"><span class="n">05</span><b>Feria del Centro</b><span class="q">Identidad de evento</span><span class="a">2025</span></a></li>
+    <li><a href="#motion" data-vista="motion"><span class="n">06</span><b>Visuales en vivo</b><span class="q">Conciertos y eventos</span><span class="a">2025</span></a></li>
+    <li><a href="#experimentacion-visual" data-vista="exp"><span class="n">07</span><b>Experimentación visual</b><span class="q">Posters, flyers y portadas</span><span class="a"></span></a></li>
+  </ol>
+</nav>
+
+<!-- ===================== 01 · ARCHIVO HISTÓRICO ===================== -->
+<section id="archivo-historico" class="ahpc bloque-ancho" aria-label="Identidad visual del Archivo Histórico de la Provincia de Córdoba">
+  <div class="ah-portada">
+    <p class="cap-num">01 — Identidad visual · Caso destacado</p>
+    <div class="ah-texto">
+      <h2>Archivo Histórico<span>de la Provincia de Córdoba</span></h2>
+      <p>Una identidad para un archivo que no está detenido en el tiempo. El signo nace del libro, del edificio que lo alberga y de las estanterías donde se guarda la memoria documental de la provincia.</p>
+      <dl class="ah-ficha">
+        <dt>Proyecto</dt><dd>Identidad visual y manual de marca</dd>
+        <dt>Año</dt><dd>2026</dd>
+        <dt>Piezas</dt><dd>Isotipo, logotipo, sigla, versión 85 años, paleta, convivencia con la marca de gobierno</dd>
+      </dl>
+    </div>
+    <div class="ah-signo" id="ahSigno" data-logo="construccion" role="img" aria-label="Isotipo del Archivo Histórico armándose capa por capa"></div>
+    <div class="ah-gigante" aria-hidden="true">AHPC</div>
+  </div>
+
+  <div class="ah-antes">
+    <figure>
+      <figcaption>Punto de partida <span>El Archivo y el Centro Cultural Córdoba compartían el mismo dibujo.</span></figcaption>
+      <div class="img"><img id="ahAntes" alt="Logos anteriores del Centro Cultural Córdoba y del Archivo Histórico, con el mismo dibujo" loading="lazy"></div>
+    </figure>
+    <figure>
+      <figcaption>Nueva identidad <span>Un signo propio, construido desde lo que el Archivo es y hace.</span></figcaption>
+      <div class="img"><div data-logo="nombre" role="img" aria-label="Logotipo del Archivo Histórico de la Provincia de Córdoba"></div></div>
+    </figure>
+  </div>
+
+  <div class="ah-anatomia" id="ahAnatomia">
+    <div class="ah-escenario" data-paso="0">
+      <div class="ah-izq">
+        <p class="cap-num"><span>Anatomía del signo</span><span id="ahCuenta">01 / 06</span></p>
+        <div class="ah-dibujo" data-logo="construccion" aria-hidden="true"></div>
+        <div>
+          <div class="ah-pasos">
+            <div class="ah-paso on"><span class="k">01</span><h3>Libro abierto<small>(al público)</small></h3><p>El libro como símbolo primario del archivo y del conocimiento. Una forma perspectivada, con una leve curvatura, sugiere un libro abierto: el Archivo como espacio de acceso, consulta y apertura, no como un depósito cerrado.</p></div>
+            <div class="ah-paso"><span class="k">02</span><h3>Libro histórico</h3><p>Las líneas del isotipo se corresponden con las capas visibles del libro físico. El signo no solo representa al libro como símbolo: también al objeto real que se conserva, se restaura y se resguarda.</p></div>
+            <div class="ah-paso"><span class="k">03</span><h3>Fachada<small>Archivo Histórico / Centro Cultural</small></h3><p>Los pilares en “V” y la curvatura de la cubierta del edificio que alberga al Archivo, sintetizados en un lenguaje gráfico contemporáneo. Una lectura conceptual de la arquitectura, no un dibujo literal.</p></div>
+            <div class="ah-paso"><span class="k">04</span><h3>Módulo Archivo Histórico</h3><p>El volumen del edificio destinado a los archivos, reinterpretado con figura y fondo: una caja contenedora que habla de su función como espacio de conservación y protección del patrimonio documental.</p></div>
+            <div class="ah-paso"><span class="k">05</span><h3>Estanterías</h3><p>Las formas lineales y repetidas remiten a las estanterías donde se ordena el material documental. La repetición genera una lectura de sistema: el trabajo archivístico es metódico y estructurado.</p></div>
+            <div class="ah-paso"><span class="k">06</span><h3>El signo</h3><p>Cinco ideas en una sola forma. El azul archivo arma el signo; el celeste marca el módulo que guarda la memoria.</p></div>
+          </div>
+          <div class="ah-puntos" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <div class="ah-fotos" id="ahFotos">
+        <div class="final" data-logo="nombre" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ah-sistema">
+    <header class="sube">
+      <h3>El sistema</h3>
+      <p>Versión completa, sigla y versión aniversario; dos colores y una sola familia tipográfica. Tocá un color para copiar su código.</p>
+    </header>
+    <div class="ah-grilla">
+      <div class="ah-tile t-navy ancho alto sube" data-logo="nombre"><span class="rot">Versión principal</span></div>
+      <div class="ah-tile t-blanco sube" data-logo="sigla"><span class="rot">Sigla</span></div>
+      <div class="ah-tile t-claro sube" data-logo="sigla"><span class="rot">Sobre celeste</span></div>
+      <div class="ah-tile t-blanco sube" data-logo="aniversario"><span class="rot">85 años</span></div>
+      <div class="ah-tile t-negro sube" data-logo="sigla"><span class="rot">Monocromo</span></div>
+      <button class="ah-tile ah-color t-navy sube" type="button" data-copiar="#1d2e36"><em>Copiado</em><b>Azul archivo</b><span>#1d2e36 · RGB 29 46 54</span></button>
+      <button class="ah-tile ah-color t-claro sube" type="button" data-copiar="#81aed7"><em>Copiado</em><b>Celeste módulo</b><span>#81aed7 · RGB 129 174 215</span></button>
+      <div class="ah-tile ah-tipo ancho sube"><span class="aa">Aa</span><div><b>Poppins</b><div class="pesos"><span>Light</span><span>Medium</span><span>SemiBold</span></div></div></div>
+    </div>
+    <div class="ah-convive" id="ahConvive"></div>
+  </div>
+
+  <div class="ah-manifiesto">
+    <div class="foto"><img id="ahFotoManif" alt="Restauración de un documento con pinza y guantes" loading="lazy"></div>
+    <div class="txt">
+      <blockquote id="ahFrase">El Archivo Histórico de la Provincia de Córdoba <em>no es un espacio detenido en el tiempo.</em> Es una institución activa, especializada y en constante evolución.</blockquote>
+      <p>La propuesta gráfica busca romper con la idea de lo antiguo, lo obsoleto o lo rústico, y construir una imagen que refleje orden, precisión y accesibilidad: preservar la memoria con rigor, hacerla accesible a la comunidad y proyectarla hacia nuevas generaciones.</p>
+    </div>
+  </div>
+
+  <div class="ah-manual">
+    <header><h3>Manual de marca</h3><button class="boton" type="button" id="ahVerManual"><span>Ver las 16 láminas ↗</span></button></header>
+    <div class="ah-manual-tira" id="ahManual"></div>
+  </div>
+</section>
+
+<!-- ===================== 02 · AGENCIA CÓRDOBA CULTURA ===================== -->
+<section id="agencia" aria-label="Motion institucional para la Agencia Córdoba Cultura">
+  <header class="ag-cab sube">
+    <p class="cap-num">02 — Motion institucional · Agencia Córdoba Cultura · 2026</p>
+    <h2>En pantalla</h2>
+    <p id="agIntro"></p>
+  </header>
+  <div id="agProyectos"></div>
+</section>
+
+<!-- ===================== 03 · CATÁLOGO FIT ===================== -->
+<section id="fit" aria-label="Catálogo del Festival Internacional de Teatro">
+  <header class="fit-cab sube">
+    <p class="cap-num">03 — Diseño editorial · 2026</p>
+    <h2>Catálogo FIT<span id="fitTitulo"></span></h2>
+    <p id="fitDesc"></p>
+  </header>
+  <div class="fit-libro" id="fitLibro" tabindex="0" aria-label="Catálogo interactivo: agarrá la hoja de una punta y arrastrala, o usá las flechas del teclado"></div>
+  <div class="fit-mandos">
+    <span class="flechas"><button type="button" aria-label="Página anterior" id="fitAnt">←</button><button type="button" aria-label="Página siguiente" id="fitSig">→</button></span>
+    <span class="fit-pag" id="fitPag" aria-live="polite">Tapa</span>
+    <span class="fit-ayuda">Agarrá la hoja de una punta y arrastrala · versión resumida</span>
+    <button class="boton" type="button" id="fitAmpliar"><span>Ampliar ↗</span></button>
+  </div>
+  <div class="fit-completo">
+    <header><h3>Catálogo completo<small id="fitCant"></small></h3><span class="flechas"><button type="button" aria-label="Anterior" data-d="-1">←</button><button type="button" aria-label="Siguiente" data-d="1">→</button></span></header>
+    <div class="fit-estante" id="fitEstante"></div>
+    <button class="boton" type="button" id="fitTodo"><span>Ver todo en pantalla completa ↗</span></button>
+  </div>
+</section>
+
+<!-- ===================== 04 · NEXAR NETWORKS ===================== -->
+<section id="nexar" aria-label="Motion para el video institucional de Nexar Networks">
+  <header class="nx-cab sube">
+    <p class="cap-num">04 — Motion · video institucional</p>
+    <h2>Nexar Networks<span class="nx-flechas" aria-hidden="true">▶▶▶</span></h2>
+    <div class="nx-texto"><p id="nxDesc"></p><button class="boton" type="button" id="nxCompleto"><span>▶ Ver el video completo con sonido</span></button></div>
+  </header>
+  <div class="nx-linea-caja">
+    <div class="nx-reglas"><span>00:00</span><span id="nxTiempo" aria-hidden="true">— / 01:04</span></div>
+    <div class="nx-linea" id="nxLinea" role="group" aria-label="Línea de tiempo del video: tocá una escena para verla con sonido"><i class="nx-cabezal" id="nxCabezal" aria-hidden="true"></i></div>
+  </div>
+  <div id="nxFilas"></div>
+</section>
+
+<!-- ===================== 05 · FERIA DEL CENTRO ===================== -->
+<section id="feria-del-centro" aria-label="Identidad de la Feria del Centro">
+  <svg class="fdc-lineas" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path id="fdcR" class="r" d="M-40 60 H600 Q640 60 662 94 L758 206 Q780 240 820 240 H1640"/>
+    <path id="fdcA" class="a" d="M-40 240 H560 Q600 240 622 206 L718 94 Q740 60 780 60 H1080 Q1120 60 1142 94 L1170 128 Q1190 150 1230 150 H1640"/>
+    <path id="fdcM" class="m" d="M-40 150 H980 Q1020 150 1042 116 L1066 82 Q1086 60 1126 60 H1640"/>
+    <g class="trenes">
+      <circle r="11"><animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#fdcR"/></animateMotion></circle>
+      <circle r="11"><animateMotion dur="11s" begin="-4s" repeatCount="indefinite"><mpath href="#fdcA"/></animateMotion></circle>
+      <circle r="11"><animateMotion dur="10s" begin="-7s" repeatCount="indefinite"><mpath href="#fdcM"/></animateMotion></circle>
+    </g>
+  </svg>
+  <header class="fdc-cab sube">
+    <p class="cap-num">05 — Identidad de evento · 2025</p>
+    <h2>Feria del Centro<span id="fdcSub"></span></h2>
+    <div class="fdc-texto"><p id="fdcDesc"></p><p id="fdcConcepto" class="fdc-concepto"></p></div>
+  </header>
+  <div class="fdc-datos" id="fdcDatos"></div>
+
+  <div class="fdc-parte" id="fdcSistema">
+    <h3 class="estacion sube"><span class="bala" style="--c:#e4087e">1</span>Un sistema de líneas<small>Elegí una línea</small></h3>
+    <div class="fdc-elegir" id="fdcElegir" role="group" aria-label="Filtrar los rótulos por rubro"></div>
+    <svg class="fdc-mapa" id="fdcMapa" viewBox="0 0 1200 330" aria-hidden="true"></svg>
+    <div class="fdc-rotulos" id="fdcRotulos"></div>
+    <p class="fdc-nota" id="fdcNotaRot"></p>
+  </div>
+
+  <div class="fdc-parte">
+    <h3 class="estacion sube"><span class="bala" style="--c:#189cd8">2</span>En el lugar<small>La identidad aplicada, en la feria</small></h3>
+  </div>
+  <div class="fdc-viaje" id="fdcViaje">
+    <div class="fdc-viaje-fijo">
+      <div class="fdc-vias" id="fdcVias"></div>
+      <div class="fdc-linea-viaje"><i class="riel"></i><i class="avance" id="fdcAvance"></i><div id="fdcParadas"></div><span class="fdc-parada-txt" id="fdcParadaTxt"></span></div>
+    </div>
+  </div>
+
+  <div class="fdc-parte">
+    <h3 class="estacion sube"><span class="bala" style="--c:#f6b233">3</span>Las piezas<small>Redes, credenciales y gran formato</small></h3>
+    <div id="fdcPiezas"></div>
+  </div>
+
+  <div class="fdc-parte">
+    <h3 class="estacion sube"><span class="bala" style="--c:#0c8748">4</span>Una bienvenida para cada proyecto<small id="fdcCantSel"></small></h3>
+    <div id="fdcSeleccionados"></div>
+  </div>
+</section>
+
+<section class="bloque" id="motion">
+  <div class="ph"><span class="y">06 · 2025</span><h2>Visuales en vivo</h2><p>Visuales para conciertos y eventos · en loop, tocá "Sonido" para escucharlos</p></div>
+  <div class="vids" id="vids"></div>
+</section>
+
+<div id="grupos"></div>
+
+<footer>© 2026 Máximo José Romero · <a href="https://www.behance.net/MaximoRomero9" target="_blank" rel="noopener">Behance</a> · <a href="https://www.linkedin.com/in/maximo-romero/" target="_blank" rel="noopener">LinkedIn</a> — maqueta de prueba</footer>
+
+<div id="visor" role="dialog" aria-modal="true" aria-label="Trabajo ampliado" aria-hidden="true">
+  <button class="cerrar" type="button" aria-label="Cerrar">Cerrar ✕</button>
+  <button class="ant" type="button" aria-label="Anterior">←</button>
+  <img alt="">
+  <video playsinline controls hidden></video>
+  <button class="sig" type="button" aria-label="Siguiente">→</button>
+  <div class="cap"><b></b><span></span></div>
+</div>
+
+<script src="comun.js?v=c9221b"></script>
+<script src="diseno.js?v=c5cfd6"></script>
+<script src="institucional.js?v=ceae81"></script>
+<script>
+(() => {
+  const raiz = document.getElementById('grupos');
+  const visor = document.getElementById('visor'), vImg = visor.querySelector('img'), vVid = visor.querySelector('video');
+  let lista = [], pos = 0;   // lista plana de imágenes de los trabajos visibles
+
+  function abrir(i) { pos = i; mostrar(); visor.classList.add('abierto'); visor.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; foco.entrar(visor, visor.querySelector('.cerrar')); }
+  function mostrar() {
+    const it = lista[pos];
+    const el = it.video ? vVid : vImg;
+    vImg.hidden = !!it.video; vVid.hidden = !it.video;
+    if (it.video) {
+      vVid.src = it.src; vVid.poster = it.poster || ''; vVid.muted = false; vVid.loop = true;
+      if (it.inicio) vVid.addEventListener('loadedmetadata', () => { vVid.currentTime = it.inicio; }, { once: true });
+      vVid.play().catch(() => {});
+    }
+    else { vVid.pause(); vVid.removeAttribute('src'); vImg.src = it.src; vImg.alt = it.trabajo.title; }
+    el.style.animation = 'none'; el.offsetWidth; el.style.animation = '';
+    visor.querySelector('.cap b').textContent = it.trabajo.title;
+    const total = it.total || it.trabajo.images.length;
+    const varias = total > 1 ? ` · ${it.n} / ${total}` : '';
+    visor.querySelector('.cap span').textContent = `${it.trabajo.catLabel}${it.trabajo.year ? ' · ' + it.trabajo.year : ''}${varias}`;
+    [1, -1].forEach(d => { const v = lista[(pos + d + lista.length) % lista.length]; if (v && !v.video) new Image().src = v.src; });
+  }
+  const cerrar = () => { vVid.pause(); vVid.removeAttribute('src'); visor.classList.remove('abierto'); visor.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; foco.salir(visor); };
+  const mover = d => { pos = (pos + d + lista.length) % lista.length; mostrar(); };
+  // Para las secciones institucionales (diseno-inst.js): piezas = [{src, video, poster, titulo, sub}]
+  window.verPiezas = (piezas, i = 0) => {
+    lista = piezas.map((p, k) => ({ src: p.src, video: p.tipo === 'video', poster: p.poster, inicio: p.inicio, n: k + 1, total: piezas.length,
+      trabajo: { title: p.titulo || '', catLabel: p.sub || '', year: null, images: [] } }));
+    abrir(i);
+  };
+  visor.querySelector('.cerrar').onclick = cerrar;
+  visor.querySelector('.ant').onclick = () => mover(-1);
+  visor.querySelector('.sig').onclick = () => mover(1);
+  visor.addEventListener('click', e => { if (e.target === visor) cerrar(); });
+  deslizar(visor, () => mover(1), () => mover(-1));
+  addEventListener('keydown', e => {
+    if (!visor.classList.contains('abierto')) return;
+    if (e.key === 'Escape') cerrar(); if (e.key === 'ArrowLeft') mover(-1); if (e.key === 'ArrowRight') mover(1);
+    foco.atrapar(e, visor);
+  });
+
+  const obs = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visto'); obs.unobserve(e.target); } }), { rootMargin: '0px 0px -40px 0px' }) : null;
+
+  // Experimentación visual: abanico de piezas (se pasan arrastrando) + grilla opcional
+  DISENO.forEach(g => {
+    const sec = document.createElement('section'); sec.className = 'bloque'; sec.id = g.slug;
+    sec.innerHTML = `<div class="ph"><span class="y">07 · ${g.works.length} trabajos</span><h2>${g.title}</h2><p>Arrastrá el abanico o usá las flechas · tocá la pieza del frente para verla grande</p></div>
+      <div class="filtros" role="group" aria-label="Filtrar por categoría"></div>
+      <div class="abanico" tabindex="0" aria-roledescription="carrusel" aria-label="${esc(g.title)}: abanico de piezas"></div>
+      <div class="ab-pie">
+        <button type="button" class="ab-ant" aria-label="Pieza anterior">←</button>
+        <div class="ab-info" aria-live="polite"><b></b><span></span></div>
+        <span class="ab-cuenta"></span>
+        <button type="button" class="ab-sig" aria-label="Pieza siguiente">→</button>
+      </div>
+      <input class="ab-barra" type="range" min="0" value="0" step="1" aria-label="Ir a una pieza">
+      <button type="button" class="ab-modo">Ver todo en grilla</button>
+      <div class="muro" hidden></div>`;
+    raiz.appendChild(sec);
+    const filtros = sec.querySelector('.filtros'), muro = sec.querySelector('.muro'), abanico = sec.querySelector('.abanico');
+    const barra = sec.querySelector('.ab-barra'), info = sec.querySelector('.ab-info'), cuenta = sec.querySelector('.ab-cuenta');
+    let actual = 'todos', vis = [], cartas = [], pos = 0, meta = 0, enGrilla = false;
+    const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const abrirTrabajo = w => {      // visor: todas las imágenes de las piezas visibles, empezando por esta
+      lista = []; let inicio = 0;
+      vis.forEach(x => x.images.forEach((im, k) => { if (x === w && k === 0) inicio = lista.length; lista.push({ src: im.src, trabajo: x, n: k + 1 }); }));
+      abrir(inicio);
+    };
+
+    // ----- abanico -----
+    function armarAbanico() {
+      abanico.innerHTML = ''; cartas = vis.map((w, i) => {
+        const c = document.createElement('button'); c.type = 'button'; c.className = 'ab-carta'; c.tabIndex = -1;
+        c.style.aspectRatio = `${w.w} / ${w.h}`; c.setAttribute('aria-label', w.title);
+        c.innerHTML = `<img src="${esc(w.thumb)}" alt="" draggable="false" decoding="async">${w.images.length > 1 ? `<span class="mas">+${w.images.length - 1}</span>` : ''}`;
+        abanico.appendChild(c); return c;
+      });
+      pos = meta = 0; barra.max = Math.max(0, vis.length - 1); barra.value = 0; contar(); pedir();
+    }
+    const paso = () => innerWidth < 760 ? 11 : 7;           // grados entre carta y carta
+    function dibujarAbanico() {
+      const p = paso();
+      cartas.forEach((c, i) => {
+        const d = i - pos, ad = Math.abs(d);
+        if (ad > 8.5) { c.style.visibility = 'hidden'; return; }
+        c.style.visibility = '';
+        const sube = Math.max(0, 1 - ad) * 26;                // la del frente se levanta
+        c.style.transform = `translateX(-50%) rotate(${d * p}deg) translateY(${-sube}px) scale(${1 - Math.min(ad, 4) * 0.035})`;
+        c.style.zIndex = 100 - Math.round(ad * 2);
+        c.style.filter = ad < 0.5 ? 'none' : `brightness(${1 - Math.min(ad, 6) * 0.07})`;
+        c.classList.toggle('frente', ad < 0.5);
+        if (ad < 1.6 && !c.dataset.grande) { c.dataset.grande = 1; c.querySelector('img').src = vis[i].images[0].src; }   // las de adelante, en alta
+      });
+    }
+    let corriendo = false;
+    function pedir() { if (!corriendo) { corriendo = true; requestAnimationFrame(animar); } }
+    function animar() {
+      const dif = meta - pos;
+      pos = Math.abs(dif) < 0.002 || quieto ? meta : pos + dif * 0.16;
+      dibujarAbanico();
+      if (pos !== meta || arrastre) requestAnimationFrame(animar); else corriendo = false;
+    }
+    function ir(i) { meta = Math.max(0, Math.min(vis.length - 1, i)); barra.value = meta; contar(); pedir(); }
+    function contar() {
+      const w = vis[Math.round(meta)]; if (!w) return;
+      info.querySelector('b').textContent = w.title;
+      info.querySelector('span').textContent = `${w.catLabel}${w.year ? ' · ' + w.year : ''}`;
+      cuenta.textContent = `${Math.round(meta) + 1} / ${vis.length}`;
+    }
+    // arrastrar: el abanico gira con el dedo; al soltar sigue un poco por la inercia y se acomoda
+    let arrastre = null;
+    abanico.addEventListener('pointerdown', e => {
+      arrastre = { x: e.clientX, p0: meta, v: 0, t: performance.now(), lx: e.clientX, movio: false, carta: e.target.closest('.ab-carta') };
+      abanico.setPointerCapture(e.pointerId);
+    });
+    abanico.addEventListener('pointermove', e => {
+      if (!arrastre) return;
+      const dx = e.clientX - arrastre.x, ancho = Math.max(120, abanico.clientHeight * 0.28);
+      if (Math.abs(dx) > 6) arrastre.movio = true;
+      if (!arrastre.movio) return;
+      const t = performance.now(); arrastre.v = (e.clientX - arrastre.lx) / Math.max(1, t - arrastre.t); arrastre.lx = e.clientX; arrastre.t = t;
+      meta = Math.max(-0.4, Math.min(vis.length - 0.6, arrastre.p0 - dx / ancho)); pos = meta; pedir();
+    });
+    const soltar = () => {
+      if (!arrastre) return;
+      const a = arrastre; arrastre = null;
+      if (a.movio) return ir(Math.round(meta - a.v * 4));
+      const i = cartas.indexOf(a.carta); if (i < 0) return;
+      if (i === Math.round(meta)) abrirTrabajo(vis[i]); else ir(i);
+    };
+    abanico.addEventListener('pointerup', soltar); abanico.addEventListener('pointercancel', soltar);
+    // rueda horizontal del trackpad (la vertical sigue scrolleando la página)
+    let acumula = 0;
+    abanico.addEventListener('wheel', e => {
+      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0); if (!d) return;
+      e.preventDefault(); acumula += d; if (Math.abs(acumula) > 45) { ir(Math.round(meta) + Math.sign(acumula)); acumula = 0; }
+    }, { passive: false });
+    abanico.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { ir(Math.round(meta) + 1); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { ir(Math.round(meta) - 1); e.preventDefault(); }
+      if (e.key === 'Enter' || e.key === ' ') { abrirTrabajo(vis[Math.round(meta)]); e.preventDefault(); }
+    });
+    sec.querySelector('.ab-ant').onclick = () => ir(Math.round(meta) - 1);
+    sec.querySelector('.ab-sig').onclick = () => ir(Math.round(meta) + 1);
+    barra.addEventListener('input', () => ir(+barra.value));
+    addEventListener('resize', pedir);
+
+    // ----- grilla (la vista de antes) -----
+    function pintarGrilla() {
+      muro.innerHTML = '';
+      vis.forEach(w => {
+        const b = document.createElement('button'); b.className = 'trabajo'; b.type = 'button'; b.setAttribute('aria-label', w.title);
+        b.style.aspectRatio = `${w.w} / ${w.h}`;
+        b.innerHTML = `<img src="${esc(w.thumb)}" alt="${esc(w.title)}" loading="lazy" decoding="async" width="${w.w}" height="${w.h}">${w.images.length > 1 ? `<span class="mas">+${w.images.length - 1}</span>` : ''}<span class="info"><b>${esc(w.title)}</b><span>${esc(w.catLabel)}${w.year ? ' · ' + w.year : ''}</span></span>`;
+        b.addEventListener('click', () => abrirTrabajo(w));
+        muro.appendChild(b);
+        if (obs) obs.observe(b); else b.classList.add('visto');
+      });
+    }
+    const modo = sec.querySelector('.ab-modo');
+    modo.onclick = () => {
+      enGrilla = !enGrilla; muro.hidden = !enGrilla;
+      [abanico, sec.querySelector('.ab-pie'), barra].forEach(el => el.hidden = enGrilla);
+      modo.textContent = enGrilla ? 'Volver al abanico' : 'Ver todo en grilla';
+      if (enGrilla) pintarGrilla(); else pedir();
+    };
+
+    function pintar() {
+      vis = g.works.filter(w => actual === 'todos' || w.cat === actual);
+      armarAbanico(); if (enGrilla) pintarGrilla();
+    }
+    const opciones = [{ slug: 'todos', label: 'Todos', count: g.works.length }, ...g.categories.filter(c => c.count)];
+    opciones.forEach(c => {
+      const b = document.createElement('button'); b.type = 'button'; b.innerHTML = `${c.label}<sup>${c.count}</sup>`;
+      b.setAttribute('aria-pressed', c.slug === 'todos'); if (c.slug === 'todos') b.classList.add('on');
+      b.onclick = () => { actual = c.slug; filtros.querySelectorAll('button').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); pintar(); };
+      filtros.appendChild(b);
+    });
+    pintar();
+  });
+
+
+  const sinMov = matchMedia('(prefers-reduced-motion: reduce)').matches;   // quien lo pide no ve videos en movimiento
+
+  // ---------- Videos propios en loop (sin reproductor externo) ----------
+  const grilla = document.getElementById('vids');
+  const grandes = new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target.querySelector('video');
+    if (e.isIntersecting) { if (v.preload === 'none') { v.preload = 'auto'; v.load(); } if (!sinMov) v.play().catch(() => {}); } else v.pause();
+  }), { rootMargin: '200px' });
+  MOTION.forEach((m, k) => {
+    const d = document.createElement('div'); d.className = 'vid';
+    d.innerHTML = `<video muted loop playsinline ${sinMov ? 'controls' : ''} preload="${m.mb < 10 ? 'auto' : 'none'}" src="${m.src}" aria-label="Motion graphics ${k + 1}"></video><button class="sonido" type="button">Sonido</button>`;
+    const v = d.querySelector('video'), bt = d.querySelector('.sonido');
+    bt.onclick = () => {
+      const quiere = v.muted; grilla.querySelectorAll('video').forEach(x => { x.muted = true; x.parentNode.querySelector('.sonido').textContent = 'Sonido'; });
+      if (quiere) { v.muted = false; bt.textContent = 'Silenciar'; }
+    };
+    v.addEventListener('error', () => d.remove());
+    grilla.appendChild(d); grandes.observe(d);
+  });
+
+  if (location.hash) { const t = document.querySelector(location.hash); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+})();
+</script>
+<script src="libro.js?v=cd1890"></script>
+<script src="diseno-inst.js?v=d7e04f"></script>
+<script src="transicion.js?v=d7eb95"></script>
+</body>
+</html>
