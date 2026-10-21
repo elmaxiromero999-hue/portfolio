@@ -127,8 +127,6 @@ header nav, header nav.principal { margin-left: auto; }
 
 /* Aura del cursor: los estilos los pone aura.js en el propio canvas */
 
-/* con el menú abierto no se ve el aviso de "Sacudí el teléfono" (pulso.js) */
-html.menu-abierto .sacudir { display: none; }
 
 /* ---------- Ajustes de celular (revisión oct 2026) ---------- */
 .fit-completo .flechas { display: flex; flex: none; }   /* las flechas del catálogo van en fila, no apiladas */
