@@ -12,8 +12,8 @@
 #indice .rueda a { white-space: normal; padding-block: 0; }
 
 /* ---------- escena 3D ---------- */
-.rueda { --w: clamp(190px, 21vw, 290px); position: relative; margin-top: 8px; }
-.ru-escena { position: relative; height: calc(var(--w) * 1.62); perspective: 1300px; perspective-origin: 50% 42%; overflow: hidden;
+.rueda { --w: clamp(200px, min(28vw, 45vh), 460px); position: relative; margin: 8px calc(var(--lado, 24px) * -1) 0; }
+.ru-escena { position: relative; height: calc(var(--w) * 1.5); perspective: 1300px; perspective-origin: 50% 42%; overflow: hidden;
   touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
 .rueda.arrastrando .ru-escena { cursor: grabbing; }
 /* piso: retícula en perspectiva que se pierde hacia el fondo */
@@ -37,8 +37,8 @@
 /* velo con líneas de escaneo y degradé para que el texto se lea */
 .ru-velo { position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px), linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,0) 55%); }
-.ru-n { position: absolute; top: 10px; left: 12px; z-index: 3; font-size: clamp(30px, 3.4vw, 52px); font-weight: 200; letter-spacing: -.05em; line-height: 1; }
-.ru-nombre { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3; font-size: clamp(15px, 1.5vw, 21px); font-weight: 500; letter-spacing: -.03em; line-height: 1.05; }
+.ru-n { position: absolute; top: 12px; left: 14px; z-index: 5; font-size: clamp(30px, calc(var(--w) * .2), 72px); font-weight: 200; letter-spacing: -.05em; line-height: 1; }
+.ru-nombre { position: absolute; left: 14px; right: 14px; bottom: 14px; z-index: 5; font-size: clamp(15px, calc(var(--w) * .075), 28px); font-weight: 500; letter-spacing: -.03em; line-height: 1.05; }
 .ru-carta:focus-visible { border-color: #fff; }
 
 /* visor: esquinas de mira fijas sobre la carta del frente */
@@ -62,8 +62,8 @@
 .ru-hud { display: flex; justify-content: space-between; gap: 12px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gris);
   font-family: ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; border-top: 1px solid var(--linea); padding-top: 10px; }
 #indice .ru-hud b { color: var(--tinta); font-weight: 500; font-size: inherit; letter-spacing: inherit; line-height: inherit; }   /* #indice b es el título grande de la lista */
-.ru-q { margin-top: 18px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); min-height: 1.2em; }
-.ru-titulo { margin-top: 8px; font-size: clamp(30px, 5vw, 72px); font-weight: 500; letter-spacing: -.045em; line-height: .95; min-height: 1.9em; display: flex; align-items: center; justify-content: center; }
+.ru-q { margin-top: 12px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); min-height: 1.2em; }
+.ru-titulo { margin-top: 6px; font-size: clamp(28px, 3.6vw, 60px); font-weight: 500; letter-spacing: -.045em; line-height: .95; min-height: 1.9em; display: flex; align-items: center; justify-content: center; }
 .ru-acciones { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; }
 .ru-acciones button { font: inherit; font-size: 18px; width: 48px; height: 48px; border: 1px solid var(--tinta); border-radius: 50%; background: none; color: var(--tinta); cursor: pointer; transition: background .2s, color .2s; }
 @media (hover: hover) { .ru-acciones button:hover { background: var(--tinta); color: var(--papel); } }

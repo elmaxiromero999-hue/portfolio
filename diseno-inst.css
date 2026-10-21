@@ -20,19 +20,13 @@
 /* ---------- Portada de Diseño: título grande + cinta de trabajos ---------- */
 :root { --relleno: #1800ff; }
 html[data-tema="oscuro"] { --relleno: #4d4dff; }   /* blanco sobre #4d4dff: 5,5:1 */
-.dis-cab { padding: calc(var(--menu-h, 60px) + clamp(40px, 8vw, 110px)) 0 0; overflow: hidden; }
+.dis-cab { padding: calc(var(--menu-h, 60px) + clamp(28px, 5vw, 70px)) 0 0; overflow: hidden; }
 .dis-cab .etiqueta { padding: 0 var(--lado); max-width: 1500px; margin: 0 auto 18px; color: var(--gris); }
-.dis-cab h1 { padding: 0 var(--lado); max-width: 1500px; margin: 0 auto; font-size: clamp(54px, 12.5vw, 210px); line-height: .86; letter-spacing: -.055em; font-weight: 600; color: var(--tinta); }
+.dis-cab h1 { padding: 0 var(--lado); max-width: 1500px; margin: 0 auto; font-size: clamp(48px, 7.2vw, 128px); line-height: .86; letter-spacing: -.055em; font-weight: 600; color: var(--tinta); }
 .dis-cab h1 em { font-style: normal; font-weight: 200; color: var(--relleno); }
-/* cinta azul inclinada con los trabajos pasando */
-.franja { margin: clamp(30px, 5vw, 60px) -4vw 0; padding: 14px 0; background: var(--relleno); transform: rotate(-2.2deg); overflow: hidden; }
-.franja-pista { display: flex; gap: 12px; width: max-content; animation: franja 70s linear infinite; }
-.franja-pista img { display: block; height: clamp(110px, 14vw, 190px); width: auto; aspect-ratio: var(--r, .7); object-fit: cover; background: rgba(255,255,255,.15); }
-.franja:hover .franja-pista { animation-play-state: paused; }
-@keyframes franja { to { transform: translateX(-50%); } }
 
 /* ---------- Índice de capítulos: cada fila se llena de azul y asoma su trabajo ---------- */
-#indice { max-width: 1500px; margin: 0 auto; padding: clamp(60px, 8vw, 120px) var(--lado) clamp(40px, 5vw, 80px); }
+#indice { max-width: 1500px; margin: 0 auto; padding: clamp(22px, 3vw, 44px) var(--lado) clamp(40px, 5vw, 80px); }   /* el visor arranca enseguida del título */
 .indice-tit { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin-bottom: 14px; }
 #indice ol { list-style: none; border-top: 2px solid var(--tinta); counter-reset: cap; }
 #indice li a { position: relative; isolation: isolate; overflow: hidden; white-space: normal; display: grid; grid-template-columns: 90px 1fr auto 60px; gap: 16px; align-items: center;
@@ -65,9 +59,7 @@ html[data-tema="oscuro"] { --relleno: #4d4dff; }   /* blanco sobre #4d4dff: 5,5:
   /* en el celular la miniatura queda siempre a la vista */
   #indice .m { position: relative; grid-column: 3; grid-row: 1 / span 2; width: 72px; height: 72px; clip-path: none; }
   #indice .m img, #indice .m video { transform: none; }
-  .franja { transform: rotate(-3deg); }
 }
-@media (prefers-reduced-motion: reduce) { .franja-pista { animation: none; } }
 
 /* ---------- 01 · Archivo Histórico de la Provincia de Córdoba ---------- */
 .ahpc { --tinta-ah: var(--navy); font-family: "Poppins", var(--sans); letter-spacing: 0; }

@@ -6,7 +6,7 @@ html.dis-nav:not([data-cap]) .capitulo, html.dis-nav:not([data-cap]) .cap-barra,
 html.dis-nav[data-cap] .dis-cab, html.dis-nav[data-cap] #indice { display: none; }
 html.dis-nav[data-cap] .capitulo:not(.abierta) { display: none; }   /* capitulos.js marca .abierta */
 /* el capítulo arranca justo debajo del menú fijo y la barra; lo que era sticky bajo el menú ahora va bajo la barra */
-html.dis-nav[data-cap] { --barra-h: 46px; scroll-padding-top: calc(var(--menu-h) + var(--barra-h)); }
+html.dis-nav[data-cap] { --barra-h: 56px; scroll-padding-top: calc(var(--menu-h) + var(--barra-h)); }
 html.dis-nav[data-cap] .ah-escenario, html.dis-nav[data-cap] .fdc-viaje-fijo { top: calc(var(--menu-h) + var(--barra-h)); height: calc(100svh - var(--menu-h) - var(--barra-h)); }
 html.dis-nav[data-cap] #nexar > .nx-linea-caja { top: calc(var(--menu-h) + var(--barra-h)); }
 html.dis-nav[data-cap] .ah-portada { min-height: calc(100svh - var(--menu-h) - var(--barra-h)); }
@@ -14,17 +14,31 @@ html.dis-nav[data-cap] .cap-barra { margin-top: var(--menu-h); }
 .capitulo:focus { outline: none; }
 
 /* ---------- barra fija del capítulo ---------- */
-.cap-barra { position: sticky; top: var(--menu-h); z-index: 45; display: flex; align-items: center; gap: 16px;
-  padding: 0 var(--lado, 24px); height: 46px; box-sizing: border-box; background: var(--papel); color: var(--tinta); border-bottom: 1px solid var(--linea);
+.cap-barra { position: sticky; top: var(--menu-h); z-index: 45; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+  padding: 0 var(--lado, 24px); height: var(--barra-h, 56px); box-sizing: border-box; background: var(--papel); color: var(--tinta); border-bottom: 1px solid var(--linea);
   font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-.cap-barra a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
-.cap-barra a:hover { color: var(--acento); }
+.cap-barra a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; }
 .cap-barra a:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
-.cb-actual { flex: 1; min-width: 0; display: flex; align-items: baseline; justify-content: center; gap: 8px; white-space: nowrap; overflow: hidden; }
-.cb-n { font-weight: 600; } .cb-de { color: var(--gris); }
-.cb-nombre { overflow: hidden; text-overflow: ellipsis; letter-spacing: .08em; }
-.cb-pasos { display: flex; gap: 18px; }
-.cb-indice { padding-right: 6px; }
+/* Índice: botón con ícono de grilla */
+.cb-indice { justify-self: start; padding: 0 16px 0 12px; border: 1px solid var(--tinta); border-radius: 999px; transition: background .2s, color .2s; }
+.cb-rejilla { display: grid; grid-template-columns: 5px 5px; gap: 2px; }
+.cb-rejilla i { width: 5px; height: 5px; background: currentColor; }
+/* los 7 capítulos: el actual se estira y muestra su nombre */
+.cb-puntos { display: flex; align-items: center; gap: 4px; }
+.cb-punto { justify-content: center; min-width: 36px; height: 36px; min-height: 36px !important; padding: 0 10px; border-radius: 999px; color: var(--gris) !important; font-variant-numeric: tabular-nums; transition: background .25s, color .25s; }
+.cb-punto b { font-weight: 500; }
+.cb-pnombre { display: none; max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: .08em; }
+.cb-punto.actual { background: var(--relleno, #1800ff); color: #fff !important; padding: 0 14px; }
+.cb-punto.actual .cb-pnombre { display: inline; }
+/* anterior / siguiente con el nombre del capítulo */
+.cb-pasos { justify-self: end; display: flex; gap: 8px; min-width: 0; }
+.cb-ant, .cb-sig { padding: 0 14px; border: 1px solid var(--linea); border-radius: 999px; max-width: 30ch; min-width: 0; }
+.cb-ant .cb-txt, .cb-sig .cb-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: .08em; }
+@media (hover: hover) {
+  .cb-indice:hover { background: var(--tinta); color: var(--papel); }
+  .cb-punto:not(.actual):hover { color: var(--tinta) !important; background: var(--papel-2, rgba(0,0,0,.06)); }
+  .cb-ant:hover, .cb-sig:hover { border-color: var(--tinta); }
+}
 
 /* ---------- cierre: siguiente capítulo ---------- */
 .cap-fin { max-width: 1500px; margin: 0 auto; padding: clamp(50px, 8vw, 110px) var(--lado, 24px) clamp(30px, 5vw, 60px); }
@@ -45,13 +59,19 @@ html.dis-nav[data-cap] .cap-barra { margin-top: var(--menu-h); }
 .cf-indice:hover { color: var(--acento); }
 .cap-fin [hidden] { display: none !important; }
 
+@media (max-width: 1100px) { .cb-ant .cb-txt, .cb-sig .cb-txt { display: none; } .cb-ant, .cb-sig { padding: 0 12px; } }
 @media (max-width: 760px) {
-  .cap-barra { gap: 10px; padding: 0 12px 0 16px; }
-  .cb-txt, .cb-de { display: none; }   /* en celular: ← Índice · 03 Nombre · ← → */
-  .cb-actual { justify-content: flex-start; }
-  .cb-pasos { gap: 4px; }
-  .cb-pasos a { justify-content: center; min-width: 40px; font-size: 16px; }
+  html.dis-nav[data-cap] { --barra-h: 50px; }
+  .cap-barra { gap: 8px; padding: 0 10px; grid-template-columns: auto 1fr auto; }
+  .cb-indice { padding: 0 10px; } .cb-indice .cb-txt { display: none; }
+  .cb-puntos { justify-content: center; gap: 0; }
+  .cb-punto { min-width: 28px; padding: 0 4px; font-size: 10px; letter-spacing: .04em; }
+  .cb-punto.actual { padding: 0 9px; }
+  .cb-punto.actual .cb-pnombre { display: none; }
+  .cb-ant, .cb-sig { padding: 0; width: 36px; justify-content: center; border: 0; font-size: 16px; }
   .cf-sig { grid-template-areas: "et et" "n flecha" "nombre nombre" "q q"; grid-template-columns: 1fr auto; }
   .cf-n { margin-bottom: 6px; }
 }
+}
 .cap-barra [hidden] { display: inline-flex; visibility: hidden; }   /* sin anterior/siguiente: el lugar queda, así la barra no salta */
+@media (max-width: 360px) { .cb-punto { min-width: 24px; padding: 0 2px; } .cb-ant, .cb-sig { width: 30px; } }

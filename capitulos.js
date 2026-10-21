@@ -20,9 +20,9 @@
   // ---------- barra fija dentro del capítulo ----------
   const barra = document.createElement('nav');
   barra.className = 'cap-barra'; barra.setAttribute('aria-label', 'Capítulos de Diseño');
-  barra.innerHTML = `<a class="cb-indice" href="#indice"><span aria-hidden="true">←</span> Índice</a>
-    <span class="cb-actual" aria-live="polite"><b class="cb-n"></b><span class="cb-de">/ ${total}</span><span class="cb-nombre"></span></span>
-    <span class="cb-pasos"><a class="cb-ant" href="#"><span aria-hidden="true">←</span><span class="cb-txt"> Anterior</span></a><a class="cb-sig" href="#"><span class="cb-txt">Siguiente </span><span aria-hidden="true">→</span></a></span>`;
+  barra.innerHTML = `<a class="cb-indice" href="#indice"><span class="cb-rejilla" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="cb-txt">Índice</span></a>
+    <span class="cb-puntos">${caps.map(c => `<a class="cb-punto" href="#${esc(c.id)}" aria-label="${esc(c.n + ' ' + c.nombre)}"><b>${esc(c.n)}</b><span class="cb-pnombre">${esc(c.nombre)}</span></a>`).join('')}</span>
+    <span class="cb-pasos"><a class="cb-ant" href="#"><span aria-hidden="true">←</span><span class="cb-txt cb-antn"></span></a><a class="cb-sig" href="#"><span class="cb-txt cb-sign"></span><span aria-hidden="true">→</span></a></span>`;
   document.getElementById(ids[0]).before(barra);
 
   // ---------- cierre de cada capítulo ----------
@@ -35,8 +35,13 @@
   const enlazar = (a, c) => { a.setAttribute('href', '#' + c.id); a.dataset.vista = c.vista; a.hidden = false; };
   function pintar(id) {
     const i = ids.indexOf(id), c = caps[i], ant = caps[i - 1], sig = caps[i + 1];
-    barra.querySelector('.cb-n').textContent = c.n;
-    barra.querySelector('.cb-nombre').textContent = c.nombre;
+    // el capítulo actual se destaca y no se puede "reabrir" (sin data-vista, transicion.js no lo anima)
+    barra.querySelectorAll('.cb-punto').forEach((p, k) => {
+      const actual = k === i; p.classList.toggle('actual', actual);
+      if (actual) { p.setAttribute('aria-current', 'page'); delete p.dataset.vista; } else { p.removeAttribute('aria-current'); p.dataset.vista = caps[k].vista; }
+    });
+    barra.querySelector('.cb-antn').textContent = ant ? ant.nombre : '';
+    barra.querySelector('.cb-sign').textContent = sig ? sig.nombre : '';
     const a = barra.querySelector('.cb-ant'), s = barra.querySelector('.cb-sig'), f = fin.querySelector('.cf-sig');
     if (ant) { enlazar(a, ant); a.setAttribute('aria-label', `Anterior: ${ant.nombre}`); } else a.hidden = true;
     if (sig) {
@@ -98,6 +103,8 @@
     const a = e.target.closest('a'); if (!a) return;
     const href = a.getAttribute('href') || '';
     if (href === '#indice' && (a.closest('.cap-barra') || a.closest('.cap-fin'))) { e.preventDefault(); volver(); return; }
+    if (a.classList.contains('cb-punto') && a.classList.contains('actual')) { e.preventDefault(); saltoA(0); return; }
+    if (html.dataset.cap && a.closest('header') && /(^|\/)diseno\.html$/.test(href)) { e.preventDefault(); volver(); return; }
     if (ids.includes(href.slice(1)) && (a.closest('#indice') || a.closest('.cap-barra') || a.closest('.cap-fin'))) { e.preventDefault(); ir(href.slice(1)); }
   });
   addEventListener('keydown', e => {

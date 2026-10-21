@@ -397,15 +397,4 @@
     if (m.firstChild) a.appendChild(m);
   });
 
-  // ---------- Portada: cinta con trabajos de todos los capítulos (se duplica para que el loop no corte) ----------
-  const pista = document.querySelector('.franja-pista');
-  if (pista) {
-    const fotos = [A.fotos.fachada.src, paginas[0].thumb, F.recorrido[2].thumb, pzA(0).poster, I.nexar.filas[2][0].poster,
-      ...expo.slice(0, 12).map(w => w.thumb), paginas[2] && paginas[2].thumb, F.recorrido[0] && F.recorrido[0].thumb].filter(Boolean);
-    const orden = fotos.map((f, k) => k % 2 ? fotos[fotos.length - 1 - (k >> 1)] : fotos[k >> 1]).filter((f, k, l) => l.indexOf(f) === k);
-    const html = orden.map(f => `<img src="${f}" alt="" loading="lazy" decoding="async" draggable="false">`).join('');
-    pista.innerHTML = html + html;
-    pista.querySelectorAll('img').forEach(i => i.addEventListener('load', () => i.style.setProperty('--r', (i.naturalWidth / i.naturalHeight).toFixed(3)), { once: true }));
-  }
-
 })();
