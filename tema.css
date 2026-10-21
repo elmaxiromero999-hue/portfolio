@@ -83,17 +83,57 @@ header nav, header nav.principal { margin-left: auto; }
 
 /* ---------- Celulares ---------- */
 @media (max-width: 640px) {
-  header, header.menu { align-items: flex-start; }
-  header .tema-boton { position: absolute; top: 0; right: 8px; margin: 0; padding: 0; min-width: 44px; min-height: 40px; justify-content: center; border-color: transparent; }
-  header .tema-txt { display: none; }
-  header nav, header nav.principal { margin-left: 0; }
   .mr-caja { --alto: 16px; }
-  header .marca.con-logo { margin: 2px 0 10px; }   /* la fila del menú baja y no queda debajo del botón */
   .tema-boton.fijo { top: 8px; right: 8px; padding: 0; min-width: 44px; min-height: 36px; justify-content: center; }
   .tema-boton.fijo .tema-txt { display: none; }
 }
+
+/* ---------- Menú desplegable (marca.js) ---------- */
+.menu-boton { display: none; }
+@media (max-width: 760px) {
+  /* encabezado en una sola fila: logo · tema · Menú */
+  header, header.menu { flex-direction: row !important; flex-wrap: nowrap; align-items: center !important; gap: 0 !important; padding: 8px 12px 8px 16px !important; }
+  header .marca.con-logo { margin: 0 !important; }
+  header .tema-boton { position: static !important; margin: 0 0 0 auto !important; padding: 0 !important; min-width: 44px; min-height: 44px; justify-content: center; border-color: transparent !important; }
+  header .tema-txt { display: none; }
+  .menu-boton { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 4px 0 10px; margin: 0; font: inherit; font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: inherit; background: none; border: 0; cursor: pointer; }
+  .menu-icono { position: relative; width: 22px; height: 10px; }
+  .menu-icono i { position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor; transition: transform .35s cubic-bezier(.7,0,.2,1), top .35s; }
+  .menu-icono i:first-child { top: 0; } .menu-icono i:last-child { top: 8.5px; }
+  html.menu-abierto .menu-icono i:first-child { top: 4.25px; transform: rotate(45deg); }
+  html.menu-abierto .menu-icono i:last-child { top: 4.25px; transform: rotate(-45deg); }
+  .menu-boton:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+  /* el nav se vuelve un panel que baja desde el encabezado */
+  header nav, header nav.principal { position: fixed; left: 0; right: 0; top: var(--menu-h); height: calc(100vh - var(--menu-h)); height: calc(100dvh - var(--menu-h));
+    display: flex; flex-direction: column; align-items: stretch; gap: 0 !important; margin: 0 !important; padding: 18px 16px 32px; width: auto !important; overflow-y: auto !important;
+    background: var(--papel); color: var(--tinta); z-index: 49; counter-reset: item;
+    font-size: clamp(30px, 9.5vw, 46px) !important; font-weight: 500; letter-spacing: -.04em !important; text-transform: none !important;
+    visibility: hidden; clip-path: inset(0 0 100% 0); transition: clip-path .5s cubic-bezier(.7,0,.2,1), visibility 0s .5s; }
+  html.menu-abierto header nav { visibility: visible; clip-path: inset(0 0 0 0); transition: clip-path .5s cubic-bezier(.7,0,.2,1), visibility 0s; }
+  header nav a { display: flex; align-items: baseline; gap: 14px; padding: 16px 0 !important; border-bottom: 1px solid var(--linea); text-decoration: none !important; opacity: 1 !important;
+    counter-increment: item; transform: translateY(18px); opacity: 0 !important; transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s, color .2s; }
+  html.menu-abierto header nav a { transform: none; opacity: 1 !important; transition-delay: calc(.12s + var(--i, 0) * 55ms); }
+  header nav a::before { content: "0" counter(item); font-size: 11px; letter-spacing: .14em; color: var(--gris); font-weight: 400; min-width: 22px; }
+  header nav a.actual { color: var(--acento); }
+  header nav a.actual::after { content: "estás acá"; margin-left: auto; align-self: center; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); font-weight: 400; }
+  html.menu-abierto { overflow: hidden; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mr-iso rect, .mr-palabra, .tema-icono, body { transition: none; }
 }
 
 /* Aura del cursor: los estilos los pone aura.js en el propio canvas */
+
+/* con el menú abierto no se ve el aviso de "Sacudí el teléfono" (pulso.js) */
+html.menu-abierto .sacudir { display: none; }
+
+/* ---------- Ajustes de celular (revisión oct 2026) ---------- */
+.fit-completo .flechas { display: flex; flex: none; }   /* las flechas del catálogo van en fila, no apiladas */
+.fit-completo .flechas button:last-child { margin-right: 0; }
+@media (max-width: 760px) {
+  .cap-num { margin-bottom: 10px; }   /* la etiqueta del capítulo no queda pegada al título */
+  .contacto a.grande { font-size: 4.7vw !important; letter-spacing: -.02em; }   /* el mail entra en una línea */
+}

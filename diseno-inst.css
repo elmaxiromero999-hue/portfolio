@@ -347,7 +347,8 @@ html[data-tema="oscuro"] { --relleno: #4d4dff; }   /* blanco sobre #4d4dff: 5,5:
 @media (max-width: 760px) { .fit-ayuda { flex-basis: 100%; order: 3; } }
 
 /* Sobre los fondos azules el logo va solo en blanco (sin el módulo celeste) */
-.ah-portada, .t-navy, .ah-fotos .final { --claro: transparent; }
+/* solo en el SVG: si se aplica al bloque entero también desaparecen los textos celestes (número de capítulo, subtítulo, ficha) */
+.ah-portada svg, .t-navy svg, .ah-fotos .final svg { --claro: transparent; }
 
 /* ---------- 05 · Nexar Networks (línea de tiempo + recortes) ---------- */
 #nexar { --nx-fondo: #18162f; --nx-placa: #221f46; --nx-turq: #06afad; position: relative; overflow: clip; background: var(--nx-fondo); color: #e9e7f5;

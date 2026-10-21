@@ -43,6 +43,28 @@
   const header = document.querySelector('header');
   if (header) header.appendChild(b); else { b.classList.add('fijo'); document.body.appendChild(b); }
   aplicar(html.dataset.tema === 'oscuro' ? 'oscuro' : 'claro');
+
+  // Menú desplegable en celulares (≤760 px): botón "Menú" que abre el nav como panel a pantalla completa
+  const nav = header && header.querySelector('nav');
+  if (nav) {
+    nav.id = nav.id || 'menu-principal';
+    [...nav.querySelectorAll('a')].forEach((a, i) => a.style.setProperty('--i', i));
+    const mb = document.createElement('button');
+    mb.type = 'button'; mb.className = 'menu-boton';
+    mb.setAttribute('aria-controls', nav.id); mb.setAttribute('aria-expanded', 'false');
+    mb.innerHTML = '<span class="menu-txt">Menú</span><span class="menu-icono" aria-hidden="true"><i></i><i></i></span>';
+    header.appendChild(mb);
+    const chico = matchMedia('(max-width: 760px)');
+    const abrir = si => {
+      html.classList.toggle('menu-abierto', si); mb.setAttribute('aria-expanded', String(si));
+      mb.querySelector('.menu-txt').textContent = si ? 'Cerrar' : 'Menú';
+      if (si) { nav.querySelector('a').focus({ preventScroll: true }); if (window.glitchPulso) glitchPulso(.25); }
+    };
+    mb.addEventListener('click', () => abrir(!html.classList.contains('menu-abierto')));
+    nav.addEventListener('click', e => { if (e.target.closest('a')) abrir(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && html.classList.contains('menu-abierto')) { abrir(false); mb.focus(); } });
+    chico.addEventListener('change', () => abrir(false));
+  }
   // si se cambió en otra pestaña o se vuelve con "atrás" (caché del navegador), tomar el tema guardado
   const guardado = () => { try { return localStorage.getItem('tema') === 'oscuro' ? 'oscuro' : 'claro'; } catch (e) { return html.dataset.tema; } };
   addEventListener('pageshow', () => aplicar(guardado()));
