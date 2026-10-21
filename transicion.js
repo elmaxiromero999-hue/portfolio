@@ -7,7 +7,7 @@
 (() => {
   // índice + barra y cierre de capítulo (capitulos.js los crea antes de que cargue este archivo)
   // índice + barra y cierre de capítulo (capitulos.js); los de la barra cambian de destino, por eso se escucha delegado
-  const SEL = '#indice a[href^="#"], .cap-barra a[data-vista], .cap-fin a[data-vista]';
+  const SEL = '#indice a[href^="#"][data-vista], .cap-barra a[data-vista], .cap-fin a[data-vista]';
   if (!document.querySelector('#indice a[href^="#"]') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const NS = 'http://www.w3.org/2000/svg';
   const I = typeof INSTITUCIONAL !== 'undefined' ? INSTITUCIONAL : null;
@@ -257,7 +257,7 @@
     const destino = document.querySelector(a.getAttribute('href')); if (!destino) { activa = null; return; }
     const k = a.dataset.vista;
     // los textos salen siempre del renglón del índice (la barra y el cierre de capítulo no los tienen todos)
-    const ref = document.querySelector(`#indice a[href="${a.getAttribute('href')}"]`) || a;
+    const ref = document.querySelector(`#indice ol a[href="${a.getAttribute('href')}"]`) || a;
     const nombre = ref.querySelector('b').textContent, num = ref.querySelector('.n').textContent, rubro = (ref.querySelector('.q') || {}).textContent || '';
     const esRafaga = k in RAFAGA;
     // lo que no llegó a cargar en 0,7 s no se espera; la ráfaga usa lo que ya está
@@ -379,6 +379,7 @@
   // en captura sobre window: corre antes que el manejador delegado de capitulos.js, que respeta el preventDefault
   addEventListener('click', e => {
     const a = e.target.closest && e.target.closest(SEL); if (!a || a.hidden) return;
+    if (a.dataset.rueda && a.dataset.rueda !== 'frente') return;   // cartas de la rueda que no están al frente: las gira rueda.js
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
     if (activa === 'saliendo') return;   // mientras se va la cortina, el salto común
     e.preventDefault(); if (activa) return;

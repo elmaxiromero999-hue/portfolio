@@ -1,0 +1,85 @@
+/* Índice de Diseño como visor 3D (rueda.js). La lista original queda como vista "Lista". */
+#indice.con-rueda:not(.modo-lista) > ol { display: none; }
+#indice.modo-lista .rueda { display: none; }
+
+/* botones Rueda / Lista en la cabecera del índice */
+.indice-tit { align-items: center; gap: 12px; }
+.ru-modos { display: inline-flex; border: 1px solid var(--linea); border-radius: 999px; padding: 2px; margin-left: auto; margin-right: 12px; }
+.ru-modos button { font: inherit; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); background: none; border: 0; border-radius: 999px; padding: 6px 12px; min-height: 32px; cursor: pointer; }
+.ru-modos button[aria-pressed="true"] { background: var(--relleno, #1800ff); color: #fff; }
+
+/* la rueda vive dentro de nav#indice: anular lo que comun.css le pone a todo "nav a" */
+#indice .rueda a { white-space: normal; padding-block: 0; }
+
+/* ---------- escena 3D ---------- */
+.rueda { --w: clamp(190px, 21vw, 290px); position: relative; margin-top: 8px; }
+.ru-escena { position: relative; height: calc(var(--w) * 1.62); perspective: 1300px; perspective-origin: 50% 42%; overflow: hidden;
+  touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.rueda.arrastrando .ru-escena { cursor: grabbing; }
+/* piso: retícula en perspectiva que se pierde hacia el fondo */
+.ru-escena::before { content: ""; position: absolute; left: -20%; right: -20%; bottom: -8%; height: 46%; pointer-events: none;
+  background-image: linear-gradient(var(--linea) 1px, transparent 1px), linear-gradient(90deg, var(--linea) 1px, transparent 1px); background-size: 48px 48px;
+  transform: perspective(500px) rotateX(62deg); transform-origin: 50% 100%; opacity: .7;
+  -webkit-mask-image: linear-gradient(transparent, #000 60%); mask-image: linear-gradient(transparent, #000 60%); }
+.ru-anillo { position: absolute; left: 50%; top: 46%; width: var(--w); height: calc(var(--w) * 1.3); margin: calc(var(--w) * -.65) 0 0 calc(var(--w) / -2);
+  transform-style: preserve-3d; }
+.ru-carta { position: absolute; inset: 0; display: block; color: #fff; text-decoration: none; background: #0b0b14; overflow: hidden;
+  transform: rotateY(calc(var(--i) * var(--paso, 51.43deg))) translateZ(var(--radio, 300px)); backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border: 1px solid rgba(255,255,255,.18); outline: none;
+  -webkit-user-drag: none; -webkit-touch-callout: none; transition: border-color .3s, box-shadow .3s; }
+/* atrás: en gris (cambia una vez por giro); la oscuridad la da el velo, que es barato de animar */
+.ru-carta .ru-img { filter: grayscale(1); transition: filter .4s; }
+.ru-carta[data-rueda="frente"] .ru-img, .rueda.arrastrando .ru-carta .ru-img { filter: none; }
+.ru-carta::after { content: ""; position: absolute; inset: 0; z-index: 4; background: #000; opacity: calc(.65 - var(--f, 0) * .65); pointer-events: none; }
+.ru-carta[data-rueda="frente"] { border-color: var(--relleno, #1800ff); box-shadow: 0 30px 80px rgba(24,0,255,.35); }
+.ru-img, .ru-img img, .ru-img video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.ru-img video { z-index: 1; }
+/* velo con líneas de escaneo y degradé para que el texto se lea */
+.ru-velo { position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px), linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,0) 55%); }
+.ru-n { position: absolute; top: 10px; left: 12px; z-index: 3; font-size: clamp(30px, 3.4vw, 52px); font-weight: 200; letter-spacing: -.05em; line-height: 1; }
+.ru-nombre { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3; font-size: clamp(15px, 1.5vw, 21px); font-weight: 500; letter-spacing: -.03em; line-height: 1.05; }
+.ru-carta:focus-visible { border-color: #fff; }
+
+/* visor: esquinas de mira fijas sobre la carta del frente */
+.ru-mira { position: absolute; left: 50%; top: 46%; width: calc(var(--w) * 1.1); height: calc(var(--w) * 1.42); transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
+.ru-mira i { position: absolute; width: 18px; height: 18px; border: 0 solid var(--tinta); }
+.ru-mira i:nth-child(1) { left: 0; top: 0; border-width: 1.5px 0 0 1.5px; } .ru-mira i:nth-child(2) { right: 0; top: 0; border-width: 1.5px 1.5px 0 0; }
+.ru-mira i:nth-child(3) { right: 0; bottom: 0; border-width: 0 1.5px 1.5px 0; } .ru-mira i:nth-child(4) { left: 0; bottom: 0; border-width: 0 0 1.5px 1.5px; }
+.ru-etq { position: absolute; left: 0; top: -20px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gris); font-family: ui-monospace, Menlo, monospace; }
+.rueda.rapido .ru-mira { animation: ru-mira .2s steps(2) infinite; }
+@keyframes ru-mira { 50% { transform: translate(calc(-50% + 3px), -50%) scale(1.02); } }
+
+/* glitch: al girar rápido las cartas se separan en cian / magenta; la nueva del frente "salta" */
+.rueda.rapido .ru-carta { box-shadow: -6px 0 0 rgba(0,240,255,.55), 6px 0 0 rgba(255,43,214,.55); }
+.ru-carta.salta .ru-img { animation: ru-salta .38s steps(1); }
+@keyframes ru-salta {
+  0% { clip-path: inset(0 0 62% 0); transform: translateX(-10px); } 20% { clip-path: inset(40% 0 20% 0); transform: translateX(8px); }
+  40% { clip-path: inset(70% 0 0 0); transform: translateX(-4px); } 60% { clip-path: inset(0 0 0 0); transform: translateX(3px); } 80% { transform: none; } }
+
+/* ---------- ficha del frente ---------- */
+.ru-info { position: relative; z-index: 3; max-width: 760px; margin: -6px auto 0; text-align: center; padding: 0 16px; }
+.ru-hud { display: flex; justify-content: space-between; gap: 12px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gris);
+  font-family: ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; border-top: 1px solid var(--linea); padding-top: 10px; }
+#indice .ru-hud b { color: var(--tinta); font-weight: 500; font-size: inherit; letter-spacing: inherit; line-height: inherit; }   /* #indice b es el título grande de la lista */
+.ru-q { margin-top: 18px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); min-height: 1.2em; }
+.ru-titulo { margin-top: 8px; font-size: clamp(30px, 5vw, 72px); font-weight: 500; letter-spacing: -.045em; line-height: .95; min-height: 1.9em; display: flex; align-items: center; justify-content: center; }
+.ru-acciones { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; }
+.ru-acciones button { font: inherit; font-size: 18px; width: 48px; height: 48px; border: 1px solid var(--tinta); border-radius: 50%; background: none; color: var(--tinta); cursor: pointer; transition: background .2s, color .2s; }
+@media (hover: hover) { .ru-acciones button:hover { background: var(--tinta); color: var(--papel); } }
+.ru-abrir { position: relative; overflow: hidden; isolation: isolate; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 26px; border-radius: 999px;
+  background: var(--relleno, #1800ff); color: #fff; text-decoration: none; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.ru-abrir::after { content: ""; position: absolute; inset: 0; z-index: -1; background: repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 2px, transparent 2px 6px); transform: translateX(-100%); transition: transform .5s; }
+.ru-abrir:hover::after { transform: none; }
+.ru-acciones :focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+
+@media (max-width: 760px) {
+  .rueda { --w: min(52vw, 220px); }
+  .ru-escena { perspective: 900px; }
+  .ru-ayuda { display: none; }
+  .ru-modos { margin-right: 0; }
+  .indice-tit > span:last-child { display: none; }   /* "7 capítulos · 2025—2026" no entra junto a los botones */
+}
+@media (prefers-reduced-motion: reduce) { .ru-carta.salta .ru-img, .rueda.rapido .ru-mira { animation: none; } }
+
+.ru-anuncio { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

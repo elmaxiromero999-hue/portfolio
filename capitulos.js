@@ -8,7 +8,7 @@
   const html = document.documentElement;
   const indice = document.getElementById('indice');
   if (!indice || !html.classList.contains('dis-nav')) return;
-  const caps = [...indice.querySelectorAll('a[href^="#"]')].map(a => ({
+  const caps = [...indice.querySelectorAll('ol a[href^="#"]')].map(a => ({
     id: a.getAttribute('href').slice(1), vista: a.dataset.vista,
     n: a.querySelector('.n').textContent, nombre: a.querySelector('b').textContent, q: (a.querySelector('.q') || {}).textContent || '',
   })).filter(c => document.getElementById(c.id));
@@ -74,8 +74,8 @@
     if (y == null) y = yIndice;
     if (y != null) saltoA(y); else indice.scrollIntoView({ behavior: 'instant' });
     // el foco vuelve al renglón del capítulo que se dejó (si no, teclado y lector de pantalla quedan en <body>)
-    const fila = desde && indice.querySelector(`a[href="#${desde}"]`);
-    if (fila) fila.focus({ preventScroll: true });
+    if (desde && window.RUEDA && !indice.classList.contains('modo-lista')) RUEDA.volverA('#' + desde);   // la rueda queda mirando ese capítulo
+    else { const fila = desde && indice.querySelector(`ol a[href="#${desde}"]`); if (fila) fila.focus({ preventScroll: true }); }
   }
   let volviendo = false;
   const volver = () => {

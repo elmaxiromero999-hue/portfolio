@@ -90,8 +90,9 @@
   if (!('DeviceMotionEvent' in window) || !matchMedia('(pointer: coarse)').matches) return;
   const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   const leer = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
-  let prev = null, ult = 0, activo = false;
+  let prev = null, ult = 0, activo = false, llego = false;
   const movimiento = e => {
+    if (!llego) { llego = true; if (!activo) encender(); }   // llegaron datos: el botón pasa a encendido
     const now = performance.now(); if (now - ult < 110) return;
     const lin = e.acceleration, g = e.accelerationIncludingGravity;
     let fuerza = 0;
@@ -150,8 +151,12 @@
 
   if (!pide) encender();   // Android: no pide permiso, queda andando desde el principio
   else if (leer('sacudir') === 'si') {
-    // ya lo aceptó otra vez: el primer toque en cualquier parte lo reactiva sin preguntar
-    const reactivar = e => { if (activo) return quitar(); if (e.target.closest && e.target.closest('.mov-boton, .mov-aviso')) return; activar().then(ok => { if (ok) quitar(); }); };
+    // ya lo aceptó otra vez. Primero se escucha sin pedir nada: si el navegador recuerda el permiso, los datos
+    // llegan solos y anda desde que se abre la página. Si no llegan, iOS exige un toque: el primero en
+    // cualquier parte (también el que saltea la intro) lo reactiva sin cartel.
+    addEventListener('devicemotion', movimiento);
+    setTimeout(() => { if (llego) { encender(); quitar(); } }, 800);
+    const reactivar = e => { if (activo || llego) { encender(); return quitar(); } if (e.target.closest && e.target.closest('.mov-boton, .mov-aviso')) return; activar().then(ok => { if (ok) quitar(); }); };
     const quitar = () => { removeEventListener('click', reactivar, true); removeEventListener('touchend', reactivar, true); };
     addEventListener('click', reactivar, true); addEventListener('touchend', reactivar, true);
   }
