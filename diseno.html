@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
 <script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
+<script>/* Diseño se navega por capítulos (capitulos.js): si la URL trae uno, se abre directo; capitulos.js valida que exista */(function(){var h=document.documentElement,c=location.hash.slice(1);h.classList.add('dis-nav');if(c&&c!=='indice')h.dataset.cap=c})()</script>
 <link rel="stylesheet" href="intro.css?v=d7eedc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
@@ -95,6 +96,7 @@
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
 <link rel="stylesheet" href="diseno-inst.css?v=d82245">
 <link rel="stylesheet" href="comun.css?v=c92278">
+<link rel="stylesheet" href="capitulos.css?v=d82c10">
 <link rel="stylesheet" href="transicion.css?v=d7e9c9">
 <link rel="stylesheet" href="tema.css?v=d82289">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
@@ -126,7 +128,7 @@
 </nav>
 
 <!-- ===================== 01 · ARCHIVO HISTÓRICO ===================== -->
-<section id="archivo-historico" class="ahpc bloque-ancho" aria-label="Identidad visual del Archivo Histórico de la Provincia de Córdoba">
+<section id="archivo-historico" class="ahpc bloque-ancho capitulo" aria-label="Identidad visual del Archivo Histórico de la Provincia de Córdoba">
   <div class="ah-portada">
     <p class="cap-num">01 — Identidad visual · Caso destacado</p>
     <div class="ah-texto">
@@ -209,7 +211,7 @@
 </section>
 
 <!-- ===================== 02 · AGENCIA CÓRDOBA CULTURA ===================== -->
-<section id="agencia" aria-label="Motion institucional para la Agencia Córdoba Cultura">
+<section id="agencia" class="capitulo" aria-label="Motion institucional para la Agencia Córdoba Cultura">
   <header class="ag-cab sube">
     <p class="cap-num">02 — Motion institucional · Agencia Córdoba Cultura · 2026</p>
     <h2>En pantalla</h2>
@@ -219,7 +221,7 @@
 </section>
 
 <!-- ===================== 03 · CATÁLOGO FIT ===================== -->
-<section id="fit" aria-label="Catálogo del Festival Internacional de Teatro">
+<section id="fit" class="capitulo" aria-label="Catálogo del Festival Internacional de Teatro">
   <header class="fit-cab sube">
     <p class="cap-num">03 — Diseño editorial · 2026</p>
     <h2>Catálogo FIT<span id="fitTitulo"></span></h2>
@@ -240,7 +242,7 @@
 </section>
 
 <!-- ===================== 04 · NEXAR NETWORKS ===================== -->
-<section id="nexar" aria-label="Motion para el video institucional de Nexar Networks">
+<section id="nexar" class="capitulo" aria-label="Motion para el video institucional de Nexar Networks">
   <header class="nx-cab sube">
     <p class="cap-num">04 — Motion · video institucional</p>
     <h2>Nexar Networks<span class="nx-flechas" aria-hidden="true">▶▶▶</span></h2>
@@ -254,7 +256,7 @@
 </section>
 
 <!-- ===================== 05 · FERIA DEL CENTRO ===================== -->
-<section id="feria-del-centro" aria-label="Identidad de la Feria del Centro">
+<section id="feria-del-centro" class="capitulo" aria-label="Identidad de la Feria del Centro">
   <svg class="fdc-lineas" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <path id="fdcR" class="r" d="M-40 60 H600 Q640 60 662 94 L758 206 Q780 240 820 240 H1640"/>
     <path id="fdcA" class="a" d="M-40 240 H560 Q600 240 622 206 L718 94 Q740 60 780 60 H1080 Q1120 60 1142 94 L1170 128 Q1190 150 1230 150 H1640"/>
@@ -301,7 +303,7 @@
   </div>
 </section>
 
-<section class="bloque" id="motion">
+<section class="bloque capitulo" id="motion">
   <div class="ph"><span class="y">06 · 2025</span><h2>Visuales en vivo</h2><p>Visuales para conciertos y eventos · en loop, tocá "Sonido" para escucharlos</p></div>
   <div class="vids" id="vids"></div>
 </section>
@@ -369,7 +371,7 @@
 
   // Experimentación visual: abanico de piezas (se pasan arrastrando) + grilla opcional
   DISENO.forEach(g => {
-    const sec = document.createElement('section'); sec.className = 'bloque'; sec.id = g.slug;
+    const sec = document.createElement('section'); sec.className = 'bloque capitulo'; sec.id = g.slug;
     sec.innerHTML = `<div class="ph"><span class="y">07 · ${g.works.length} trabajos</span><h2>${g.title}</h2><p>Arrastrá el abanico o usá las flechas · tocá la pieza del frente para verla grande</p></div>
       <div class="filtros" role="group" aria-label="Filtrar por categoría"></div>
       <div class="abanico" tabindex="0" aria-roledescription="carrusel" aria-label="${esc(g.title)}: abanico de piezas"></div>
@@ -527,11 +529,12 @@
     grilla.appendChild(d); grandes.observe(d);
   });
 
-  if (location.hash) { const t = document.querySelector(location.hash); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+  // los saltos por #capítulo los maneja capitulos.js
 })();
 </script>
 <script src="libro.js?v=cd1890"></script>
-<script src="diseno-inst.js?v=d7e04f"></script>
-<script src="transicion.js?v=d7eb95"></script>
+<script src="diseno-inst.js?v=d82c10"></script>
+<script src="capitulos.js?v=d82c40"></script>
+<script src="transicion.js?v=d82bfa"></script>
 </body>
 </html>

@@ -5,8 +5,10 @@
 // (cuadros de los videos en img/motion-cuadros/, miniaturas de DISENO), cada una con un efecto distinto
 // (pixelado, vectorizado, glitch, onda, armado por bloques) dibujado en un canvas. Con un clic, Esc o scroll se saltea.
 (() => {
-  const links = document.querySelectorAll('#indice a[href^="#"]');
-  if (!links.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // índice + barra y cierre de capítulo (capitulos.js los crea antes de que cargue este archivo)
+  // índice + barra y cierre de capítulo (capitulos.js); los de la barra cambian de destino, por eso se escucha delegado
+  const SEL = '#indice a[href^="#"], .cap-barra a[data-vista], .cap-fin a[data-vista]';
+  if (!document.querySelector('#indice a[href^="#"]') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const NS = 'http://www.w3.org/2000/svg';
   const I = typeof INSTITUCIONAL !== 'undefined' ? INSTITUCIONAL : null;
 
@@ -135,9 +137,10 @@
   const el = (tag, at = {}, padre) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (padre) padre.appendChild(e); return e; };
   const azar = (a, b) => a + Math.random() * (b - a);
   const GLIFOS = '01#%&*/\\<>_=+▮▯◢◣';
-  let activa = null;
+  let activa = null, cancelada = false;
   // historial primero (así Atrás vuelve al índice donde estaba), después el salto sin scroll suave y el foco al capítulo
   function saltar(destino, hash) {
+    if (window.CAPS) return CAPS.ir(destino.id);   // Diseño por capítulos: muestra solo ese y maneja el historial
     if (location.hash !== hash) { history.replaceState({ y: scrollY }, ''); history.pushState(null, '', hash); }
     const h = document.documentElement, sb = h.style.scrollBehavior; h.style.scrollBehavior = 'auto';
     destino.scrollIntoView(); h.style.scrollBehavior = sb;
@@ -253,13 +256,16 @@
   async function transicion(a) {
     const destino = document.querySelector(a.getAttribute('href')); if (!destino) { activa = null; return; }
     const k = a.dataset.vista;
-    const nombre = a.querySelector('b').textContent, num = a.querySelector('.n').textContent, rubro = (a.querySelector('.q') || {}).textContent || '';
+    // los textos salen siempre del renglón del índice (la barra y el cierre de capítulo no los tienen todos)
+    const ref = document.querySelector(`#indice a[href="${a.getAttribute('href')}"]`) || a;
+    const nombre = ref.querySelector('b').textContent, num = ref.querySelector('.n').textContent, rubro = (ref.querySelector('.q') || {}).textContent || '';
     const esRafaga = k in RAFAGA;
     // lo que no llegó a cargar en 0,7 s no se espera; la ráfaga usa lo que ya está
     const espera = new Promise(r => setTimeout(() => r(null), 700));
     const svgTxt = esRafaga ? null : await Promise.race([logo(k), espera]);
     const fotos = esRafaga ? await Promise.race([piezasRafaga(k), espera.then(() => RAFAGA[k].map(s => listas[s]).filter(Boolean))]) : [];
 
+    if (cancelada) { cancelada = false; activa = null; return; }   // se tocó Atrás mientras cargaba el logo
     const fila = a.getBoundingClientRect();   // se mide después de esperar el logo
     const t = document.createElement('div'); t.className = esRafaga ? 'trans rafaga' : 'trans'; t.setAttribute('aria-hidden', 'true');
     t.innerHTML = `<div class="tr-grilla"></div>
@@ -338,6 +344,7 @@
     const timers = [];
     const en = (ms, f) => timers.push(setTimeout(f, ms));
     const irAlCapitulo = () => {
+      if (cancelada) { cancelada = false; return; }   // Atrás durante la transición: manda el historial
       saltar(destino, a.getAttribute('href'));
     };
     const salir = () => {
@@ -366,9 +373,12 @@
     en(2050, salir);
   }
 
-  // Atrás: vuelve a la altura del índice desde donde se saltó (algunos navegadores no la recuerdan solos)
-  addEventListener('popstate', e => { if (e.state && typeof e.state.y === 'number') { const h = document.documentElement, sb = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; scrollTo(0, e.state.y); h.style.scrollBehavior = sb; } });
-  links.forEach(a => a.addEventListener('click', e => {
+  // Atrás / Adelante: lo maneja capitulos.js
+  // Atrás durante la transición: se corta y no se empuja el capítulo de destino encima
+  addEventListener('popstate', () => { if (activa && activa !== 'saliendo') { cancelada = true; if (typeof activa === 'function') activa(); } });
+  // en captura sobre window: corre antes que el manejador delegado de capitulos.js, que respeta el preventDefault
+  addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest(SEL); if (!a || a.hidden) return;
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
     if (activa === 'saliendo') return;   // mientras se va la cortina, el salto común
     e.preventDefault(); if (activa) return;
@@ -378,5 +388,5 @@
       document.querySelectorAll('.trans').forEach(n => n.remove()); activa = null;
       const d = document.querySelector(a.getAttribute('href')); if (d) saltar(d, a.getAttribute('href'));
     });
-  }));
+  }, true);
 })();

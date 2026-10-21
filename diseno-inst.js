@@ -219,7 +219,7 @@
       <g class="bl"><circle cx="1160" cy="${y1}" r="22" fill="${l.color}"/>${l.icono.replace('<svg ', `<svg x="1138" y="${y1 - 22}" width="44" height="44" `)}</g>
       <text class="rot" x="66" y="${y0 - 14}">${esc(l.nombre)}</text>`;
     capaEncima.appendChild(g);
-    const ln = gl.querySelector('.ln'); ln.style.setProperty('--l', Math.ceil(ln.getTotalLength()));
+    const ln = gl.querySelector('.ln'); try { ln.style.setProperty('--l', Math.ceil(ln.getTotalLength() || 2000)); } catch (e) { ln.style.setProperty('--l', 2000); }   // el capítulo puede estar oculto al medir
   });
   if (sinMov) mapa.querySelectorAll('animateMotion').forEach(a => a.remove());
   aparecer.observe(mapa);
@@ -408,5 +408,4 @@
     pista.querySelectorAll('img').forEach(i => i.addEventListener('load', () => i.style.setProperty('--r', (i.naturalWidth / i.naturalHeight).toFixed(3)), { once: true }));
   }
 
-  if (location.hash) { const t = document.querySelector(location.hash); if (t) setTimeout(() => t.scrollIntoView(), 80); }
 })();

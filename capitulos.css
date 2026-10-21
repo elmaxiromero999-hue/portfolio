@@ -1,0 +1,57 @@
+/* Diseño por capítulos (capitulos.js). html.dis-nav lo pone el <head>; html[data-cap] = capítulo abierto.
+   Sin JS no hay dis-nav y se ve todo seguido, como antes. */
+
+/* portada: índice sin capítulos · capítulo: sin portada y solo el elegido */
+html.dis-nav:not([data-cap]) .capitulo, html.dis-nav:not([data-cap]) .cap-barra, html.dis-nav:not([data-cap]) .cap-fin { display: none; }
+html.dis-nav[data-cap] .dis-cab, html.dis-nav[data-cap] #indice { display: none; }
+html.dis-nav[data-cap] .capitulo:not(.abierta) { display: none; }   /* capitulos.js marca .abierta */
+/* el capítulo arranca justo debajo del menú fijo y la barra; lo que era sticky bajo el menú ahora va bajo la barra */
+html.dis-nav[data-cap] { --barra-h: 46px; scroll-padding-top: calc(var(--menu-h) + var(--barra-h)); }
+html.dis-nav[data-cap] .ah-escenario, html.dis-nav[data-cap] .fdc-viaje-fijo { top: calc(var(--menu-h) + var(--barra-h)); height: calc(100svh - var(--menu-h) - var(--barra-h)); }
+html.dis-nav[data-cap] #nexar > .nx-linea-caja { top: calc(var(--menu-h) + var(--barra-h)); }
+html.dis-nav[data-cap] .ah-portada { min-height: calc(100svh - var(--menu-h) - var(--barra-h)); }
+html.dis-nav[data-cap] .cap-barra { margin-top: var(--menu-h); }
+.capitulo:focus { outline: none; }
+
+/* ---------- barra fija del capítulo ---------- */
+.cap-barra { position: sticky; top: var(--menu-h); z-index: 45; display: flex; align-items: center; gap: 16px;
+  padding: 0 var(--lado, 24px); height: 46px; box-sizing: border-box; background: var(--papel); color: var(--tinta); border-bottom: 1px solid var(--linea);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.cap-barra a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+.cap-barra a:hover { color: var(--acento); }
+.cap-barra a:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.cb-actual { flex: 1; min-width: 0; display: flex; align-items: baseline; justify-content: center; gap: 8px; white-space: nowrap; overflow: hidden; }
+.cb-n { font-weight: 600; } .cb-de { color: var(--gris); }
+.cb-nombre { overflow: hidden; text-overflow: ellipsis; letter-spacing: .08em; }
+.cb-pasos { display: flex; gap: 18px; }
+.cb-indice { padding-right: 6px; }
+
+/* ---------- cierre: siguiente capítulo ---------- */
+.cap-fin { max-width: 1500px; margin: 0 auto; padding: clamp(50px, 8vw, 110px) var(--lado, 24px) clamp(30px, 5vw, 60px); }
+.cf-sig { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "et et et" "n nombre flecha" ". q flecha";
+  column-gap: 20px; align-items: baseline; padding: clamp(22px, 3vw, 36px) clamp(14px, 2vw, 26px); color: var(--tinta); text-decoration: none;
+  border-top: 2px solid var(--tinta); border-bottom: 1px solid var(--linea); transition: color .3s; }
+.cf-sig::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--relleno, #1800ff); transform: scaleX(0); transform-origin: left; transition: transform .5s cubic-bezier(.7,0,.2,1); }
+.cf-et { grid-area: et; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin-bottom: 14px; transition: color .3s; }
+.cf-n { grid-area: n; font-size: clamp(28px, 4vw, 56px); font-weight: 200; letter-spacing: -.04em; color: var(--gris); transition: color .3s; }
+.cf-nombre { grid-area: nombre; font-weight: 500; font-size: clamp(30px, 5.5vw, 84px); letter-spacing: -.045em; line-height: .95; }
+.cf-q { grid-area: q; margin-top: 10px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); transition: color .3s; }
+.cf-flecha { grid-area: flecha; align-self: center; font-size: clamp(30px, 5vw, 70px); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.cf-sig:hover, .cf-sig:focus-visible { color: #fff; outline: none; }
+.cf-sig:hover::before, .cf-sig:focus-visible::before { transform: none; }
+.cf-sig:hover .cf-et, .cf-sig:hover .cf-n, .cf-sig:hover .cf-q, .cf-sig:focus-visible .cf-et, .cf-sig:focus-visible .cf-n, .cf-sig:focus-visible .cf-q { color: rgba(255,255,255,.8); }
+.cf-sig:hover .cf-flecha { transform: translateX(10px); }
+.cf-indice { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 18px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta); text-decoration: none; }
+.cf-indice:hover { color: var(--acento); }
+.cap-fin [hidden] { display: none !important; }
+
+@media (max-width: 760px) {
+  .cap-barra { gap: 10px; padding: 0 12px 0 16px; }
+  .cb-txt, .cb-de { display: none; }   /* en celular: ← Índice · 03 Nombre · ← → */
+  .cb-actual { justify-content: flex-start; }
+  .cb-pasos { gap: 4px; }
+  .cb-pasos a { justify-content: center; min-width: 40px; font-size: 16px; }
+  .cf-sig { grid-template-areas: "et et" "n flecha" "nombre nombre" "q q"; grid-template-columns: 1fr auto; }
+  .cf-n { margin-bottom: 6px; }
+}
+.cap-barra [hidden] { display: inline-flex; visibility: hidden; }   /* sin anterior/siguiente: el lugar queda, así la barra no salta */
