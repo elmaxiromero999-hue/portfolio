@@ -1,0 +1,90 @@
+/* Obra: campo para explorar con linterna (campo.js). Capas dentro de #escena:
+   obras sin ver (z 1) · velo con un agujero de luz (z 5) · obras vistas (z 6) · obra señalada (z 8) · textos y HUD (z 10+). */
+#escena.campo { position: relative; height: calc(100vh - var(--menu-h, 56px)); height: calc(100svh - var(--menu-h, 56px)); min-height: 480px;
+  margin-top: var(--menu-h, 56px); overflow: hidden; overflow: clip; isolation: isolate; background: var(--papel); cursor: crosshair;
+  touch-action: pan-y pinch-zoom; user-select: none; -webkit-user-select: none; --lx: 50%; --ly: 50%; --r: 160px; }
+.cp-mundo { position: absolute; inset: 0; }   /* sin transform: así las obras compiten en z con el velo */
+
+/* obras */
+.cp-obra { position: absolute; left: 0; top: 0; padding: 0; border: 0; background: var(--papel-2); cursor: pointer; z-index: 1; will-change: transform;
+  box-shadow: 0 18px 40px -18px rgba(0,0,0,.55); -webkit-user-drag: none; -webkit-touch-callout: none; }
+.cp-obra img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none;
+  transform: rotate(var(--rot, 0deg)) scale(.25); opacity: 0;
+  transition: transform .9s cubic-bezier(.16,1,.3,1), opacity .6s, filter .4s; }
+.campo.listo .cp-obra img { transform: rotate(var(--rot, 0deg)); opacity: 1; }
+.cp-obra { background: none; box-shadow: none; }   /* la sombra va en la imagen, que es la que rota */
+.cp-obra img { box-shadow: 0 18px 40px -18px rgba(0,0,0,.55); }
+.cp-obra.vista { z-index: 6; }
+.cp-obra.encima { z-index: 8; }
+.cp-obra.encima img { transform: rotate(0deg) scale(1.1); box-shadow: 0 40px 90px -30px rgba(0,0,0,.7); transition-duration: .5s; }
+.cp-obra:focus-visible { outline: none; }
+.cp-obra:focus-visible img { outline: 2px solid var(--acento); outline-offset: 4px; }
+.cp-nuevo { position: absolute; top: 8px; left: 8px; z-index: 2; background: var(--relleno, #1800ff); color: #fff; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 4px 7px; pointer-events: none; }
+/* emerge: entra por encima del velo cortada en franjas */
+.cp-obra.emerge img { animation: cp-emerge .5s steps(1); }
+@keyframes cp-emerge {
+  0% { clip-path: inset(0 0 70% 0); translate: -12px 0; filter: invert(1); } 20% { clip-path: inset(30% 0 30% 0); translate: 9px 0; filter: none; }
+  40% { clip-path: inset(60% 0 0 0); translate: -5px 0; } 60% { clip-path: inset(0 0 0 0); translate: 3px 0; } 80% { translate: 0 0; } }
+
+/* velo con el agujero de luz */
+.cp-velo { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: var(--papel); opacity: .9;
+  -webkit-mask-image: radial-gradient(circle at var(--lx) var(--ly), transparent 0, transparent calc(var(--r) * .55), #000 calc(var(--r) * 1.15));
+  mask-image: radial-gradient(circle at var(--lx) var(--ly), transparent 0, transparent calc(var(--r) * .55), #000 calc(var(--r) * 1.15)); }
+.cp-velo::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, var(--linea) 0 1px, transparent 1px 4px); opacity: .5; }
+.campo.completo .cp-velo { opacity: .55; }
+/* lente: aro fino con marcas que sigue a la luz */
+.cp-lente { position: absolute; left: 0; top: 0; z-index: 9; width: calc(var(--r) * 1.3); height: calc(var(--r) * 1.3); pointer-events: none;
+  translate: calc(var(--lx) - var(--r) * .65) calc(var(--ly) - var(--r) * .65); border: 1px solid var(--linea); border-radius: 50%; }
+.cp-lente::before, .cp-lente::after { content: ""; position: absolute; background: var(--tinta); opacity: .5; }
+.cp-lente::before { left: 50%; top: -6px; width: 1px; height: calc(100% + 12px); -webkit-mask: linear-gradient(#000 10px, transparent 10px calc(100% - 10px), #000 calc(100% - 10px)); mask: linear-gradient(#000 10px, transparent 10px calc(100% - 10px), #000 calc(100% - 10px)); }
+.cp-lente::after { top: 50%; left: -6px; height: 1px; width: calc(100% + 12px); -webkit-mask: linear-gradient(90deg, #000 10px, transparent 10px calc(100% - 10px), #000 calc(100% - 10px)); mask: linear-gradient(90deg, #000 10px, transparent 10px calc(100% - 10px), #000 calc(100% - 10px)); }
+
+/* nombre arriba, como encabezado */
+.cp-rotulo { position: absolute; left: clamp(16px, 3vw, 40px); top: clamp(16px, 3vw, 34px); z-index: 10; pointer-events: none; color: #fff; mix-blend-mode: difference; }
+.cp-rotulo h1 { font-weight: 600; font-size: clamp(46px, 9vw, 150px); letter-spacing: -.055em; line-height: .84; }
+.cp-rotulo p { margin-top: 14px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+
+/* HUD */
+.cp-hud { position: absolute; z-index: 10; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--tinta);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.cp-hud.tr { top: clamp(16px, 3vw, 34px); right: clamp(16px, 3vw, 40px); text-align: right; display: grid; gap: 8px; justify-items: end; background: var(--papel); padding: 10px 12px; border: 1px solid var(--linea); }
+.cp-cuenta { font-size: clamp(22px, 2.4vw, 34px); letter-spacing: -.02em; font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif; font-weight: 500; }
+.cp-progreso { width: 140px; height: 2px; background: var(--linea); }
+.cp-progreso i { display: block; height: 100%; background: var(--relleno, #1800ff); transform-origin: left; transform: scaleX(0); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.campo.completo .cp-etq-vistas::after { content: " · todas"; color: var(--relleno, #1800ff); }
+.cp-hud.bl { left: clamp(16px, 3vw, 40px); bottom: 18px; max-width: 46ch; background: var(--papel); padding: 8px 12px; border: 1px solid var(--linea); }
+.cp-hud.br { right: clamp(16px, 3vw, 40px); bottom: 18px; display: flex; gap: 8px; align-items: center; }
+.cp-hud button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--tinta); background: var(--papel); border: 1px solid var(--linea); border-radius: 999px; padding: 0 14px; min-height: 36px; cursor: pointer; }
+.cp-hud button:hover { border-color: var(--tinta); }
+.cp-coords { margin-right: 6px; color: var(--gris); }
+
+/* ficha de la obra señalada */
+.cp-ficha { position: absolute; left: 0; top: 0; z-index: 11; width: 236px; padding: 12px 14px; pointer-events: none; display: grid; gap: 4px;
+  background: var(--papel); color: var(--tinta); border: 1px solid var(--tinta); font-size: 12px; line-height: 1.35;
+  opacity: 0; transition: opacity .2s; box-shadow: 6px 6px 0 var(--relleno, #1800ff); }
+.cp-ficha.ver { opacity: 1; }
+.cp-ficha b { font-size: 18px; font-weight: 500; letter-spacing: -.02em; line-height: 1.1; }
+.cp-ficha .cp-fn, .cp-ficha em { font-family: ui-monospace, Menlo, monospace; font-style: normal; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+
+/* bajar a la grilla */
+.cp-bajar { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; z-index: 10; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gris); text-decoration: none; min-height: 36px; display: inline-flex; align-items: center; }
+
+/* ---------- todas las obras (grilla compacta) ---------- */
+.todas-grilla { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; max-width: 1500px; margin: 0 auto; }
+.todas-grilla button { display: block; width: 100%; aspect-ratio: 4/5; padding: 0; border: 0; background: var(--papel-2); cursor: zoom-in; overflow: hidden; position: relative; }
+.todas-grilla img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(.3); transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .3s; }
+.todas-grilla button:hover img, .todas-grilla button:focus-visible img { transform: scale(1.06); filter: none; }
+.todas-grilla span { position: absolute; left: 6px; bottom: 6px; font-size: 10px; letter-spacing: .12em; background: var(--papel); color: var(--tinta); padding: 2px 6px; font-family: ui-monospace, Menlo, monospace; }
+
+@media (max-width: 760px) {
+  .cp-hud.bl { right: 16px; bottom: 56px; }
+  .cp-hud.br { left: 16px; right: 16px; justify-content: space-between; }
+  .cp-coords { display: none; }
+  .cp-progreso { width: 90px; }
+  .cp-ficha { width: 200px; }
+  .cp-bajar { display: none; }
+  .todas-grilla { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+}
+@media (prefers-reduced-motion: reduce) { .cp-obra.emerge img { animation: none; } .cp-obra img { transition: none; } }
+
+.cp-anuncio { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
