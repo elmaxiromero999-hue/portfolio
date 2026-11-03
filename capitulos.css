@@ -3,7 +3,7 @@
 
 /* portada: índice sin capítulos · capítulo: sin portada y solo el elegido */
 html.dis-nav:not([data-cap]) .capitulo, html.dis-nav:not([data-cap]) .cap-barra, html.dis-nav:not([data-cap]) .cap-fin { display: none; }
-html.dis-nav[data-cap] .dis-cab, html.dis-nav[data-cap] #indice { display: none; }
+html.dis-nav[data-cap] .dis-cab, html.dis-nav[data-cap] #indice, html.dis-nav[data-cap] .dis-extra { display: none; }
 html.dis-nav[data-cap] .capitulo:not(.abierta) { display: none; }   /* capitulos.js marca .abierta */
 /* el capítulo arranca justo debajo del menú fijo y la barra; lo que era sticky bajo el menú ahora va bajo la barra */
 html.dis-nav[data-cap] { --barra-h: 56px; scroll-padding-top: calc(var(--menu-h) + var(--barra-h)); }

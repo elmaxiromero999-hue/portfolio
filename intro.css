@@ -74,3 +74,30 @@ html[data-tema="oscuro"] #intro .lockup > .i-iso { color: #4d4dff; }   /* #1800f
 #intro.sale .lockup { transform: translateY(28vh); }
 
 @media (max-width: 640px) { .i-hud.br, .i-hud.tr { display: none; } }
+
+/* ---------- Carga breve entre secciones (carga.js) ---------- */
+html.con-carga { overflow: hidden; }
+html.con-carga body::before { content: ""; position: fixed; inset: 0; z-index: 998; background: #1800ff; }
+html[data-tema="oscuro"].con-carga body::before { background: #000; }
+#carga { position: fixed; inset: 0; z-index: 1001; display: grid; place-items: center; background: #1800ff; color: #fff;
+  font-family: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size: 64px 64px; }
+html[data-tema="oscuro"] #carga { background-color: #000; }
+html[data-tema="oscuro"] #carga .ca-iso { color: #4d4dff; }
+.ca-centro { display: grid; justify-items: center; gap: 18px; }
+.ca-iso svg { display: block; width: clamp(84px, 11vw, 132px); height: auto; overflow: visible; }
+.ca-iso rect { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform .32s cubic-bezier(.2,.85,.25,1) calc(var(--k) * 60ms); }
+#carga.arma .ca-iso rect, #carga.cubre .ca-iso rect { transform: none; }
+#carga.cubre .ca-iso rect { transition: none; }
+.ca-nombre { font-size: clamp(22px, 3vw, 38px); font-weight: 500; letter-spacing: -.03em; }
+.ca-barra { display: flex; align-items: center; gap: 10px; font: 500 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; }
+.ca-pista { width: 120px; height: 2px; background: rgba(255,255,255,.25); overflow: hidden; }
+.ca-pista i { display: block; height: 100%; background: #fff; transform-origin: left; transform: scaleX(0); }
+.ca-log { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font: 11px ui-monospace, Menlo, monospace; letter-spacing: .2em; opacity: .55; white-space: pre; }
+/* salida de la carga: la tapa sube */
+#carga.sale { clip-path: inset(0 0 100% 0); transition: clip-path .5s cubic-bezier(.7,0,.2,1); }
+/* al irse de la página: la tapa baja desde arriba */
+#carga.cubre { animation: ca-cubre .4s cubic-bezier(.7,0,.2,1) both; }
+@keyframes ca-cubre { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@media (prefers-reduced-motion: reduce) { #carga.sale { transition: none; } #carga.cubre { animation: none; } }

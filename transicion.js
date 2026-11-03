@@ -235,7 +235,7 @@
         const i = golpes.findIndex(g => el < g.ini + g.dur), g = golpes[i], p = Math.min(1, (el - g.ini) / g.dur);
         if (i !== actual) {
           actual = i; if (g.limpia) { cx.fillStyle = fondo; cx.fillRect(0, 0, W, H); }
-          hn.textContent = String(i + 1).padStart(2, '0'); ht.textContent = g.efecto;
+          hn.textContent = String(i + 1).padStart(2, '0'); ht.textContent = g.efecto; window.SFX && SFX.bit();
         }
         try { pinta(g, p, now); } catch (e) {}   // un cuadro que falla no frena la ráfaga
         if (g.flash && p < .25) { cx.globalCompositeOperation = 'difference'; cx.fillStyle = '#fff'; cx.fillRect(...g.caja); cx.globalCompositeOperation = 'source-over'; }   // negativo de un cuadro
@@ -361,14 +361,15 @@
     addEventListener('keydown', tecla); addEventListener('wheel', frena, { passive: false }); addEventListener('touchmove', frena, { passive: false });
 
     requestAnimationFrame(() => requestAnimationFrame(() => { t.style.clipPath = 'inset(0px 0px 0px 0px)'; t.classList.add('entra'); }));
+    if (window.SFX) { SFX.barrido(); if (!esRafaga) setTimeout(() => SFX.datos(.75), 250); }   // barrido de entrada + "datos" mientras se arma el logo
     const dura = esRafaga && fotos.length ? rafaga(t, fotos, hn, ht) : 0;
     if (window.TR_PAUSA) return;   // para revisar cada etapa a mano desde la consola
     if (esRafaga) {
       const total = Math.max(1200, Math.min(2200, dura || 1200));
-      en(total - 350, () => t.classList.add('glitch')); en(total - 100, () => t.classList.remove('glitch')); en(total, salir); return;
+      en(total - 350, () => { t.classList.add('glitch'); window.SFX && SFX.glitch(.7); }); en(total - 100, () => t.classList.remove('glitch')); en(total, salir); return;
     }
     en(1150, () => t.classList.add('rellena'));
-    en(1400, () => t.classList.add('glitch'));
+    en(1400, () => { t.classList.add('glitch'); window.SFX && SFX.glitch(.7); });
     en(1800, () => t.classList.remove('glitch'));
     en(2050, salir);
   }

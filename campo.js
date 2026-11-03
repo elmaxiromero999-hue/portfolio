@@ -103,6 +103,7 @@
     p.vista = true; p.el.classList.add('vista');
     if (!silencio && !quieto) { p.el.classList.add('emerge'); setTimeout(() => p.el.classList.remove('emerge'), 520); }
     vistas++; pintarCuenta();
+    if (!silencio) window.SFX && SFX.bit();
     if (vistas === total) { anuncio.textContent = 'Viste todas las obras'; if (!silencio && window.glitchPulso) glitchPulso(.7); }
   }
   let encendiendo = [];

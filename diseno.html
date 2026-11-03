@@ -4,12 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
-<script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
-<script>/* Diseño se navega por capítulos (capitulos.js): si la URL trae uno, se abre directo; capitulos.js valida que exista */(function(){var h=document.documentElement,c=location.hash.slice(1);h.classList.add('dis-nav');if(c&&c!=='indice')h.dataset.cap=c})()</script>
-<link rel="stylesheet" href="intro.css?v=d7eedc">
+<script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
+<script>/* Diseño se navega por capítulos (capitulos.js): si la URL trae uno, se abre directo; capitulos.js valida que exista */(function(){var h=document.documentElement,c=location.hash.slice(1);h.classList.add('dis-nav');if(c&&!/^(indice|sobre|contacto)$/.test(c))h.dataset.cap=c})()</script>
+<link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
-<script src="pulso.js?v=d9166c" defer></script>
+<script src="pulso.js?v=e96fff" defer></script>
+<script src="sonido.js?v=e96fff" defer></script>
+<script src="carga.js?v=e96fff" defer></script>
 <script src="fondo.js?v=d7ecf9" defer></script>
 <meta name="description" content="Diseño gráfico y motion graphics de Máximo José Romero: identidad visual del Archivo Histórico de la Provincia de Córdoba, motion institucional para la Agencia Córdoba Cultura, catálogo FIT, Nexar Networks, Feria del Centro, visuales para conciertos y experimentación visual.">
 <meta name="theme-color" content="#ffffff">
@@ -96,16 +98,16 @@
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
 <link rel="stylesheet" href="diseno-inst.css?v=d924ce">
 <link rel="stylesheet" href="comun.css?v=c92278">
-<link rel="stylesheet" href="capitulos.css?v=d924f4">
+<link rel="stylesheet" href="capitulos.css?v=e96d32">
 <link rel="stylesheet" href="rueda.css?v=d924e5">
 <link rel="stylesheet" href="transicion.css?v=d7e9c9">
-<link rel="stylesheet" href="tema.css?v=d8ffb1">
+<link rel="stylesheet" href="tema.css?v=e96fff">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
 </head>
 <body>
 <header class="menu">
   <a class="marca" href="index.html">Máximo Romero</a>
-  <nav class="principal"><a href="index.html">Inicio</a><a href="obras.html">Obra</a><a class="actual" href="diseno.html">Diseño y motion</a><a href="obras.html#contacto">Contacto</a></nav>
+  <nav class="principal"><a href="index.html">Inicio</a><a href="obras.html">Obra</a><a class="actual" href="diseno.html">Diseño y motion</a><a href="#sobre">Sobre mí</a><a href="#contacto">Contacto</a></nav>
 </header>
 <script src="marca.js?v=d821e9"></script>
 
@@ -126,6 +128,52 @@
     <li><a href="#experimentacion-visual" data-vista="exp"><span class="n">07</span><b>Experimentación visual</b><span class="q">Posters, flyers y portadas</span><span class="a"></span></a></li>
   </ol>
 </nav>
+
+<!-- Sobre mí como diseñador + contacto: solo en la portada de Diseño (se ocultan dentro de un capítulo) -->
+<section class="bloque dis-extra dis-sobre" id="sobre" aria-labelledby="ds-tit">
+  <p class="etiqueta">Sobre mí · Como diseñador</p>
+  <div class="ds-grid">
+    <div class="ds-intro">
+      <h2 id="ds-tit">Máximo Romero<span>Diseñador gráfico</span></h2>
+      <p>Diseñador gráfico con base teórica sólida y mucho interés por la experimentación. Me adapto a cada cliente y a cada formato, y disfruto resolver problemas visuales de forma creativa y eficiente: identidad, editorial, redes, motion y gran formato.</p>
+      <p>Estudio la Licenciatura en Diseño Gráfico en la Universidad Siglo 21 y vengo del Bachiller en Artes con orientación en Música, algo que se nota en cómo trabajo el ritmo y el movimiento.</p>
+      <ul class="ds-chips" aria-label="Especialidades"><li>Identidad visual</li><li>Editorial</li><li>Redes sociales</li><li>Motion graphics</li><li>Gran formato</li></ul>
+    </div>
+    <div class="ds-col">
+      <h3>Experiencia</h3>
+      <ol class="ds-linea">
+        <li><span class="ds-fecha">2025 — hoy</span><b>Agencia Córdoba Cultura</b><em>Diseñador gráfico · equipo de comunicación</em><p>Piezas para redes y eventos, identidades visuales y animación para escenarios y pantallas LED. Feria del Centro, Premios Sur, La Noche de los Teatros, Día del Tango.</p></li>
+        <li><span class="ds-fecha">2024 — hoy</span><b>Siglo 21 · Carrera de Diseño Gráfico</b><em>Diseñador de contenido digital</em><p>Contenido y redes de la Licenciatura en Diseño Gráfico: flyers e identidades para eventos como Crossover 21 y Rally Creativo.</p></li>
+        <li><span class="ds-fecha">2021 — 2025</span><b>Freelance</b><em>Diseñador gráfico independiente</em><p>Identidades, piezas para redes, animación de logos y visuales para escenarios. Clientes: Barbería SEVEN, Pan Beat, B16, Paradojas de Germán Álvarez.</p></li>
+      </ol>
+      <h3>Formación</h3>
+      <ol class="ds-linea">
+        <li><span class="ds-fecha">En curso · 3.er año</span><b>Lic. en Diseño Gráfico — Universidad Siglo 21</b><em>Beca del 50 % por rendimiento académico</em></li>
+        <li><span class="ds-fecha">Secundario</span><b>Bachiller en Artes, Música — Collegium</b></li>
+      </ol>
+      <h3>Herramientas</h3>
+      <ul class="ds-chips ds-soft" aria-label="Herramientas"><li>Illustrator</li><li>Photoshop</li><li>After Effects</li><li>Premiere</li><li>InDesign</li><li>Blender</li><li>Firefly</li><li>IA y automatización</li></ul>
+    </div>
+  </div>
+  <a class="cruce" href="obras.html#sobre"><span>También dibujo: carbonilla, acrílico y obra en gran formato</span> <b>Ver Obra →</b></a>
+</section>
+
+  <section class="bloque ct dis-extra" id="contacto" aria-labelledby="ct-tit">
+    <p class="etiqueta">Contacto</p>
+    <h2 class="ct-tit" id="ct-tit">¿Tenés un proyecto en mente?</h2>
+    <p class="ct-sub">Identidad, piezas para redes, editorial o motion para pantallas y escenarios. Escribime y lo charlamos.</p>
+    <div class="ct-mail">
+      <a class="ct-mail-link" href="mailto:maximojoseromero.dg@gmail.com"><span>maximojoseromero.dg</span><wbr><span>@gmail.com</span></a>
+      <button type="button" class="ct-copiar" data-mail="maximojoseromero.dg@gmail.com"><span class="ct-copiar-txt" aria-live="polite">Copiar mail</span></button>
+    </div>
+    <ul class="ct-redes">
+      <li><a class="ct-red" href="https://instagram.com/maxdiibujos" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg><span>Instagram</span><b>@maxdiibujos</b></a></li>
+      <li><a class="ct-red" href="https://wa.me/5493512115333" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.7A8 8 0 1 1 8.6 18.6z"/><path d="M9.2 8.6c.2-.5.6-.6 1-.5l.9 2-.6.9c.4.9 1.3 1.8 2.2 2.2l.9-.6 2 .9c.1.4 0 .8-.5 1-1 .6-2.6.4-4.3-1.2-1.7-1.6-2.2-3.3-1.6-4.7z"/></svg><span>WhatsApp</span><b>351 211-5333</b></a></li>
+      <li><a class="ct-red" href="https://www.behance.net/MaximoRomero9" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h5.2a2.8 2.8 0 0 1 0 5.6H3zM3 11.6h5.8a3.1 3.1 0 0 1 0 6.2H3zM14 8h6M13.5 14h7.3a3.7 3.7 0 1 0-1 2.6"/></svg><span>Behance</span><b>MaximoRomero9</b></a></li>
+      <li><a class="ct-red" href="https://www.linkedin.com/in/maximo-romero/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V17M8 7.4v.1M12 17v-6.5M12 13.5c0-2.2 4.5-2.8 4.5.4V17"/></svg><span>LinkedIn</span><b>maximo-romero</b></a></li>
+    </ul>
+    <p class="ct-lugar">Unquillo, Córdoba, Argentina</p>
+  </section>
 
 <!-- ===================== 01 · ARCHIVO HISTÓRICO ===================== -->
 <section id="archivo-historico" class="ahpc bloque-ancho capitulo" aria-label="Identidad visual del Archivo Histórico de la Provincia de Córdoba">
@@ -310,7 +358,7 @@
 
 <div id="grupos"></div>
 
-<footer>© 2026 Máximo José Romero · <a href="https://www.behance.net/MaximoRomero9" target="_blank" rel="noopener">Behance</a> · <a href="https://www.linkedin.com/in/maximo-romero/" target="_blank" rel="noopener">LinkedIn</a> — maqueta de prueba</footer>
+<footer class="pie"><span>© 2026 Máximo José Romero · Unquillo, Córdoba</span><span class="pie-links"><a href="https://instagram.com/maxdiibujos" target="_blank" rel="noopener">Instagram</a><a href="https://www.behance.net/MaximoRomero9" target="_blank" rel="noopener">Behance</a><a href="https://www.linkedin.com/in/maximo-romero/" target="_blank" rel="noopener">LinkedIn</a></span></footer>
 
 <div id="visor" role="dialog" aria-modal="true" aria-label="Trabajo ampliado" aria-hidden="true">
   <button class="cerrar" type="button" aria-label="Cerrar">Cerrar ✕</button>
@@ -534,8 +582,8 @@
 </script>
 <script src="libro.js?v=cd1890"></script>
 <script src="diseno-inst.js?v=d924ae"></script>
-<script src="rueda.js?v=d91666"></script>
-<script src="capitulos.js?v=d924ae"></script>
-<script src="transicion.js?v=d913a7"></script>
+<script src="rueda.js?v=e96dca"></script>
+<script src="capitulos.js?v=e96fff"></script>
+<script src="transicion.js?v=e96dca"></script>
 </body>
 </html>

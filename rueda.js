@@ -104,7 +104,7 @@
   function cambiarFrente(i) {
     frente = i; const d = datos[i];
     desbloquear();
-    if (porUsuario) { anuncio.textContent = `${d.n}: ${d.nombre}`; porUsuario = false; }
+    if (porUsuario) { anuncio.textContent = `${d.n}: ${d.nombre}`; porUsuario = false; window.SFX && SFX.paso(); }
     cuenta.textContent = d.n; ruQ.textContent = [d.q, d.anio].filter(Boolean).join(' · ');
     abrir.setAttribute('href', d.href); abrir.dataset.vista = d.vista;
     const c = cartas[i]; c.classList.remove('salta'); void c.offsetWidth; c.classList.add('salta');

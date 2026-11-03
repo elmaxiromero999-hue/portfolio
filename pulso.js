@@ -56,7 +56,9 @@
     }
     if (barras.length) requestAnimationFrame(cuadro); else { corriendo = false; ultimo = 0; cx.clearRect(0, 0, W, H); cv.hidden = true; }
   }
+  let ultimoSonido = 0;
   window.glitchPulso = (I = .5) => {
+    if (window.SFX && performance.now() - ultimoSonido > 250) { ultimoSonido = performance.now(); SFX.glitch(Math.max(.1, Math.min(1, I))); }
     I = Math.max(.1, Math.min(1, I));
     cv.width = de.clientWidth; cv.height = de.clientHeight;
     const W = cv.width, H = cv.height, n = Math.round(6 + I * 26);

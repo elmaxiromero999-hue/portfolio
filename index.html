@@ -4,11 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
-<script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
-<link rel="stylesheet" href="intro.css?v=d7eedc">
+<script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
+<link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
-<script src="pulso.js?v=d9166c" defer></script>
+<script src="pulso.js?v=e96fff" defer></script>
+<script src="sonido.js?v=e96fff" defer></script>
+<script src="carga.js?v=e96fff" defer></script>
 <title>Máximo Romero — Artista visual y diseñador</title>
 <meta name="description" content="Máximo José Romero: obra artística, diseño gráfico y motion graphics. Córdoba, Argentina.">
 <style>
@@ -71,7 +73,7 @@
   @media (prefers-reduced-motion: reduce) { .lado, .fondo { transition: none; } }
 </style>
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
-<link rel="stylesheet" href="tema.css?v=d8ffb1">
+<link rel="stylesheet" href="tema.css?v=e96fff">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
 <meta name="theme-color" content="#111111">
 </head>

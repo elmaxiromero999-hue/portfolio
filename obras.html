@@ -4,11 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
-<script>/* intro del nombre: una vez por visita (intro.js); si no carga, la tapa se va sola */try{if(!sessionStorage.getItem('intro-vista')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('con-intro');setTimeout(function(){document.documentElement.classList.remove('con-intro')},4000)}}catch(e){}</script>
-<link rel="stylesheet" href="intro.css?v=d7eedc">
+<script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
+<link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
-<script src="pulso.js?v=d9166c" defer></script>
+<script src="pulso.js?v=e96fff" defer></script>
+<script src="sonido.js?v=e96fff" defer></script>
+<script src="carga.js?v=e96fff" defer></script>
 <script src="fondo.js?v=d7ecf9" defer></script>
 <title>Máximo Romero — Artista visual</title>
 <meta name="description" content="Portfolio de Máximo José Romero: dibujo, carbonilla, diseño gráfico y motion graphics. Córdoba, Argentina.">
@@ -87,7 +89,7 @@
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
 <link rel="stylesheet" href="comun.css?v=c92278">
 <link rel="stylesheet" href="campo.css?v=dab159">
-<link rel="stylesheet" href="tema.css?v=d8ffb1">
+<link rel="stylesheet" href="tema.css?v=e96fff">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
 <meta name="theme-color" content="#ffffff">
 </head>
@@ -97,7 +99,7 @@
   <a class="marca" href="index.html">Máximo Romero</a>
   <nav>
     <a href="index.html">Inicio</a>
-    <a class="actual" href="#escena">Obras</a>
+    <a class="actual" href="#escena">Obra</a>
     <a href="diseno.html">Diseño y motion</a>
     <a href="#sobre">Sobre mí</a>
     <a href="#contacto">Contacto</a>
@@ -125,7 +127,7 @@
   </section>
 
     <section class="bloque" id="sobre">
-    <p class="etiqueta">Sobre mí</p>
+    <p class="etiqueta">Sobre mí · Como artista</p>
     <div class="sobre">
       <img src="img/retrato.jpg" alt="Máximo Romero dibujando en un cuaderno" loading="lazy">
       <div>
@@ -134,23 +136,27 @@
         <p>Dibujar es lo que más amo, lo que me entretiene y me da paz. No lo hago solo porque me guste o porque desde chico se me daba bien, sino porque es mi forma de canalizar emociones y conectarme profundamente conmigo mismo. Dibujo porque lo necesito, porque es parte de mí.</p>
         <p>Este último año me dediqué al estudio de la carbonilla y, a su vez, trabajé mucho en una perspectiva que juega de manera brusca con la deformación del campo visual. Busco generar una visión que transmita movimiento exagerado, intentando plasmar en el dibujo la idea de dinamismo y fluidez. Para ello, utilizo con frecuencia cuerpos orgánicos que me permiten expresar esa energía en cada trazo.</p>
         <p>Este portfolio reúne 2 obras de gran tamaño y 25 obras realizadas en carbonilla sobre hojas A4. Cada una de ellas busca ilustrar y transmitir escenas de la vida cotidiana, ventanas hacia distintas situaciones y personas que habitan lo común y lo azaroso. La intención es poner en valor lo bello de la cotidianeidad y la aparente banalidad de la vida, resaltando la poesía que existe en los gestos y momentos simples del día a día.</p>
+        <a class="cruce" href="diseno.html#sobre"><span>También soy diseñador gráfico y hago motion</span> <b>Ver Diseño y motion →</b></a>
       </div>
     </div>
   </section>
 
-  <section class="bloque" id="contacto">
+  <section class="bloque ct" id="contacto" aria-labelledby="ct-tit">
     <p class="etiqueta">Contacto</p>
-    <div class="contacto">
-      <a class="grande" href="mailto:maxdibujosinstgramoficial@gmail.com">maxdibujosinstgramoficial@gmail.com</a>
-      <ul>
-        <li><a href="https://instagram.com/maxdiibujos" target="_blank" rel="noopener">Instagram @maxdiibujos</a></li>
-        <li><a href="tel:+543512115333">351 211-5333</a></li>
-        <li>Córdoba, Argentina</li>
-      </ul>
+    <h2 class="ct-tit" id="ct-tit">¿Te interesa una obra o un encargo?</h2>
+    <p class="ct-sub">Escribime por obras, encargos, ilustraciones o muestras. Respondo por mail o por Instagram.</p>
+    <div class="ct-mail">
+      <a class="ct-mail-link" href="mailto:maxdibujosinstgramoficial@gmail.com"><span>maxdibujosinstgramoficial</span><wbr><span>@gmail.com</span></a>
+      <button type="button" class="ct-copiar" data-mail="maxdibujosinstgramoficial@gmail.com"><span class="ct-copiar-txt" aria-live="polite">Copiar mail</span></button>
     </div>
+    <ul class="ct-redes">
+      <li><a class="ct-red" href="https://instagram.com/maxdiibujos" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg><span>Instagram</span><b>@maxdiibujos</b></a></li>
+      <li><a class="ct-red" href="https://wa.me/5493512115333" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.7A8 8 0 1 1 8.6 18.6z"/><path d="M9.2 8.6c.2-.5.6-.6 1-.5l.9 2-.6.9c.4.9 1.3 1.8 2.2 2.2l.9-.6 2 .9c.1.4 0 .8-.5 1-1 .6-2.6.4-4.3-1.2-1.7-1.6-2.2-3.3-1.6-4.7z"/></svg><span>WhatsApp</span><b>351 211-5333</b></a></li>
+    </ul>
+    <p class="ct-lugar">Unquillo, Córdoba, Argentina</p>
   </section>
 </main>
-<footer>© 2026 Máximo José Romero — maqueta de prueba</footer>
+<footer class="pie"><span>© 2026 Máximo José Romero · Unquillo, Córdoba</span><span class="pie-links"><a href="https://instagram.com/maxdiibujos" target="_blank" rel="noopener">Instagram</a><a href="https://www.behance.net/MaximoRomero9" target="_blank" rel="noopener">Behance</a><a href="https://www.linkedin.com/in/maximo-romero/" target="_blank" rel="noopener">LinkedIn</a></span></footer>
 
 <div id="visor" role="dialog" aria-modal="true" aria-label="Obra ampliada" aria-hidden="true">
   <button class="cerrar" type="button" aria-label="Cerrar">Cerrar ✕</button>
@@ -203,6 +209,6 @@
   document.getElementById('todasGrilla').addEventListener('click', e => { const b = e.target.closest('button'); if (b) abrirObra(+b.dataset.i); });
 })();
 </script>
-<script src="campo.js?v=dab159"></script>
+<script src="campo.js?v=e96dca"></script>
 </body>
 </html>
