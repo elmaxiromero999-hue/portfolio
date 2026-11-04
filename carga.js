@@ -62,6 +62,23 @@
   // volver con "atrás" desde la caché del navegador: sin tapa
   addEventListener('pageshow', e => { if (e.persisted) { de.classList.remove('con-carga'); document.querySelectorAll('#carga').forEach(n => n.remove()); saliendo = false; } });
 
+  // ---------- Precarga: al apuntar a un link de otra página, se baja antes del clic ----------
+  const precargadas = new Set();
+  const precargar = e => {
+    const a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank') return;
+    const url = new URL(a.href, location.href);
+    if (url.origin !== location.origin || !/\.html$|\/$/.test(url.pathname) || archivo(url.href) === archivo(location.href)) return;
+    const clave = url.pathname; if (precargadas.has(clave)) return; precargadas.add(clave);
+    const l = document.createElement('link'); l.rel = 'prefetch'; l.href = url.pathname; document.head.appendChild(l);
+  };
+  document.addEventListener('pointerover', precargar, { passive: true });
+  document.addEventListener('touchstart', precargar, { passive: true });
+  document.addEventListener('focusin', precargar);
+
+  // ---------- Caché local (sw.js): solo en el sitio publicado (https), no en la compu de trabajo ----------
+  // DESACTIVADO hasta revisarlo (el critic no llegó a terminar): para activarlo, cambiar false por true
+  if (false && 'serviceWorker' in navigator && location.protocol === 'https:') addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+
   // ---------- Copiar mail ----------
   document.addEventListener('click', e => {
     const b = e.target.closest('.ct-copiar'); if (!b) return;

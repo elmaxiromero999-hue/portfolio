@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
 <script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
+<link rel="preload" as="font" type="font/woff2" href="fuentes/inter-tight-latin.woff2" crossorigin>
 <link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
 <script src="pulso.js?v=e96fff" defer></script>
 <script src="sonido.js?v=e96fff" defer></script>
-<script src="carga.js?v=e96fff" defer></script>
+<script src="carga.js?v=ebbe98" defer></script>
 <script src="fondo.js?v=d7ecf9" defer></script>
 <title>Máximo Romero — Artista visual</title>
 <meta name="description" content="Portfolio de Máximo José Romero: dibujo, carbonilla, diseño gráfico y motion graphics. Córdoba, Argentina.">
@@ -88,7 +89,7 @@
 </style>
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
 <link rel="stylesheet" href="comun.css?v=c92278">
-<link rel="stylesheet" href="campo.css?v=dab159">
+<link rel="stylesheet" href="campo.css?v=ebbe73">
 <link rel="stylesheet" href="tema.css?v=e96fff">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
 <meta name="theme-color" content="#ffffff">
@@ -167,17 +168,23 @@
 
 <script src="comun.js?v=c9221b"></script>
 <script src="obras.js?v=c5c10c"></script>
+<script src="variantes.js?v=ebbd02"></script>
 <script>
 (() => {
   // ----- Visor (lo usan el campo y la grilla) -----
   const visor = document.getElementById('visor'), vImg = visor.querySelector('img');
   const total = OBRAS.length;
   let actual = 0;
-  const precargar = i => { new Image().src = OBRAS[(i + total) % total].src; };
+  const v = (typeof imagen === 'function') ? imagen : s => s;
+  const ANCHO_VISOR = () => Math.min(innerWidth * .7, innerHeight * .9 * .8);   // ancho aproximado de la obra en el visor
+  const precargar = i => { new Image().src = v(OBRAS[(i + total) % total].src, ANCHO_VISOR()); };
   function mostrar(i) {
     actual = (i + total) % total;
     const o = OBRAS[actual];
-    vImg.src = o.src; vImg.alt = o.titulo;
+    // al instante la versión chica (ya está en caché), y cuando llega la nítida se reemplaza
+    const alta = v(o.src, ANCHO_VISOR()), yo = actual;
+    vImg.src = v(o.src, 240); vImg.alt = o.titulo;
+    const pre = new Image(); pre.src = alta; pre.decode().then(() => { if (actual === yo) vImg.src = alta; }, () => {});
     visor.querySelector('h3').textContent = o.titulo;
     visor.querySelector('.tec').textContent = o.tecnica;
     visor.querySelector('.med').textContent = o.medidas;
@@ -205,10 +212,10 @@
   // ----- Todas las obras: grilla compacta debajo del campo -----
   document.getElementById('todasCant').textContent = total;
   document.getElementById('todasGrilla').innerHTML = OBRAS.map((o, i) =>
-    `<li><button type="button" data-i="${i}" aria-label="${esc(o.titulo)}. Ampliar"><img src="${esc(o.thumb)}" alt="" loading="lazy" decoding="async"><span>${String(i + 1).padStart(2, '0')}</span></button></li>`).join('');
+    `<li><button type="button" data-i="${i}" aria-label="${esc(o.titulo)}. Ampliar"><img src="${esc(v(o.src, 170))}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"><span>${String(i + 1).padStart(2, '0')}</span></button></li>`).join('');
   document.getElementById('todasGrilla').addEventListener('click', e => { const b = e.target.closest('button'); if (b) abrirObra(+b.dataset.i); });
 })();
 </script>
-<script src="campo.js?v=e96dca"></script>
+<script src="campo.js?v=ebbe61"></script>
 </body>
 </html>

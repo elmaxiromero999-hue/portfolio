@@ -7,12 +7,14 @@
 (() => {
   const html = document.documentElement;
   const indice = document.getElementById('indice');
-  if (!indice || !html.classList.contains('dis-nav')) return;
+  if (!indice || !html.classList.contains('dis-nav')) { document.querySelectorAll('video[data-poster]').forEach(v => { v.poster = v.dataset.poster; }); return; }
   const caps = [...indice.querySelectorAll('ol a[href^="#"]')].map(a => ({
     id: a.getAttribute('href').slice(1), vista: a.dataset.vista,
     n: a.querySelector('.n').textContent, nombre: a.querySelector('b').textContent, q: (a.querySelector('.q') || {}).textContent || '',
   })).filter(c => document.getElementById(c.id));
   const ids = caps.map(c => c.id), total = String(caps.length).padStart(2, '0');
+  // lo pesado de cada capítulo (posters de video) se pide recién cuando se abre
+  const hidratar = sec => { if (sec) sec.querySelectorAll('video[data-poster]').forEach(v => { v.poster = v.dataset.poster; v.removeAttribute('data-poster'); }); };
   const abrir = id => document.querySelectorAll('.capitulo').forEach(sec => sec.classList.toggle('abierta', sec.id === id));
   if (html.dataset.cap && !ids.includes(html.dataset.cap)) delete html.dataset.cap;   // el <head> pone cualquier hash
   const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -64,7 +66,7 @@
       if (desdeIndice) history.replaceState({ y: scrollY }, '');   // altura del índice, para volver al mismo lugar
       history.pushState({ cap: id, desdeIndice }, '', '#' + id);
     }
-    html.dataset.cap = id; abrir(id); pintar(id);
+    html.dataset.cap = id; abrir(id); pintar(id); hidratar(document.getElementById(id));
     saltoA(0);
     avisar();
     const sec = document.getElementById(id);
@@ -123,7 +125,7 @@
   // arranque: si la URL trae un capítulo, ya está visible (lo puso el <head>); falta la barra y el historial
   const inicial = location.hash.slice(1);
   if (ids.includes(inicial)) {
-    abrir(inicial); pintar(inicial);
+    abrir(inicial); pintar(inicial); hidratar(document.getElementById(inicial));
     // al recargar dentro de un capítulo se conserva el historial (desdeIndice) y la altura que restaura el navegador
     const yaEstaba = history.state && history.state.cap === inicial;
     if (!yaEstaba) { history.replaceState({ cap: inicial, desdeIndice: false }, ''); setTimeout(() => saltoA(0), 0); }

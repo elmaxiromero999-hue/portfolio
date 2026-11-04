@@ -14,7 +14,7 @@
     const sinMov = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const imgs = [];
     const cargar = i => {
-      if (i < 0 || i >= N || imgs[i]) return;
+      if (i < 0 || i >= N || imgs[i] || !cont.offsetParent) return;   // oculto (capítulo cerrado): se pide al aparecer
       const im = new Image(); im.decoding = 'async'; im.onload = pedir; im.src = paginas[i].src; imgs[i] = im;
     };
 
@@ -37,6 +37,7 @@
       cv.style.width = W + 'px'; cv.style.height = H + 'px';
       if (!doble) pos = Math.min(pos, N - 1); else pos -= pos % 2;
       corrMeta = corr = metaCorr();
+      for (let k = -3; k <= 5; k++) cargar(pos + k);   // al aparecer (o cambiar de tamaño) se piden las páginas cercanas
       pedir();
     }
     const metaCorr = () => !doble ? 0 : pos === 0 ? -pw / 2 : pos >= N ? pw / 2 : 0;

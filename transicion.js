@@ -43,7 +43,8 @@
   ('requestIdleCallback' in window) ? requestIdleCallback(prefetch, { timeout: 3000 }) : setTimeout(prefetch, 1500);
   const indice = document.getElementById('indice');
   if ('IntersectionObserver' in window && indice) {
-    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); Object.keys(RAFAGA).forEach(piezasRafaga); } }, { rootMargin: '600px' });
+    const tranqui = f => ('requestIdleCallback' in window) ? requestIdleCallback(f, { timeout: 4000 }) : setTimeout(f, 2500);
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); const ir = () => tranqui(() => Object.keys(RAFAGA).forEach(piezasRafaga)); document.readyState === 'complete' ? ir() : addEventListener('load', ir, { once: true }); } }, { rootMargin: '600px' });
     io.observe(indice);
   } else Object.keys(RAFAGA).forEach(piezasRafaga);
 

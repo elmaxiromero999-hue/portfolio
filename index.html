@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
 <script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
+<link rel="preload" as="font" type="font/woff2" href="fuentes/inter-tight-latin.woff2" crossorigin>
 <link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
 <script src="pulso.js?v=e96fff" defer></script>
 <script src="sonido.js?v=e96fff" defer></script>
-<script src="carga.js?v=e96fff" defer></script>
+<script src="carga.js?v=ebbe98" defer></script>
 <title>Máximo Romero — Artista visual y diseñador</title>
 <meta name="description" content="Máximo José Romero: obra artística, diseño gráfico y motion graphics. Córdoba, Argentina.">
 <style>
@@ -105,21 +106,24 @@
 <script src="obras.js?v=c5c10c"></script>
 <script src="diseno.js?v=c5cfd6"></script>
 <script src="inicio.js?v=c5cfd6"></script>
+<script src="variantes.js?v=ebbd02"></script>
 <script>
 (() => {
   const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const DUR_IMG = 4200, DUR_VIDEO_MAX = 9000, BARRIDO = 1000;
 
   // ---- Qué se muestra en cada mitad ----
-  const chica = matchMedia('(max-width: 760px)').matches;      // en celular se usan las miniaturas (mucho más livianas)
+  const chica = matchMedia('(max-width: 760px)').matches;
+  // cada mitad ocupa media pantalla en compu (en celular, el ancho entero pero bajito): se pide la versión WebP justa
+  const v = (typeof imagen === 'function') ? imagen : s => s, ANCHO = chica ? innerWidth : innerWidth / 2;
   const nuevas = OBRAS.filter(o => o.nuevo).slice(0, 5);
   const siempre = OBRAS.filter(o => !o.nuevo);
   const elegidasObra = [0, 1, 3, 6, 9, 12, 16, 20, 25].map(i => siempre[i]).filter(Boolean);
-  const fotosObra = nuevas.concat(elegidasObra).map(o => ({ tipo: 'img', src: chica ? o.thumb : o.src, nuevo: !!o.nuevo, titulo: o.titulo }));
+  const fotosObra = nuevas.concat(elegidasObra).map(o => ({ tipo: 'img', src: v(o.src, ANCHO), nuevo: !!o.nuevo, titulo: o.titulo }));
 
   const trabajos = DISENO.flatMap(g => g.works);
   const paso = Math.max(1, Math.floor(trabajos.length / 10));
-  const fotosDiseno = trabajos.filter((_, i) => i % paso === 0).slice(0, 10).map(w => ({ tipo: 'img', src: chica ? w.thumb : w.images[0].src, titulo: w.title }));
+  const fotosDiseno = trabajos.filter((_, i) => i % paso === 0).slice(0, 10).map(w => ({ tipo: 'img', src: v(w.images[0].src, ANCHO), titulo: w.title }));
 
   // Los videos de "videos inicio/" se intercalan: uno cada 3 fotos
   function mezclar(fotos, videos) {
@@ -170,13 +174,23 @@
       if (document.hidden) { clearTimeout(timer); timer = setTimeout(avanzar, 500); return; }
       let k = i;
       for (let n = 0; n < slides.length; n++) { k = (k + 1) % slides.length; if (!slides[k].malo) break; }   // saltea videos que no se pueden reproducir
+      // si la próxima foto todavía no bajó, se espera un poco (no se muestra a medio cargar)
+      const c = crear(k);
+      if (c.s.tipo === 'img' && !c.m.complete && (avanzar.espera = (avanzar.espera || 0) + 1) < 12) { clearTimeout(timer); timer = setTimeout(avanzar, 250); return; }
+      avanzar.espera = 0;
       mostrar(k);
     }
 
     if (!slides.length) return;
-    mostrar(0);
-    if (reducido || slides.length < 2) { clearTimeout(timer); barra.parentNode.style.display = 'none'; }
-    else { clearTimeout(timer); timer = setTimeout(avanzar, retraso); }   // la primera foto dura 'retraso': así los dos paneles quedan desfasados
+    // la primera aparece recién cuando está decodificada (como mucho 1,5 s de espera): nunca a medio cargar
+    const empezar = () => {
+      mostrar(0);
+      if (reducido || slides.length < 2) { clearTimeout(timer); barra.parentNode.style.display = 'none'; }
+      else { clearTimeout(timer); timer = setTimeout(avanzar, retraso); }   // la primera foto dura 'retraso': así los dos paneles quedan desfasados
+    };
+    const primera = crear(0);
+    if (primera.s.tipo === 'img' && primera.m.decode) Promise.race([primera.m.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]).then(empezar);
+    else empezar();
   }
 
   carrusel(document.querySelector('.lado.obra'), mezclar(fotosObra, VIDEOS_INICIO.obra), 3200);

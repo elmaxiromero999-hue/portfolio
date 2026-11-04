@@ -88,3 +88,7 @@
 @media (prefers-reduced-motion: reduce) { .cp-obra.emerge img { animation: none; } .cp-obra img { transition: none; } }
 
 .cp-anuncio { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* las miniaturas de la grilla entran con un fundido cuando ya bajaron (no se dibujan de a franjas) */
+.todas-grilla img { opacity: 0; transition: opacity .45s, transform .5s cubic-bezier(.2,.8,.2,1), filter .3s; }
+.todas-grilla img.ok { opacity: 1; }

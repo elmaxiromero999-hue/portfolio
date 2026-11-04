@@ -1,8 +1,8 @@
 /* Sección Diseño: trabajo institucional (Archivo Histórico, Agencia Córdoba Cultura, Feria del Centro, Catálogo FIT).
    Se carga después de tipografia.css y antes de comun.css. */
-@font-face { font-family: "Poppins"; font-weight: 300; font-display: swap; src: url("fuentes/Poppins-Light.ttf") format("truetype"); }
-@font-face { font-family: "Poppins"; font-weight: 500; font-display: swap; src: url("fuentes/Poppins-Medium.ttf") format("truetype"); }
-@font-face { font-family: "Poppins"; font-weight: 600; font-display: swap; src: url("fuentes/Poppins-SemiBold.ttf") format("truetype"); }
+@font-face { font-family: "Poppins"; font-weight: 300; font-display: swap; src: url("fuentes/Poppins-Light.woff2") format("woff2"), url("fuentes/Poppins-Light.ttf") format("truetype"); }
+@font-face { font-family: "Poppins"; font-weight: 500; font-display: swap; src: url("fuentes/Poppins-Medium.woff2") format("woff2"), url("fuentes/Poppins-Medium.ttf") format("truetype"); }
+@font-face { font-family: "Poppins"; font-weight: 600; font-display: swap; src: url("fuentes/Poppins-SemiBold.woff2") format("woff2"), url("fuentes/Poppins-SemiBold.ttf") format("truetype"); }
 
 :root { --lado: clamp(16px, 3vw, 40px); --navy: #1d2e36; --claro: #81aed7; --gris-signo: #c9cfd3;
   --fdc-rosa: #e4087e; --fdc-azul: #189cd8; --fdc-amarillo: #f6b233; }

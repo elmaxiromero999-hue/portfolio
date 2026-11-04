@@ -6,12 +6,13 @@
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
 <script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
 <script>/* Diseño se navega por capítulos (capitulos.js): si la URL trae uno, se abre directo; capitulos.js valida que exista */(function(){var h=document.documentElement,c=location.hash.slice(1);h.classList.add('dis-nav');if(c&&!/^(indice|sobre|contacto)$/.test(c))h.dataset.cap=c})()</script>
+<link rel="preload" as="font" type="font/woff2" href="fuentes/inter-tight-latin.woff2" crossorigin>
 <link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
 <script src="pulso.js?v=e96fff" defer></script>
 <script src="sonido.js?v=e96fff" defer></script>
-<script src="carga.js?v=e96fff" defer></script>
+<script src="carga.js?v=ebbe98" defer></script>
 <script src="fondo.js?v=d7ecf9" defer></script>
 <meta name="description" content="Diseño gráfico y motion graphics de Máximo José Romero: identidad visual del Archivo Histórico de la Provincia de Córdoba, motion institucional para la Agencia Córdoba Cultura, catálogo FIT, Nexar Networks, Feria del Centro, visuales para conciertos y experimentación visual.">
 <meta name="theme-color" content="#ffffff">
@@ -96,7 +97,7 @@
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .trabajo { opacity: 1; transform: none; transition: none; } }
 </style>
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
-<link rel="stylesheet" href="diseno-inst.css?v=d924ce">
+<link rel="stylesheet" href="diseno-inst.css?v=ebbd4e">
 <link rel="stylesheet" href="comun.css?v=c92278">
 <link rel="stylesheet" href="capitulos.css?v=e96d32">
 <link rel="stylesheet" href="rueda.css?v=d924e5">
@@ -371,6 +372,7 @@
 
 <script src="comun.js?v=c9221b"></script>
 <script src="diseno.js?v=c5cfd6"></script>
+<script src="variantes.js?v=ebbd02"></script>
 <script src="institucional.js?v=ceae81"></script>
 <script>
 (() => {
@@ -388,13 +390,20 @@
       if (it.inicio) vVid.addEventListener('loadedmetadata', () => { vVid.currentTime = it.inicio; }, { once: true });
       vVid.play().catch(() => {});
     }
-    else { vVid.pause(); vVid.removeAttribute('src'); vImg.src = it.src; vImg.alt = it.trabajo.title; }
+    else {
+      vVid.pause(); vVid.removeAttribute('src');
+      // al instante la versión chica y, cuando baja, la nítida para el tamaño del visor (las de Experimentación tienen versiones WebP)
+      const v = (typeof imagen === 'function') ? imagen : s => s, alta = v(it.src, Math.min(innerWidth * .9, innerHeight * .86)), yo = pos;
+      vImg.src = v(it.src, 240); vImg.alt = it.trabajo.title;
+      if (alta !== vImg.getAttribute('src')) { const pre = new Image(); pre.src = alta; pre.decode().then(() => { if (pos === yo) vImg.src = alta; }, () => {}); }
+    }
     el.style.animation = 'none'; el.offsetWidth; el.style.animation = '';
     visor.querySelector('.cap b').textContent = it.trabajo.title;
     const total = it.total || it.trabajo.images.length;
     const varias = total > 1 ? ` · ${it.n} / ${total}` : '';
     visor.querySelector('.cap span').textContent = `${it.trabajo.catLabel}${it.trabajo.year ? ' · ' + it.trabajo.year : ''}${varias}`;
-    [1, -1].forEach(d => { const v = lista[(pos + d + lista.length) % lista.length]; if (v && !v.video) new Image().src = v.src; });
+    const vv = (typeof imagen === 'function') ? imagen : s => s;
+    [1, -1].forEach(d => { const v = lista[(pos + d + lista.length) % lista.length]; if (v && !v.video) new Image().src = vv(v.src, Math.min(innerWidth * .9, innerHeight * .86)); });
   }
   const cerrar = () => { vVid.pause(); vVid.removeAttribute('src'); visor.classList.remove('abierto'); visor.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; foco.salir(visor); };
   const mover = d => { pos = (pos + d + lista.length) % lista.length; mostrar(); };
@@ -449,7 +458,7 @@
       abanico.innerHTML = ''; cartas = vis.map((w, i) => {
         const c = document.createElement('button'); c.type = 'button'; c.className = 'ab-carta'; c.tabIndex = -1;
         c.style.aspectRatio = `${w.w} / ${w.h}`; c.setAttribute('aria-label', w.title);
-        c.innerHTML = `<img src="${esc(w.thumb)}" alt="" draggable="false" decoding="async">${w.images.length > 1 ? `<span class="mas">+${w.images.length - 1}</span>` : ''}`;
+        c.innerHTML = `<img data-src="${esc(w.thumb)}" alt="" draggable="false" decoding="async" loading="lazy">${w.images.length > 1 ? `<span class="mas">+${w.images.length - 1}</span>` : ''}`;
         abanico.appendChild(c); return c;
       });
       pos = meta = 0; barra.max = Math.max(0, vis.length - 1); barra.value = 0; contar(); pedir();
@@ -461,12 +470,16 @@
         const d = i - pos, ad = Math.abs(d);
         if (ad > 8.5) { c.style.visibility = 'hidden'; return; }
         c.style.visibility = '';
+        const ima = c.querySelector('img'); if (ima.dataset.src) { ima.src = ima.dataset.src; delete ima.dataset.src; }   // la miniatura recién cuando la carta asoma
         const sube = Math.max(0, 1 - ad) * 26;                // la del frente se levanta
         c.style.transform = `translateX(-50%) rotate(${d * p}deg) translateY(${-sube}px) scale(${1 - Math.min(ad, 4) * 0.035})`;
         c.style.zIndex = 100 - Math.round(ad * 2);
         c.style.filter = ad < 0.5 ? 'none' : `brightness(${1 - Math.min(ad, 6) * 0.07})`;
         c.classList.toggle('frente', ad < 0.5);
-        if (ad < 1.6 && !c.dataset.grande) { c.dataset.grande = 1; c.querySelector('img').src = vis[i].images[0].src; }   // las de adelante, en alta
+        if (ad < 1.6 && !c.dataset.grande) {   // las de adelante, en alta: la versión justa para su tamaño, cambiada cuando ya bajó
+          c.dataset.grande = 1; const im = c.querySelector('img'), alta = (typeof imagen === 'function') ? imagen(vis[i].images[0].src, c.offsetWidth || 400) : vis[i].images[0].src;
+          const pre = new Image(); pre.src = alta; pre.decode().then(() => { im.src = alta; }, () => {});
+        }
       });
     }
     let corriendo = false;
@@ -567,7 +580,7 @@
   }), { rootMargin: '200px' });
   MOTION.forEach((m, k) => {
     const d = document.createElement('div'); d.className = 'vid';
-    d.innerHTML = `<video muted loop playsinline ${sinMov ? 'controls' : ''} preload="${m.mb < 10 ? 'auto' : 'none'}" src="${m.src}" aria-label="Motion graphics ${k + 1}"></video><button class="sonido" type="button">Sonido</button>`;
+    d.innerHTML = `<video muted loop playsinline ${sinMov ? 'controls' : ''} preload="none" src="${m.src}" aria-label="Motion graphics ${k + 1}"></video><button class="sonido" type="button">Sonido</button>`;
     const v = d.querySelector('video'), bt = d.querySelector('.sonido');
     bt.onclick = () => {
       const quiere = v.muted; grilla.querySelectorAll('video').forEach(x => { x.muted = true; x.parentNode.querySelector('.sonido').textContent = 'Sonido'; });
@@ -580,10 +593,10 @@
   // los saltos por #capítulo los maneja capitulos.js
 })();
 </script>
-<script src="libro.js?v=cd1890"></script>
-<script src="diseno-inst.js?v=d924ae"></script>
+<script src="libro.js?v=ebbe28"></script>
+<script src="diseno-inst.js?v=ebbdfa"></script>
 <script src="rueda.js?v=e96dca"></script>
-<script src="capitulos.js?v=e96fff"></script>
-<script src="transicion.js?v=e96dca"></script>
+<script src="capitulos.js?v=ebbdfa"></script>
+<script src="transicion.js?v=ebbdfa"></script>
 </body>
 </html>

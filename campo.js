@@ -17,12 +17,22 @@
   // azar con semilla: el campo es el mismo en cada visita
   let semilla = 11; const azar = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
   const total = OBRAS.length;
+  const achica = (typeof imagen === 'function' ? imagen : s => s);
+  // versión nítida para el tamaño real en pantalla: se baja aparte y se cambia recién cuando está lista (sin parpadeo)
+  function enAlta(p) {
+    if (p.alta) return; p.alta = true;
+    const src = achica(p.o.src, p.w * 1.12), img = p.el.querySelector('img');
+    if (img.getAttribute('src') === src) return;
+    const pre = new Image(); pre.decoding = 'async'; pre.src = src;
+    pre.decode().then(() => { img.src = src; }, () => {});
+  }
 
   const piezas = OBRAS.map((o, i) => {
     const el = document.createElement('button');
     el.type = 'button'; el.className = 'cp-obra' + (o.nuevo ? ' es-nueva' : '');
     el.setAttribute('aria-label', `${o.titulo}${o.tecnica ? ', ' + o.tecnica : ''}. Ampliar`);
-    el.innerHTML = `<img src="${esc(o.thumb)}" alt="" draggable="false" decoding="async">${o.nuevo ? '<span class="cp-nuevo">Nuevo</span>' : ''}`;
+    // primero la versión chica (480 px, ~50 KB): bajo el velo alcanza; al descubrirla se cambia por una nítida
+    el.innerHTML = `<img src="${esc(achica(o.src, 240))}" alt="" draggable="false" decoding="async">${o.nuevo ? '<span class="cp-nuevo">Nuevo</span>' : ''}`;
     mundo.appendChild(el);
     return { o, i, el, x: 0, y: 0, w: 0, h: 0, d: 1, rot: 0, vista: false, sx: 0, sy: 0 };
   });
@@ -100,7 +110,7 @@
   };
   function descubrir(p, silencio) {
     if (p.vista) return;
-    p.vista = true; p.el.classList.add('vista');
+    p.vista = true; p.el.classList.add('vista'); ultimaFirma = '';   // la versión nítida se pide en el próximo cuadro, si está a la vista
     if (!silencio && !quieto) { p.el.classList.add('emerge'); setTimeout(() => p.el.classList.remove('emerge'), 520); }
     vistas++; pintarCuenta();
     if (!silencio) window.SFX && SFX.bit();
@@ -116,7 +126,7 @@
     if (encima === p) return;
     if (encima) encima.el.classList.remove('encima');
     encima = p; if (!p) { armada = null; ficha.classList.remove('ver'); return; }
-    p.el.classList.add('encima');
+    p.el.classList.add('encima'); enAlta(p);
     const o = p.o, id = ++deco, t0 = performance.now();
     ficha.innerHTML = `<span class="cp-fn">${String(p.i + 1).padStart(2, '0')} / ${total}</span><b></b><span>${esc([o.tecnica, o.medidas].filter(Boolean).join(' · ') || 'Dibujo')}</span><em>${tactil ? 'tocá de nuevo para ampliar' : 'clic para ampliar'}</em>`;
     const b = ficha.querySelector('b');
@@ -178,6 +188,8 @@
     for (const p of piezas) {
       p.sx = p.x - camX * p.d; p.sy = p.y - camY * p.d;
       p.el.style.transform = `translate3d(${p.sx.toFixed(1)}px, ${p.sy.toFixed(1)}px, 0)`;
+      // descubierta y dentro de la pantalla: recién ahí se baja en alta ("Encender todo" no baja las 30 de golpe)
+      if (p.vista && !p.alta && p.sx < Vw && p.sx + p.w > 0 && p.sy < Vh && p.sy + p.h > 0) enAlta(p);
       // lo que entra en la luz emerge
       if (!p.vista) {
         const cx = p.sx + p.w / 2, cy = p.sy + p.h / 2, dx = Math.max(Math.abs(cx - luzX) - p.w / 2, 0), dy = Math.max(Math.abs(cy - luzY) - p.h / 2, 0);

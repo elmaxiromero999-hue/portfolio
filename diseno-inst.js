@@ -53,7 +53,7 @@
       b.type = 'button'; b.className = 'pz'; b.setAttribute('aria-label', (p.titulo || sub) + (p.tipo === 'video' ? ' (video)' : ''));
       b.dataset.ar = ar;
       if (p.tipo === 'video') {
-        b.innerHTML = `<video muted loop playsinline preload="none" poster="${esc(p.poster)}" src="${esc(p.src)}"></video><span class="play">${p.audio ? '▶ con sonido' : '▶'}</span><span class="et">${esc(p.titulo)}</span>`;
+        b.innerHTML = `<video muted loop playsinline preload="none" data-poster="${esc(p.poster)}" src="${esc(p.src)}"></video><span class="play">${p.audio ? '▶ con sonido' : '▶'}</span><span class="et">${esc(p.titulo)}</span>`;
         enPantalla.observe(b.querySelector('video'));
       } else {
         b.innerHTML = `<img src="${esc(grande && !chica ? p.src : p.thumb)}" alt="${esc(p.titulo)}" loading="lazy" decoding="async"><span class="et">${esc(p.titulo)}</span>`;
@@ -346,7 +346,7 @@
       b.style.flex = `${ar} 1 0`; b.style.aspectRatio = `${p.w} / ${p.h}`;
       const rango = p.desde != null ? `${tc(p.desde)}–${tc(p.desde + p.dur)}` : 'logo';
       b.setAttribute('aria-label', `${p.titulo}, ${p.detalle} (${rango}): ver en el video completo con sonido`);
-      b.innerHTML = `<video muted loop playsinline preload="none" poster="${esc(p.poster)}" src="${esc(p.src)}"></video><span class="tc">${rango}</span><span class="et"><b>${esc(p.titulo)}</b><span>${esc(p.detalle)}</span></span>`;
+      b.innerHTML = `<video muted loop playsinline preload="none" data-poster="${esc(p.poster)}" src="${esc(p.src)}"></video><span class="tc">${rango}</span><span class="et"><b>${esc(p.titulo)}</b><span>${esc(p.detalle)}</span></span>`;
       const v = b.querySelector('video'); enPantalla.observe(v);
       b.onclick = () => p.desde != null ? completo(p.desde) : verPiezas([{ ...p, sub: p.detalle }], 0);
       b.onmouseenter = () => { activo = { b, v, p }; };
