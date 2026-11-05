@@ -30,7 +30,7 @@
   const piezas = OBRAS.map((o, i) => {
     const el = document.createElement('button');
     el.type = 'button'; el.className = 'cp-obra' + (o.nuevo ? ' es-nueva' : '');
-    el.setAttribute('aria-label', `${o.titulo}${o.tecnica ? ', ' + o.tecnica : ''}. Ampliar`);
+    el.setAttribute('aria-label', `${o.nuevo ? 'Nuevo: ' : ''}${o.titulo}${o.tecnica ? ', ' + o.tecnica : ''}. Ampliar`);
     // primero la versión chica (480 px, ~50 KB): bajo el velo alcanza; al descubrirla se cambia por una nítida
     el.innerHTML = `<img src="${esc(achica(o.src, 240))}" alt="" draggable="false" decoding="async">${o.nuevo ? '<span class="cp-nuevo">Nuevo</span>' : ''}`;
     mundo.appendChild(el);

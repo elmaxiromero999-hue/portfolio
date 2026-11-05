@@ -9,11 +9,21 @@
 <link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
 <script src="aura.js?v=d7ed08" defer></script>
-<script src="pulso.js?v=e96fff" defer></script>
+<script src="pulso.js?v=eccb32" defer></script>
 <script src="sonido.js?v=e96fff" defer></script>
 <script src="carga.js?v=ebd41b" defer></script>
 <script src="fondo.js?v=d7ecf9" defer></script>
 <title>Máximo Romero — Ilustración a mano para música y teatro</title>
+<link rel="canonical" href="https://elmaxiromero999-hue.github.io/portfolio/obras.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Máximo Romero">
+<meta property="og:title" content="Máximo Romero — Ilustración a mano para música y teatro">
+<meta property="og:description" content="Ilustración hecha a mano para afiches de conciertos, obras de teatro y festivales. Máximo José Romero, artista visual y diseñador en Córdoba, Argentina. Encargos y obras originales.">
+<meta property="og:url" content="https://elmaxiromero999-hue.github.io/portfolio/obras.html">
+<meta property="og:image" content="https://elmaxiromero999-hue.github.io/portfolio/img/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Ilustración hecha a mano para afiches de conciertos, obras de teatro y festivales. Máximo José Romero, artista visual y diseñador en Córdoba, Argentina. Encargos y obras originales.">
 <style>
   :root {
@@ -52,7 +62,7 @@
   .etiqueta { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); margin-bottom: 28px; }
 
   .sobre { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 80px); align-items: start; max-width: 1300px; margin: 0 auto; }
-  .sobre img { width: 100%; display: block; filter: grayscale(1) contrast(1.05); }
+  .sobre img { width: 100%; height: auto; display: block; filter: grayscale(1) contrast(1.05); }
   .sobre h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4vw, 54px); line-height: 1.02; margin-bottom: 26px; }
   .sobre p { font-size: 16px; line-height: 1.65; margin-bottom: 1.1em; max-width: 60ch; }
 
@@ -90,7 +100,7 @@
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
 <link rel="stylesheet" href="comun.css?v=c92278">
 <link rel="stylesheet" href="campo.css?v=ebbe73">
-<link rel="stylesheet" href="tema.css?v=ecc863">
+<link rel="stylesheet" href="tema.css?v=eccb4b">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
 <meta name="theme-color" content="#ffffff">
 </head>
@@ -123,66 +133,37 @@
     <span class="cp-anuncio" aria-live="polite"></span>
   </section>
 
+  <section class="bloque" id="todas" aria-label="Todas las obras">
+    <p class="etiqueta">Todas las obras · <span id="todasCant"></span></p>
+    <ul class="todas-grilla" id="todasGrilla"></ul>
+  </section>
+
   <section class="bloque tc" id="encargos" aria-labelledby="tc-tit">
-    <p class="etiqueta">Trabajá conmigo · Ilustración para la escena</p>
+    <p class="etiqueta">Encargos · Ilustración para música y escena</p>
     <div class="tc-cab">
       <figure class="tc-pieza"><img src="img/web/nuevos/ilustracion-960.webp" srcset="img/web/nuevos/ilustracion-480.webp 480w, img/web/nuevos/ilustracion-960.webp 960w" sizes="(max-width: 760px) 340px, 30vw" decoding="async" alt="Dibujo a carbonilla de músicos tocando instrumentos de viento" loading="lazy" width="1343" height="1900"><figcaption>Ilustración para un concierto de vientos</figcaption></figure>
       <div>
         <h2 class="tc-tit" id="tc-tit">Una imagen con autor para <em>tu próximo show.</em></h2>
-        <p class="tc-lead">Hago ilustraciones a mano para afiches, flyers y portadas de conciertos, obras de teatro y festivales. Cada pieza se dibuja para ese evento: no es una imagen genérica, no se repite en otro cartel.</p>
-        <p class="tc-para">Para teatros · salas · orquestas · bandas · compañías · productoras · festivales</p>
+        <p class="tc-lead">Ilustro a mano afiches y portadas para conciertos, teatro y festivales. Una imagen única, pensada para tu evento y lista para imprimir y publicar.</p>
+        <ul class="ds-chips tc-chips" aria-label="Qué puedo ilustrar"><li>Afiches y flyers</li><li>Obras de teatro</li><li>Portadas de disco</li><li>Festivales y ciclos</li><li>Versión animada</li></ul>
+        <p class="tc-proceso" aria-label="Cómo trabajamos">Me contás el evento <i>→</i> boceto <i>→</i> ilustración final <i>→</i> todos los formatos</p>
         <div class="tc-acciones">
           <a class="tc-boton" href="mailto:maxdibujosinstgramoficial@gmail.com?subject=Encargo%20de%20ilustraci%C3%B3n">Pedí tu ilustración <span aria-hidden="true">→</span></a>
           <a class="tc-link" href="https://wa.me/5493512115333?text=Hola%20M%C3%A1ximo%2C%20quiero%20consultarte%20por%20una%20ilustraci%C3%B3n%20para%20un%20evento" target="_blank" rel="noopener">o escribime por WhatsApp</a>
         </div>
       </div>
     </div>
-    <div class="tc-cols">
-      <div>
-        <h3>Por qué conmigo</h3>
-        <ul>
-          <li><b>Hecha a mano</b><span>Cada ilustración la dibujo yo, trazo por trazo. Tu evento tiene una imagen que nadie más tiene.</span></li>
-          <li><b>Ilustración + diseño</b><span>También soy diseñador: la imagen llega armada como afiche, flyer, posteo o historia, lista para imprimir y publicar.</span></li>
-          <li><b>Vengo de la música</b><span>Bachiller en Artes con orientación en Música. Diseño para eventos culturales como La Noche de los Teatros y el Día del Tango.</span></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Qué podemos hacer</h3>
-        <ul>
-          <li>Afiche o flyer de concierto, gira o temporada</li>
-          <li>Imagen para obra de teatro y programa de mano</li>
-          <li>Portada de disco, EP o single</li>
-          <li>Imagen de festival o ciclo</li>
-          <li>Ilustración animada para redes y pantallas</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Cómo funciona</h3>
-        <ol class="tc-pasos">
-          <li><span>Me contás el evento: fecha, lugar, elenco y dónde se va a ver.</span></li>
-          <li><span>Te muestro un boceto antes de avanzar.</span></li>
-          <li><span>Dibujo la ilustración final.</span></li>
-          <li><span>Te entrego todos los formatos: afiche, post, historia y pantalla.</span></li>
-        </ol>
-      </div>
-    </div>
-    <p class="tc-venta"><b>Obras originales</b><span>¿Te gustó un dibujo? Consultá si está disponible.</span><a href="mailto:maxdibujosinstgramoficial@gmail.com?subject=Consulta%20por%20una%20obra">Consultar por una obra →</a></p>
-  </section>
-
-  <section class="bloque" id="todas" aria-label="Todas las obras">
-    <p class="etiqueta">Todas las obras · <span id="todasCant"></span></p>
-    <ul class="todas-grilla" id="todasGrilla"></ul>
   </section>
 
     <section class="bloque" id="sobre">
     <p class="etiqueta">Sobre mí · Como artista</p>
     <div class="sobre">
-      <img src="img/retrato.jpg" alt="Máximo Romero dibujando en un cuaderno" loading="lazy">
+      <img src="img/retrato.webp" alt="Máximo Romero dibujando en un cuaderno" loading="lazy" decoding="async" width="900" height="1200">
       <div>
         <h2>Máximo José Romero</h2>
         <p>Tengo 19 años, soy de Córdoba y dibujo desde que tengo memoria. Dibujar es mi forma de canalizar lo que siento: lo hago porque lo necesito.</p>
         <p>Trabajo sobre todo con carbonilla, buscando movimiento exagerado: perspectivas que se deforman y cuerpos que se estiran para que la imagen tenga ritmo. Dibujo escenas cotidianas, músicos, gente en movimiento: la poesía de los gestos simples.</p>
-        <p>Ese mismo trazo es el que llevo a los afiches de música y teatro.</p>
+        <p>Estudié música en el secundario y hoy diseño para eventos culturales de la Agencia Córdoba Cultura: por eso los afiches de música y teatro son mi terreno.</p>
         <a class="cruce" href="diseno.html#sobre"><span>También soy diseñador gráfico y hago motion</span> <b>Ver Diseño y motion →</b></a>
       </div>
     </div>
@@ -191,7 +172,7 @@
   <section class="bloque ct" id="contacto" aria-labelledby="ct-tit">
     <p class="etiqueta">Contacto</p>
     <h2 class="ct-tit" id="ct-tit">¿Tenés un concierto, una obra o un festival en puerta?</h2>
-    <p class="ct-sub">Contame la fecha y el formato, y te respondo con una propuesta. Escribime también por obras originales y muestras.</p>
+    <p class="ct-sub">Contame la fecha y el formato, y te respondo con una propuesta. Para obras originales, muestras o galerías, también escribime acá.</p>
     <div class="ct-mail">
       <a class="ct-mail-link" href="mailto:maxdibujosinstgramoficial@gmail.com"><span>maxdibujosinstgramoficial</span><wbr><span>@gmail.com</span></a>
       <button type="button" class="ct-copiar" data-mail="maxdibujosinstgramoficial@gmail.com"><span class="ct-copiar-txt" aria-live="polite">Copiar mail</span></button>
@@ -258,10 +239,10 @@
   // ----- Todas las obras: grilla compacta debajo del campo -----
   document.getElementById('todasCant').textContent = total;
   document.getElementById('todasGrilla').innerHTML = OBRAS.map((o, i) =>
-    `<li><button type="button" data-i="${i}" aria-label="${esc(o.titulo)}. Ampliar"><img src="${esc(v(o.src, 170))}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"><span>${String(i + 1).padStart(2, '0')}</span></button></li>`).join('');
+    `<li><button type="button" data-i="${i}" aria-label="${String(i + 1).padStart(2, '0')} · ${esc(o.titulo)}. Ampliar"><img src="${esc(v(o.src, 170))}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"><span>${String(i + 1).padStart(2, '0')}</span></button></li>`).join('');
   document.getElementById('todasGrilla').addEventListener('click', e => { const b = e.target.closest('button'); if (b) abrirObra(+b.dataset.i); });
 })();
 </script>
-<script src="campo.js?v=ebbe61"></script>
+<script src="campo.js?v=eccb32"></script>
 </body>
 </html>

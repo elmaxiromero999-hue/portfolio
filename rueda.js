@@ -25,9 +25,9 @@
   r.className = 'rueda';
   r.innerHTML = `<div class="ru-escena" role="group" aria-roledescription="carrusel" aria-label="Capítulos de Diseño">
       <div class="ru-mira" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="ru-etq">visor · cap</span></div>
-      <div class="ru-anillo">${datos.map((d, i) => `<a class="ru-carta" href="${esc(d.href)}" data-vista="${esc(d.vista)}" data-rueda="atras" draggable="false" style="--i:${i}" aria-label="${esc(d.n + ' ' + d.nombre)}">
+      <div class="ru-anillo">${datos.map((d, i) => `<a class="ru-carta" href="${esc(d.href)}" data-vista="${esc(d.vista)}" data-rueda="atras" draggable="false" style="--i:${i}">
         <span class="ru-img">${d.foto ? `<img src="${esc(d.foto)}" alt="" decoding="async" draggable="false">` : ''}</span>
-        <span class="ru-velo"></span><span class="ru-n">${esc(d.n)}</span><span class="ru-nombre">${esc(d.nombre)}</span></a>`).join('')}</div>
+        <span class="ru-velo"></span><span class="ru-n">${esc(d.n)}</span> <span class="ru-nombre">${esc(d.nombre)}</span></a>`).join('')}</div>
     </div>
     <div class="ru-info">
       <div class="ru-hud" aria-hidden="true"><span>θ <b class="ru-ang">000.0</b>°</span><span class="ru-ayuda">arrastrá · tocá la del frente para abrir</span><span><b class="ru-cuenta">01</b> / ${String(N).padStart(2, '0')}</span></div>

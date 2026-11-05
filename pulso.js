@@ -33,7 +33,7 @@
     .mov-tel { flex: none; width: 14px; height: 24px; border: 1.5px solid currentColor; border-radius: 3px; animation: mov-tiembla 1.2s ease-in-out infinite; }
     .mov-aviso button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; min-height: 40px; }
     .mov-si { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 0 6px; font-size: 12px !important; letter-spacing: .1em; text-transform: uppercase; }
-    .mov-no { font-size: 18px !important; opacity: .6; padding: 0 6px; }
+    .mov-no { font-size: 18px !important; opacity: .6; padding: 0 6px; min-width: 44px; min-height: 44px; }
     html.menu-abierto .mov-aviso { display: none; }
     @media (max-width: 360px) { .menu-txt { display: none; } }`;
   document.head.appendChild(css);
