@@ -24,6 +24,7 @@ html[data-tema="oscuro"] { --relleno: #4d4dff; }   /* blanco sobre #4d4dff: 5,5:
 .dis-cab .etiqueta { padding: 0 var(--lado); max-width: 1500px; margin: 0 auto 18px; color: var(--gris); }
 .dis-cab h1 { padding: 0 var(--lado); max-width: 1500px; margin: 0 auto; font-size: clamp(48px, 7.2vw, 128px); line-height: .86; letter-spacing: -.055em; font-weight: 600; color: var(--tinta); }
 .dis-cab h1 em { font-style: normal; font-weight: 200; color: var(--relleno); }
+.dis-cab .dis-lema { padding: 0 var(--lado); max-width: 1500px; margin: 22px auto 0; font-size: clamp(16px, 1.6vw, 21px); line-height: 1.4; color: var(--gris); }
 
 /* ---------- Índice de capítulos: cada fila se llena de azul y asoma su trabajo ---------- */
 #indice { max-width: 1500px; margin: 0 auto; padding: clamp(22px, 3vw, 44px) var(--lado) clamp(40px, 5vw, 80px); }   /* el visor arranca enseguida del título */

@@ -107,14 +107,14 @@
     if (href === '#indice' && (a.closest('.cap-barra') || a.closest('.cap-fin'))) { e.preventDefault(); volver(); return; }
     if (a.classList.contains('cb-punto') && a.classList.contains('actual')) { e.preventDefault(); saltoA(0); return; }
     if (html.dataset.cap && a.closest('header') && /(^|\/)diseno\.html$/.test(href)) { e.preventDefault(); volver(); return; }
-    // Sobre mí / Contacto viven en la portada: desde un capítulo, primero se vuelve a ella
-    if (html.dataset.cap && (href === '#sobre' || href === '#contacto')) {
+    // Servicios / Sobre mí / Contacto viven en la portada: desde un capítulo, primero se vuelve a ella
+    if (html.dataset.cap && (href === '#servicios' || href === '#sobre' || href === '#contacto')) {
       e.preventDefault(); alIndice();
       const t = document.querySelector(href);
       if (t) { t.scrollIntoView({ behavior: 'instant' }); history.replaceState(null, '', href); if (!t.hasAttribute('tabindex')) t.tabIndex = -1; t.focus({ preventScroll: true }); }
       return;
     }
-    if (ids.includes(href.slice(1)) && (a.closest('#indice') || a.closest('.cap-barra') || a.closest('.cap-fin'))) { e.preventDefault(); ir(href.slice(1)); }
+    if (ids.includes(href.slice(1)) && (a.closest('#indice') || a.closest('.cap-barra') || a.closest('.cap-fin') || a.closest('#servicios'))) { e.preventDefault(); ir(href.slice(1)); }
   });
   addEventListener('keydown', e => {
     if (e.key !== 'Escape' || e.repeat || !html.dataset.cap || e.defaultPrevented) return;
@@ -130,5 +130,5 @@
     const yaEstaba = history.state && history.state.cap === inicial;
     if (!yaEstaba) { history.replaceState({ cap: inicial, desdeIndice: false }, ''); setTimeout(() => saltoA(0), 0); }
   }
-  else if (inicial && document.getElementById(inicial)) setTimeout(() => document.getElementById(inicial).scrollIntoView({ behavior: 'instant' }), 0);   // #indice, #sobre, #contacto
+  else if (inicial && document.getElementById(inicial)) setTimeout(() => document.getElementById(inicial).scrollIntoView({ behavior: 'instant' }), 0);   // #indice, #servicios, #sobre, #contacto
 })();

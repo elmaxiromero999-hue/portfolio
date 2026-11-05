@@ -198,3 +198,53 @@ footer.pie { display: flex; flex-wrap: wrap; justify-content: space-between; gap
   .ct-copiar { width: 100%; }
   .ct-redes { grid-template-columns: 1fr; }
 }
+
+/* ---------- Trabajá conmigo (.tc): encargos en Obra, servicios en Diseño ---------- */
+.tc > * { max-width: 1300px; margin-left: auto; margin-right: auto; }
+.tc-cab { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 80px); align-items: end; }
+.tc-cab.sin-pieza { grid-template-columns: 1fr; }
+.tc-pieza { margin: 0; }
+.tc-pieza img { display: block; width: 100%; height: auto; aspect-ratio: 1343 / 1900; object-fit: cover; background: var(--papel-2); }
+.tc-pieza figcaption { margin-top: 10px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+.tc-tit { font-weight: 500; font-size: clamp(32px, 5.2vw, 76px); letter-spacing: -.045em; line-height: .96; max-width: 16ch; }
+.tc-tit em { font-style: normal; color: var(--acento); }
+.tc-lead { margin-top: 20px; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.5; max-width: 44ch; }
+.tc-para { margin-top: 14px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); max-width: 60ch; line-height: 1.6; }
+.tc-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-top: 28px; }
+.tc-boton { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; font-weight: 500; font-size: 15px; letter-spacing: .01em; color: var(--papel); background: var(--tinta); border: 1px solid var(--tinta); text-decoration: none; transition: background .25s, color .25s; }
+.tc-boton:hover, .tc-boton:focus-visible { background: transparent; color: var(--tinta); }
+.tc-link { font-size: 14px; color: var(--gris); text-decoration: underline; text-underline-offset: 4px; }
+.tc-link:hover { color: var(--tinta); }
+.tc-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); margin-top: clamp(44px, 7vw, 90px); padding-top: 26px; border-top: 1px solid var(--linea); }
+.tc-cols h3 { font-size: 11px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--gris); margin-bottom: 16px; }
+.tc-cols ul, .tc-cols ol { list-style: none; padding: 0; margin: 0; }
+.tc-cols li { padding: 11px 0; border-bottom: 1px solid var(--linea); font-size: 15px; line-height: 1.45; }
+.tc-cols li:first-child { padding-top: 0; }
+.tc-cols li b { display: block; font-weight: 500; font-size: 17px; letter-spacing: -.01em; margin-bottom: 3px; }
+.tc-cols li span { color: var(--gris); }
+.tc-pasos { counter-reset: paso; }
+.tc-pasos li { counter-increment: paso; display: grid; grid-template-columns: 2.2em 1fr; }
+.tc-pasos li::before { content: counter(paso, decimal-leading-zero); font-size: 12px; letter-spacing: .08em; color: var(--gris); padding-top: 3px; }
+/* servicios de Diseño: tres tarjetas grandes */
+.tc-servicios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: clamp(36px, 5vw, 64px); border-top: 1px solid var(--tinta); }
+.tc-servicio { padding: 24px clamp(0px, 2vw, 28px) 28px 0; border-right: 1px solid var(--linea); }
+.tc-servicio + .tc-servicio { padding-left: clamp(16px, 2vw, 28px); }
+.tc-servicio:last-child { border-right: 0; }
+.tc-servicio .n { font-size: 12px; letter-spacing: .1em; color: var(--gris); }
+.tc-servicio h3 { margin: 10px 0 12px; font-weight: 500; font-size: clamp(22px, 2.4vw, 32px); letter-spacing: -.03em; line-height: 1.02; }
+.tc-servicio p { font-size: 15px; line-height: 1.5; color: var(--gris); }
+.tc-servicio .tc-ej { margin-top: 14px; font-size: 12px; letter-spacing: .06em; color: var(--tinta); }
+.tc-servicio .tc-ej a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.tc-servicio .tc-ej a:hover { color: var(--acento); }
+.tc-venta { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; margin-top: 34px; padding: 18px 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); font-size: 15px; color: var(--gris); }
+.tc-venta b { font-weight: 500; color: var(--tinta); font-size: 17px; }
+.tc-venta a { color: var(--tinta); text-decoration: underline; text-underline-offset: 3px; margin-left: auto; }
+@media (max-width: 900px) {
+  .tc-cols, .tc-servicios { grid-template-columns: 1fr; }
+  .tc-servicio, .tc-servicio + .tc-servicio { padding: 22px 0; border-right: 0; border-bottom: 1px solid var(--linea); }
+}
+@media (max-width: 760px) {
+  .tc-cab { grid-template-columns: 1fr; }
+  .tc-pieza { order: 2; max-width: 300px; }
+  .tc-venta a { margin-left: 0; }
+}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* tema claro/oscuro antes de pintar (marca.js lo cambia y lo guarda) */(function(){var t='claro';try{t=localStorage.getItem('tema')==='oscuro'?'oscuro':'claro'}catch(e){}document.documentElement.dataset.tema=t})()</script>
 <script>/* intro del nombre: una vez por visita (intro.js); las demás veces, carga breve con el logo (carga.js). Si no cargan, la tapa se va sola */(function(){try{var h=document.documentElement,q=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!sessionStorage.getItem('intro-vista')&&!q){h.classList.add('con-intro');setTimeout(function(){h.classList.remove('con-intro')},4000)}else if(!q){h.classList.add('con-carga');setTimeout(function(){h.classList.remove('con-carga')},3000)}}catch(e){}})()</script>
-<script>/* Diseño se navega por capítulos (capitulos.js): si la URL trae uno, se abre directo; capitulos.js valida que exista */(function(){var h=document.documentElement,c=location.hash.slice(1);h.classList.add('dis-nav');if(c&&!/^(indice|sobre|contacto)$/.test(c))h.dataset.cap=c})()</script>
+<script>/* Diseño se navega por capítulos (capitulos.js): si la URL trae uno, se abre directo; capitulos.js valida que exista */(function(){var h=document.documentElement,c=location.hash.slice(1);h.classList.add('dis-nav');if(c&&!/^(indice|servicios|sobre|contacto)$/.test(c))h.dataset.cap=c})()</script>
 <link rel="preload" as="font" type="font/woff2" href="fuentes/inter-tight-latin.woff2" crossorigin>
 <link rel="stylesheet" href="intro.css?v=e96dbc">
 <script src="intro.js?v=d7eedc" defer></script>
@@ -14,9 +14,9 @@
 <script src="sonido.js?v=e96fff" defer></script>
 <script src="carga.js?v=ebd41b" defer></script>
 <script src="fondo.js?v=d7ecf9" defer></script>
-<meta name="description" content="Diseño gráfico y motion graphics de Máximo José Romero: identidad visual del Archivo Histórico de la Provincia de Córdoba, motion institucional para la Agencia Córdoba Cultura, catálogo FIT, Nexar Networks, Feria del Centro, visuales para conciertos y experimentación visual.">
+<meta name="description" content="Diseño de identidades visuales, identidades animadas, flyers y carruseles para eventos y motion graphics. Máximo José Romero, Córdoba, Argentina. Trabajos: identidad visual del Archivo Histórico de la Provincia de Córdoba, motion institucional para la Agencia Córdoba Cultura, catálogo FIT, Nexar Networks, Feria del Centro, visuales para conciertos y experimentación visual.">
 <meta name="theme-color" content="#ffffff">
-<title>Diseño y motion — Máximo Romero</title>
+<title>Identidad visual, flyers y motion — Máximo Romero</title>
 <style>
   :root { --papel: #e8e4db; --papel-2: #dedad0; --tinta: #141414; --gris: #6d6a63; --acento: #c8321e;
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -97,24 +97,25 @@
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .trabajo { opacity: 1; transform: none; transition: none; } }
 </style>
 <link rel="stylesheet" href="tipografia.css?v=c920a1">
-<link rel="stylesheet" href="diseno-inst.css?v=ebbd4e">
+<link rel="stylesheet" href="diseno-inst.css?v=ecc757">
 <link rel="stylesheet" href="comun.css?v=c92278">
 <link rel="stylesheet" href="capitulos.css?v=e96d32">
 <link rel="stylesheet" href="rueda.css?v=d924e5">
 <link rel="stylesheet" href="transicion.css?v=d7e9c9">
-<link rel="stylesheet" href="tema.css?v=e96fff">
+<link rel="stylesheet" href="tema.css?v=ecc863">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3.5 17 17'%3E%3Crect x='-2' y='-3.5' width='17' height='17' fill='%23fff'/%3E%3Cg fill='%231800ff'%3E%3Crect width='8' height='4'/%3E%3Crect y='4' width='3' height='6'/%3E%3Crect x='4' y='4' width='3' height='6'/%3E%3Crect x='8' y='4' width='3' height='6'/%3E%3Crect x='11' y='4' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
 </head>
 <body>
 <header class="menu">
   <a class="marca" href="index.html">Máximo Romero</a>
-  <nav class="principal"><a href="index.html">Inicio</a><a href="obras.html">Obra</a><a class="actual" href="diseno.html">Diseño y motion</a><a href="#sobre">Sobre mí</a><a href="#contacto">Contacto</a></nav>
+  <nav class="principal"><a href="index.html">Inicio</a><a href="obras.html">Obra</a><a class="actual" href="diseno.html">Diseño y motion</a><a href="#servicios">Servicios</a><a href="#sobre">Sobre mí</a><a href="#contacto">Contacto</a></nav>
 </header>
 <script src="marca.js?v=d821e9"></script>
 
 <div class="dis-cab">
-  <p class="etiqueta">02 — Diseño gráfico y motion graphics</p>
+  <p class="etiqueta">02 — Diseño y motion</p>
   <h1>Diseño <em>y</em> movimiento</h1>
+  <p class="dis-lema">Identidades visuales que se mueven y flyers para música y escena.</p>
 </div>
 
 <nav id="indice" aria-label="Capítulos">
@@ -130,15 +131,74 @@
   </ol>
 </nav>
 
-<!-- Sobre mí como diseñador + contacto: solo en la portada de Diseño (se ocultan dentro de un capítulo) -->
+<!-- Servicios + Sobre mí como diseñador + contacto: solo en la portada de Diseño (se ocultan dentro de un capítulo) -->
+<section class="bloque tc dis-extra" id="servicios" aria-labelledby="sv-tit">
+  <p class="etiqueta">Trabajá conmigo · Servicios</p>
+  <div class="tc-cab sin-pieza">
+    <div>
+      <h2 class="tc-tit" id="sv-tit">Marcas que se reconocen <em>y se mueven.</em></h2>
+      <p class="tc-lead">Diseño identidades para marcas, comercios e instituciones, y piezas para eventos de música y cultura. Del logo al sistema completo, y del sistema al movimiento.</p>
+    </div>
+  </div>
+  <div class="tc-servicios">
+    <article class="tc-servicio">
+      <span class="n">01</span>
+      <h3>Identidad visual</h3>
+      <p>Logotipo, paleta, tipografía y manual de marca. Un sistema claro para que tu marca se vea igual de bien en un cartel, en redes y en la puerta del local.</p>
+      <p class="tc-ej">Ej.: <a href="#archivo-historico">Archivo Histórico de Córdoba</a> · <a href="#feria-del-centro">Feria del Centro</a></p>
+    </article>
+    <article class="tc-servicio">
+      <span class="n">02</span>
+      <h3>Identidad animada y motion</h3>
+      <p>Logos animados, piezas para redes y videos institucionales. Visuales para pantallas LED y escenarios en vivo.</p>
+      <p class="tc-ej">Ej.: <a href="#agencia">Agencia Córdoba Cultura</a> · <a href="#nexar">Nexar Networks</a> · <a href="#motion">Visuales en vivo</a></p>
+    </article>
+    <article class="tc-servicio">
+      <span class="n">03</span>
+      <h3>Flyers y carruseles para eventos</h3>
+      <p>Afiches, flyers y carruseles que mezclan ilustración a mano y diseño gráfico. Para conciertos, teatro, fiestas y ciclos culturales.</p>
+      <p class="tc-ej">Ej.: <a href="#experimentacion-visual">Experimentación visual</a> · <a href="obras.html#encargos">Ilustración a mano</a></p>
+    </article>
+  </div>
+  <div class="tc-cols">
+    <div>
+      <h3>Por qué conmigo</h3>
+      <ul>
+        <li><b>Diseño que se mueve</b><span>Pienso la marca desde el principio para que también funcione animada: redes, pantallas y video.</span></li>
+        <li><b>Dibujo propio</b><span>Cuando la pieza lo pide, sumo ilustración hecha a mano. Una imagen que no sale de un banco.</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Con quién trabajé</h3>
+      <ul>
+        <li><b>Agencia Córdoba Cultura</b><span>Diseñador en el equipo de comunicación: Premios Sur, La Noche de los Teatros, Día del Tango.</span></li>
+        <li><b>Clientes propios</b><span>Barbería SEVEN, Pan Beat, B16, Paradojas de Germán Álvarez.</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Cómo trabajamos</h3>
+      <ol class="tc-pasos">
+        <li><span>Charlamos: qué hacés, a quién le hablás, qué necesitás.</span></li>
+        <li><span>Te presento una propuesta de dirección visual.</span></li>
+        <li><span>Desarrollamos y ajustamos juntos.</span></li>
+        <li><span>Te entrego los archivos listos para usar, con su guía.</span></li>
+      </ol>
+    </div>
+  </div>
+  <div class="tc-acciones">
+    <a class="tc-boton" href="mailto:maximojoseromero.dg@gmail.com?subject=Proyecto%20de%20dise%C3%B1o">Contame tu proyecto <span aria-hidden="true">→</span></a>
+    <a class="tc-link" href="https://wa.me/5493512115333?text=Hola%20M%C3%A1ximo%2C%20quiero%20consultarte%20por%20un%20proyecto%20de%20dise%C3%B1o" target="_blank" rel="noopener">o escribime por WhatsApp</a>
+  </div>
+</section>
+
 <section class="bloque dis-extra dis-sobre" id="sobre" aria-labelledby="ds-tit">
   <p class="etiqueta">Sobre mí · Como diseñador</p>
   <div class="ds-grid">
     <div class="ds-intro">
       <h2 id="ds-tit">Máximo Romero<span>Diseñador gráfico</span></h2>
-      <p>Diseñador gráfico con base teórica sólida y mucho interés por la experimentación. Me adapto a cada cliente y a cada formato, y disfruto resolver problemas visuales de forma creativa y eficiente: identidad, editorial, redes, motion y gran formato.</p>
+      <p>Diseño identidades visuales y piezas para eventos, con el movimiento como parte del sistema. Me adapto a cada cliente y a cada formato, y disfruto resolver problemas visuales de forma creativa y eficiente.</p>
       <p>Estudio la Licenciatura en Diseño Gráfico en la Universidad Siglo 21 y vengo del Bachiller en Artes con orientación en Música, algo que se nota en cómo trabajo el ritmo y el movimiento.</p>
-      <ul class="ds-chips" aria-label="Especialidades"><li>Identidad visual</li><li>Editorial</li><li>Redes sociales</li><li>Motion graphics</li><li>Gran formato</li></ul>
+      <ul class="ds-chips" aria-label="Especialidades"><li>Identidad visual</li><li>Identidad animada</li><li>Flyers y carruseles</li><li>Motion graphics</li><li>Editorial</li><li>Gran formato</li></ul>
     </div>
     <div class="ds-col">
       <h3>Experiencia</h3>
@@ -156,15 +216,15 @@
       <ul class="ds-chips ds-soft" aria-label="Herramientas"><li>Illustrator</li><li>Photoshop</li><li>After Effects</li><li>Premiere</li><li>InDesign</li><li>Blender</li><li>Firefly</li><li>IA y automatización</li></ul>
     </div>
   </div>
-  <a class="cruce" href="obras.html#sobre"><span>También dibujo: carbonilla, acrílico y obra en gran formato</span> <b>Ver Obra →</b></a>
+  <a class="cruce" href="obras.html#encargos"><span>También ilustro a mano: afiches para música y teatro</span> <b>Ver Obra →</b></a>
 </section>
 
   <section class="bloque ct dis-extra" id="contacto" aria-labelledby="ct-tit">
     <p class="etiqueta">Contacto</p>
-    <h2 class="ct-tit" id="ct-tit">¿Tenés un proyecto en mente?</h2>
-    <p class="ct-sub">Identidad, piezas para redes, editorial o motion para pantallas y escenarios. Escribime y lo charlamos.</p>
+    <h2 class="ct-tit" id="ct-tit">¿Tu marca o tu evento necesita una imagen?</h2>
+    <p class="ct-sub">Identidades, identidades animadas, flyers y carruseles, motion para pantallas. Contame qué necesitás y lo charlamos.</p>
     <div class="ct-mail">
-      <a class="ct-mail-link" href="mailto:maximojoseromero.dg@gmail.com"><span>maximojoseromero.dg</span><wbr><span>@gmail.com</span></a>
+      <a class="ct-mail-link" href="mailto:maximojoseromero.dg@gmail.com?subject=Proyecto%20de%20dise%C3%B1o"><span>maximojoseromero.dg</span><wbr><span>@gmail.com</span></a>
       <button type="button" class="ct-copiar" data-mail="maximojoseromero.dg@gmail.com"><span class="ct-copiar-txt" aria-live="polite">Copiar mail</span></button>
     </div>
     <ul class="ct-redes">
@@ -596,7 +656,7 @@
 <script src="libro.js?v=ebbe28"></script>
 <script src="diseno-inst.js?v=ebbdfa"></script>
 <script src="rueda.js?v=e96dca"></script>
-<script src="capitulos.js?v=ebbdfa"></script>
+<script src="capitulos.js?v=ecc757"></script>
 <script src="transicion.js?v=ebbdfa"></script>
 </body>
 </html>
