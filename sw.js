@@ -5,14 +5,22 @@
 // - Imágenes y fuentes sin ?v=: se muestra lo guardado al instante y se actualiza en segundo plano.
 // - Videos: no se tocan (el navegador los pide por partes).
 // Para invalidar todo: subir VERSION.
+// EMERGENCIA: si algo anda mal, poner APAGADO = true y publicar: borra lo guardado y el service worker se da de baja solo.
+const APAGADO = false;
 const VERSION = 'mr-2026-11-04';
 const PAGINAS = 'paginas-' + VERSION, RECURSOS = 'recursos-' + VERSION;
-const MAX_RECURSOS = 450;
+const MAX_RECURSOS = 300;   // tope de archivos guardados (los más viejos se borran)
 
 self.addEventListener('install', e => {
+  if (APAGADO) { self.skipWaiting(); return; }
   e.waitUntil(caches.open(PAGINAS).then(c => c.addAll(['./', './index.html', './obras.html', './diseno.html']).catch(() => {})).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
+  if (APAGADO) {
+    e.waitUntil(caches.keys().then(ks => Promise.all(ks.map(k => caches.delete(k)))).then(() => self.registration.unregister())
+      .then(() => self.clients.matchAll()).then(cs => cs.forEach(c => c.navigate(c.url))));
+    return;
+  }
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== PAGINAS && k !== RECURSOS).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
@@ -26,6 +34,7 @@ async function recortar() {
 }
 
 self.addEventListener('fetch', e => {
+  if (APAGADO) return;
   const r = e.request;
   if (r.method !== 'GET' || r.headers.has('range')) return;
   const url = new URL(r.url);

@@ -76,8 +76,7 @@
   document.addEventListener('focusin', precargar);
 
   // ---------- Caché local (sw.js): solo en el sitio publicado (https), no en la compu de trabajo ----------
-  // DESACTIVADO hasta revisarlo (el critic no llegó a terminar): para activarlo, cambiar false por true
-  if (false && 'serviceWorker' in navigator && location.protocol === 'https:') addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  if ('serviceWorker' in navigator && location.protocol === 'https:') addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 
   // ---------- Copiar mail ----------
   document.addEventListener('click', e => {
